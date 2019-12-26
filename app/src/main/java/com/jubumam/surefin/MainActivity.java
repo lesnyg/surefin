@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
+
         final Intent intent = getIntent();
 //        caregiverPhone = intent.getExtras().getString("caregiverPhone");
         responsibility = intent.getExtras().getString("responsibility");
@@ -111,9 +112,9 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         });
+        cal_btn = findViewById(R.id.cal_btn);
 
 
-/*
         final Calendar cal = Calendar.getInstance();
 
         Log.e(TAG, cal.get(Calendar.YEAR) + "");
@@ -159,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-*/
+
 
         /*
 
@@ -303,7 +304,6 @@ public class MainActivity extends AppCompatActivity {
             //resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 full outer join Su_사진 on Su_수급자기본정보.");
 
 
-
             byte bt[];
             list = new ArrayList<>();
             while (resultSetlist.next()) {
@@ -314,15 +314,12 @@ public class MainActivity extends AppCompatActivity {
                 rating = resultSetlist.getString(4);
                 s1 = resultSetlist.getString(63);*/
 
-
                 personId = resultSetlist.getString("Idno");
                 name = resultSetlist.getString("수급자명");
                 adress = resultSetlist.getString("주소2");
                 number = resultSetlist.getString("hp");
                 s1 = resultSetlist.getString("담당");
                 gender = resultSetlist.getString("성별");
-
-
 
 
                 try {
@@ -340,7 +337,6 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 } catch (Exception e) {
-
 
                 }
 
@@ -367,6 +363,7 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -378,6 +375,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("name", recipient.getName());
                         intent.putExtra("title", "main");
                         startActivity(intent);
+
 
                     }
 
@@ -433,23 +431,21 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
         switch (item.getItemId()) {
-
             case android.R.id.home:
                 Intent intent = new Intent(MainActivity.this, MenuMain.class);
                 intent.putExtra("name", name);
                 intent.putExtra("rating", rating);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
-
                 return true;
             case R.id.action_notice:
                 Intent intent1 = new Intent(MainActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
@@ -464,40 +460,6 @@ public class MainActivity extends AppCompatActivity {
                 i8.putExtra("rating", rating);
                 startActivity(i8);
                 break;
-
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG, cal.get(Calendar.DATE) + "");
-                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
-                        date1 = String.format("%d-%d-%d", year, month + 1, date);
-                        date2 = date1;
-
-                        cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
-                dialog.show();
-
-                break;
-
         }
         return super.onOptionsItemSelected(item);
     }

@@ -268,11 +268,9 @@ public class EditRecipientActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-
             if(isCancelled())
                 return (null);
             query();
-
 
             return null;
         }
@@ -296,12 +294,12 @@ public class EditRecipientActivity extends AppCompatActivity {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("UPDATE Su_수급자기본정보 SET 수급자명='"+r_name+"',hp ='"+r_phone+"',등급='"+r_rating+"',생년월일='"+r_birth+"',주소1 = '"+r_adress+"',보호자성명 = '"+r_guardian+"',관계 = '"+r_relationship+"',생년월일1 ='"+r_gbirth+"',hp2='"+r_gnumber+"',주소11='"+r_gadress+"' WHERE 수급자명='"+name+"'");
 
-
             while (resultSet.next()) {
+
+
 
             }
             connection.close();
-
 
         } catch (Exception e) {
             Log.w("Error connection", "" + e.getMessage());
@@ -337,6 +335,7 @@ public class EditRecipientActivity extends AppCompatActivity {
         }
 
     }*/
+
 
 
     public void selectquery() {
@@ -407,7 +406,6 @@ public class EditRecipientActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.w("Error connection", "" + e.getMessage());
-
         }
 
     }
@@ -422,7 +420,7 @@ public class EditRecipientActivity extends AppCompatActivity {
            // ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+imageString+"') WHERE 이름 = '"+name+"'");
             //ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+blob+"') WHERE 이름 = '"+name+"'");
           // ResultSet resultSet = statement.executeQuery("INSERT INTO Su_사진(BLOBData) VALUES(?);");
-
+            
             ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData ='"+blob+"'WHERE 이름 = '"+name+"'");
 
 
@@ -513,6 +511,8 @@ public class EditRecipientActivity extends AppCompatActivity {
             case R.id.action_notice:
                 Intent intent1 = new Intent(EditRecipientActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:

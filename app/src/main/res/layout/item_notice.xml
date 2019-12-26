@@ -33,12 +33,6 @@
 
     </LinearLayout>
 
-    <ImageView
-        android:layout_width="14dp"
-        android:layout_height="9dp"
-        android:src="@drawable/icon_pagedown"
-        android:layout_gravity="center_vertical"
-        />
 </LinearLayout>
     <View
         android:layout_width="match_parent"

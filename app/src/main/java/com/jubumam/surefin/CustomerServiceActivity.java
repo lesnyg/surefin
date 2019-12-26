@@ -173,6 +173,8 @@ public class CustomerServiceActivity extends AppCompatActivity {
             case R.id.action_notice:
                 Intent intent1 = new Intent(CustomerServiceActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
@@ -187,8 +189,6 @@ public class CustomerServiceActivity extends AppCompatActivity {
                 i8.putExtra("rating", rating);
                 startActivity(i8);
                 break;
-
-
         }
         return super.onOptionsItemSelected(item);
 

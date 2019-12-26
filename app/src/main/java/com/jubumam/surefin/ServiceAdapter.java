@@ -68,14 +68,17 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceH
         }else {
             holder.tv_bathDayCount.setText("0");
         }
-        if(service.getNursingCount() != null){
-            holder.tv_nursingDayCount.setText(service.getNursingCount());
+        if(service.getNursingTotal()!=null){
+            holder.tv_nursingDayCount.setText("1회");
         }else{
-            holder.tv_nursingDayCount.setText("");
+            holder.tv_nursingDayCount.setText("0회");
         }
         holder.tv_nursingDayTime.setText(service.getNursingTotal());
-        holder.tv_tenObjectDayCount.setText("0건");
-
+            if(service.getNonPay()!=null && service.getNonPay().equals("제공")) {
+            holder.tv_tenObjectDayCount.setText("1건");
+        }else{
+            holder.tv_tenObjectDayCount.setText("0건");
+        }
 
     }
     @Override

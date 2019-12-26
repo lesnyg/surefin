@@ -1,12 +1,16 @@
 package com.jubumam.surefin;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -120,6 +124,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private AsyncTask<String, String, String> dbCheckSyncTask;
     private AsyncTask<String, String, String> recipientSyncTask;
     private AsyncTask<String, String, String> priceSyncTask;
+    private AsyncTask<String, String, String> dateSyncTask;
     private String strDate;
     private int intCar;
     private int intNoCar;
@@ -132,7 +137,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String totalnumber;
     private long tdiff;
 
-
     private long sec;
     private long hour;
     private long today;
@@ -142,6 +146,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String dbCheck;
     private LottieAnimationView animationView;
     private LinearLayout lin_bathAll;
+    private String dateCheck;
+    private int number = 0;
 
 
     @Override
@@ -268,12 +274,12 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
         formatterScreen = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
         timeformatter = new SimpleDateFormat("HH:mm", Locale.KOREA);
-        utctime = new SimpleDateFormat("HH:mm", Locale.KOREA);
+        utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
         strDate = formatter.format(currentTime);
         String strDateScreen = formatterScreen.format(currentTime);
         tv_date.setText(strDateScreen);
-
+        dateSyncTask = new DateSyncTask().execute();
 
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -307,8 +313,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                     }
 
                     if (tv_time.getText().equals("")) {
-
-                        usingTime = utctime.format(diff);
+                        usingTime=Long.toString(diff/(60*1000));
+//                        usingTime = utctime.format(diff);
 
                         tv_time.setText(usingTime);
                     } else {
@@ -316,7 +322,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                             totalnumber = tv_time.getText().toString();
                             Date s1 = timeformatter.parse(totalnumber);
                             tdiff = diff + s1.getTime();
-                            usingTime = utctime.format(diff);
+                            usingTime=Long.toString(diff/(60*1000));
+//                            usingTime = utctime.format(diff);
                             tv_time.setText(usingTime);
 
 
@@ -441,13 +448,55 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                         if (aSwitch1.isChecked() && carNumber.equals("")) {
                             Toast.makeText(this, "차번호를 입력해 주세요", Toast.LENGTH_LONG).show();
                         } else {
+
                             carNumber = et_carNumber.getText().toString();
                             etc = et_etc.getText().toString();
                             providing = ((RadioButton) findViewById(intProviding)).getText().toString();
                             Date dbDate = new Date();
                             dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
-                            bathSyncTask = new BathSyncTask().execute();
-                            dbCheckSyncTask = new DbCheckSyncTask().execute();
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                            builder.setTitle("내용전송");
+                            builder.setMessage("총시간"  + usingTime + "분을 전송하시겠습니까?");
+                            // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                            builder.setPositiveButton("예",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            if(dateCheck!=null && dateCheck.equals(strDate)){
+                                                AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingBathActivity.this);
+                                                builder2.setTitle("방문목욕");
+                                                builder2.setMessage("오늘 방문목욕은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                                // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                                builder2.setPositiveButton("예",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                number++;
+                                                                bathSyncTask = new BathSyncTask().execute();
+                                                                dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                            }
+                                                        });
+                                                builder2.setNegativeButton("아니오",
+                                                        new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int which) {
+                                                                Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
+                                                builder2.show();
+                                            }else {
+                                                number = 1;
+                                                bathSyncTask = new BathSyncTask().execute();
+                                                dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                            }
+                                        }
+                                    });
+                            builder.setNegativeButton("아니오",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
+                                        }
+                            });
+                            builder.show();
                         }
                     }
                 }
@@ -478,7 +527,48 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    private void dbCheckQuery() {
+    public class DateSyncTask extends AsyncTask<String, String, String> {
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            dateQuery();
+
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
+
+    private void dateQuery() {
+        Connection connection = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = connection.createStatement();
+            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문목욕정보 WHERE 수급자명 = '" + name + "' AND 일자='" + strDate + "'");
+            while (dateRS.next()) {
+                dateCheck = dateRS.getString("일자");
+                number++;
+            }
+            connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+        private void dbCheckQuery() {
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
@@ -491,6 +581,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(et_etc.getWindowToken(), 0);
                             animationView = (LottieAnimationView) findViewById(R.id.animation_view);
                             animationView.setVisibility(View.VISIBLE);
                             lin_bathAll.setVisibility(View.GONE);
@@ -666,15 +758,16 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
             ResultSet bathResultSet = statement.executeQuery("insert into Su_방문목욕정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호," +
                     "시작시간,종료시간,총시간,차량이용,차량번호,차량미이용,제공방법,목욕전배뇨배변,목욕전욕창,목욕전얼굴색피부색," +
                     "목욕후얼굴색피부색,목욕후몸단장,목욕후주변정리,특이사항,금액," +
-                    "지점,담당,기본시간,급여,주요질환,구분,성별,목욕여부,디비체크)" +
+                    "지점,담당,기본시간,급여,주요질환,구분,성별,목욕여부,디비체크,번호)" +
                     "VALUES('" + strDate + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "','" + birth + "','" + acceptnumber + "'," +
                     "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + strCar + "','" + carNumber + "','" + strNoCar + "','" + providing + "','" + beforeCK01 + "','" + beforeCK02 + "','" + beforeCK03 + "'," +
                     "'" + afterCK01 + "','" + afterCK02 + "','" + afterCK03 + "','" + etc + "','" + nonPayment + "'," +
-                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "')");
-
-
+                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','"+number+"')");
+//                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
+//                    "시작시간,종료시간,총시간,방문종류구분,디비체크)" +
+//                    "values('" + strDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "','" + organization + "','" + organizationId + "'," +
+//                    "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','목욕','" + dbCheck + "')");
             connection.close();
-
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -737,6 +830,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
             case R.id.action_notice:
                 Intent intent1 = new Intent(VisitingBathActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
