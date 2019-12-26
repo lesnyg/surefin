@@ -39,6 +39,8 @@ import androidx.viewpager.widget.ViewPager;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.channels.ConnectionPendingException;
+import java.nio.channels.ReadableByteChannel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -954,6 +956,8 @@ public class MenuMain extends AppCompatActivity {
 
             }
 
+
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -977,6 +981,9 @@ public class MenuMain extends AppCompatActivity {
                     tv_nurseSumTotal.setText(Integer.toString(nhour)+":"+Integer.toString(nmin)+"");
                     //tv_nurseSumTotal.setText(intNursingTotal + "분");
                     tv_nosupport.setText(nosupport + "");
+
+
+
 
 
                 }

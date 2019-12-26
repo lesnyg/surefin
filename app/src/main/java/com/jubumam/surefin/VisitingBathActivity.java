@@ -1,15 +1,20 @@
 package com.jubumam.surefin;
 
 import android.animation.Animator;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -33,6 +38,7 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -142,6 +148,20 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String dbCheck;
     private LottieAnimationView animationView;
     private LinearLayout lin_bathAll;
+
+    private String schedule_date;//일자
+    private String scheduletime;//근무시간
+    private String contracttime; //계약시간
+    private String schedulename;//계약수급자명
+    private String divisiontotal;
+
+    private String date2;
+    private String date1;
+    private String TAG = "PickerActivity";
+
+
+
+    private AsyncTask<String, String, String> cTask;
 
 
     @Override
@@ -456,6 +476,93 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+
+
+    public class CalSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            calQuery();
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+
+    public void calQuery(){
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+
+            while (calres.next()){
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division =  calres.getString("구분");//구분
+
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    if (schedule_date != null) {
+                        divisiontotal = "어르신 : " + schedulename+"  "
+                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
+                        //                      cal_txt1.setText("어르신:" + schedulename);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                        builder.setTitle("일정관리");
+                        builder.setPositiveButton(divisiontotal,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
+                                    }
+
+                                });
+                        builder.show();
+                    }else if (schedule_date == null){
+                        Toast.makeText(VisitingBathActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
     public class DbCheckSyncTask extends AsyncTask<String, String, String> {
         protected void onPreExecute() {
         }
@@ -750,6 +857,40 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 i8.putExtra("name", name);
                 i8.putExtra("rating", rating);
                 startActivity(i8);
+                break;
+
+
+            case R.id.action_cal:
+                final Calendar cal = Calendar.getInstance();
+                Log.e(TAG, cal.get(Calendar.YEAR) + "");
+                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
+                Log.e(TAG, cal.get(Calendar.DATE) + "");
+                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
+                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+                DatePickerDialog dialog = new DatePickerDialog(VisitingBathActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+
+
+                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date2 = date1;
+
+                        cTask = new CalSyncTask().execute();
+                        //       cal_btn.setText(date1);
+                        //vtxt1.setText(date1);
+
+
+
+                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
+
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
+                //dialog.getDatePicker().setMaxDate(new Date().getTime());
+
+                dialog.show();
+
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -139,7 +139,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
        dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
-        et_name = findViewById(R.id.et_name);
+        //et_name = findViewById(R.id.et_name);
         tv_name = findViewById(R.id.tv_name_result);
         tv_phone = findViewById(R.id.tv_phone_result);
         tv_date = findViewById(R.id.tv_date_result);

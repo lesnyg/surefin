@@ -290,14 +290,11 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         stimet = findViewById(R.id.stimet);
         etimet = findViewById(R.id.etimet);
 
+
       //  vbtn_start1 = findViewById(R.id.vbtn_start1);
-
      //   vbtn_start2 = findViewById(R.id.vbtn_start2);
-
         vbtn_start3 = findViewById(R.id.vbtn_start3);
-
       //  vbtn_start4 = findViewById(R.id.vbtn_start4);
-
       //  vbtn_start5 = findViewById(R.id.vbtn_start5);
 
         vbtn_start6 = findViewById(R.id.vbtn_start6);
@@ -313,6 +310,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 finish();
             }
         });
+
+
 
 
         findViewById(R.id.lin_info).setOnClickListener(new View.OnClickListener() {
@@ -881,6 +880,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
+
 
 
     public boolean onCreateOptionsMenu(Menu menu) {
