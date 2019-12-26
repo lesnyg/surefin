@@ -33,6 +33,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -86,6 +87,9 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String usingTime3;
     private String startMon;
     private String endMon;
+    private String totalUsingTime;
+    private String dateCheck;
+    private String clockusingTime;
 
     String bodyactiv1;
     String bodyactiv2;
@@ -101,6 +105,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private AsyncTask<String, String, String> aTask;
     private AsyncTask<String, String, String> mTask;
     private AsyncTask<String, String, String> dbCheckSyncTask;
+    private AsyncTask<String, String, String> dateSyncTask;
     private ResultSet resultSet;
 
 
@@ -125,6 +130,10 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private Button btn_decrease;
     private Button btn_increase;
 
+    private TextView tv_time;
+    private String strStartTime;    //시작시간
+    private String strEndTime;      //종료시간
+
     String gender;
     String rating;
     String acceptnumber; //인정번호
@@ -132,13 +141,12 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     String organizationId; //기관번호
     String birth;
     String pastdisease;
-    String responsibility;
+    String responsibility;  //담당자
     String stime;
     String stime1;
     String stime1_1;
     String stime2;
     String stime3;
-    String manager;     //담당
     String division;        //수급자 구분
     String place;            //수급자 지점
     String baseTime;        //수급자 기본시간
@@ -181,6 +189,8 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String dbCheck;
     private LottieAnimationView animationView;
     private LinearLayout lin_careAll;
+    private int totaltime;
+    private int number = 0;
 
 
     @Override
@@ -270,11 +280,13 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         ck_housework1 = findViewById(R.id.ck_housework1);
         ck_housework2 = findViewById(R.id.ck_housework2);
         lin_careAll = findViewById(R.id.lin_careAll);
-
+        btn_start = findViewById(R.id.btn_start);
+        btn_end = findViewById(R.id.btn_end);
+        tv_time = findViewById(R.id.tv_time);
         tv_information = findViewById(R.id.tv_information);
         tv_information.setText(name + "님의정보");
 
-
+        dateSyncTask = new DateSyncTask().execute();
         findViewById(R.id.lin_service).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -351,6 +363,66 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         rg_meal = findViewById(R.id.rg_meal);
         rg_cognitive = findViewById(R.id.rg_cognitive);
 
+        btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Date startTime = new Date();
+                strStartTime = timeformatter.format(startTime);
+                btn_start.setText(strStartTime);
+                tv_startTime.setText(strStartTime);
+            }
+        });
+        btn_end.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (btn_start.getText().equals("시작")) {
+                    Toast.makeText(VisitingActivity.this, "시작시간을 눌러주세요", Toast.LENGTH_SHORT).show();
+                } else {
+                    Date endTime = new Date();
+                    strEndTime = timeformatter.format(endTime);
+                    btn_end.setText(strEndTime);
+                    tv_endTime.setText(strEndTime);
+                    try {
+                        Date endtimes = timeformatter.parse(strEndTime);
+                        Date starttimes = timeformatter.parse(strStartTime);
+
+                        //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
+                        diff = endtimes.getTime() - starttimes.getTime();
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (tv_time.getText().equals("")) {
+                        totalUsingTime=Long.toString(diff/(60*1000));
+                        tv_time.setText(totalUsingTime);
+                    } else {
+                        try {
+                            totalnumber = tv_time.getText().toString();
+                            Date s1 = timeformatter.parse(totalnumber);
+                            tdiff = diff + s1.getTime();
+                            totalUsingTime=Long.toString(diff/(60*1000));
+                            tv_time.setText(totalUsingTime);
+
+
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+
+
+                    btn_start.setText("시작");
+                    btn_end.setText("종료");
+                    // usingTime = utctime.format(diff);
+
+                    // tv_time.setText(usingTime);
+
+                }
+            }
+        });
+
         findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -424,13 +496,12 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 }
 
 
-                int totaltime;
                 totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
                 int thour = totaltime / 60;
                 int tmin = totaltime % 60;
                 AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
                 builder.setTitle("내용전송");
-                builder.setMessage("총시간" + thour + "시간" + tmin + "분을 전송하시겠습니까?");
+                builder.setMessage("총시간"  + totaltime + "분을 전송하시겠습니까?");
                 // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
                 builder.setPositiveButton("예",
                         new DialogInterface.OnClickListener() {
@@ -445,19 +516,19 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                                 // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
 
                                 if (sr.equals("-1")) {
-                                    body = "";
+                                    body = "입력안함";
                                 } else {
                                     body = ((RadioButton) findViewById(bodyId)).getText().toString();
                                 }
 
                                 if (or.equals("-1")) {
-                                    meal = "";
+                                    meal = "입력안함";
                                 } else {
                                     meal = ((RadioButton) findViewById(mealId)).getText().toString();
                                 }
 
                                 if (co.equals("-1")) {
-                                    cognitive = "";
+                                    cognitive = "입력안함";
                                 } else {
                                     cognitive = ((RadioButton) findViewById(cognitiveId)).getText().toString();
                                 }
@@ -503,10 +574,37 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                                 }
                                 Date dbDate = new Date();
                                 dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
-                                mTask = new MySyncTask().execute();
-                                dbCheckSyncTask = new DbCheckSyncTask().execute();
-                            }
-                        });
+
+
+
+                                                if(dateCheck!=null && dateCheck.equals(currentDate)){
+                                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
+                                                    builder2.setTitle("방문요양");
+                                                    builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                                    builder2.setPositiveButton("예",
+                                                            new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    number++;
+                                                                    mTask = new MySyncTask().execute();
+                                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                                }
+                                                            });
+                                                    builder2.setNegativeButton("아니오",
+                                                            new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                    builder2.show();
+                                                }else {
+                                                    number = 1;
+                                                    mTask = new MySyncTask().execute();
+                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                }
+                                            }
+                                        });
+
                 builder.setNegativeButton("아니오",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
@@ -529,6 +627,47 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         });
 
     }
+    public class DateSyncTask extends AsyncTask<String, String, String> {
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            dateQuery();
+
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
+
+    private void dateQuery() {
+        Connection connection = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = connection.createStatement();
+            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문요양급여정보 WHERE 수급자명 = '" + name + "' AND 일자='" + currentDate + "'");
+            while (dateRS.next()) {
+                dateCheck = dateRS.getString("일자");
+                number++;
+            }
+            connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public class DbCheckSyncTask extends AsyncTask<String, String, String> {
         protected void onPreExecute() {
@@ -670,10 +809,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 String time4 = visitingRS.getString("정서사용시간계");
                 String time5 = visitingRS.getString("생활지원사용시간계");
 
-                
-
-
-
                 if (time1 == null || time1.equals("") || time1.equals("null")) {
                     time1Sum = time1Sum + 0;
                 } else {
@@ -713,7 +848,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 division = rs.getString(10);
                 baseTime = rs.getString(11);
                 place = rs.getString(12);
-                manager = rs.getString(13);
+                responsibility = rs.getString(13);
                 phone = rs.getString("hp");
             }
             ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='2019'");
@@ -753,15 +888,13 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60;
-                    tv_sumTime.setText("총시간" + Integer.toString(thour) + "시간" + Integer.toString(tmin) + "분");
+                    tv_sumTime.setText("총시간:" + Integer.toString(thour) + ":" + Integer.toString(tmin));
                     //  tv_sumTime.setText("총시간"+totalhour+"분");
                     vistime1 = totalhour - (int) vistime;
                     int nhour = vistime1 / 60;
                     int nmin = vistime1 % 60;
-                    tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + "시간" + Integer.toString(nmin) + "분");
+                    tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin) );
                     //   tv_remainingTime.setText("남은시간"+vistime1+"분");
-
-
 
                 }
             });
@@ -787,15 +920,17 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     "기관명,기관기호,신체사용시간계,인지사용시간계,정서사용시간계,생활지원사용시간계," +
                     "신체기능,식사기능,인지기능,대변횟수,소변횟수,특이사항," +
                     "신체활동지원,인지활동지원,정서활동지원,생활활동지원," +
-                    "일상생활시간계,개인위생,몸씻기도움,식사도움,체위변경,이동도움,화장실이용,식사청소정리세탁,개인활동지원,디비체크) " +
-                    "values('" + currentDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + manager + "'," +
+                    "일상생활시간계,개인위생,몸씻기도움,식사도움,체위변경,이동도움,화장실이용,식사청소정리세탁,개인활동지원," +
+                    "디비체크,시작시간,종료시간,총시간,방문종류구분,번호) " +
+                    "values('" + currentDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "'," +
                     "'" + organization + "','" + organizationId + "','" + usingTime + "','" + usingTime1 + "','" + usingTime2 + "','" + usingTime3 + "'," +
                     "'" + body + "','" + meal + "','" + cognitive + "','" + mNumber4 + "','" + mNumber5 + "','" + uniqueness + "'," +
                     "'" + stime + "','" + stime1 + "','" + stime2 + "','" + stime3 + "'," +
-                    "'" + usingTime1_1 + "','" + bodyactiv1 + "','" + bodyactiv2 + "','" + bodyactiv3 + "','" + bodyactiv4 + "','" + bodyactiv5 + "','" + bodyactiv6 + "','" + housework1 + "','" + housework2 + "','"+dbCheck+"')");
+                    "'" + usingTime1_1 + "','" + bodyactiv1 + "','" + bodyactiv2 + "','" + bodyactiv3 + "','" + bodyactiv4 + "','" + bodyactiv5 + "','" + bodyactiv6 + "','" + housework1 + "','" + housework2 + "'," +
+                    "'" + dbCheck + "','"+strStartTime+"','"+strEndTime+"','"+totaltime+"','요양','"+number+"')");
 
 
-        connection.close();
+            connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
@@ -858,6 +993,8 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
             case R.id.action_notice:
                 Intent intent1 = new Intent(VisitingActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:

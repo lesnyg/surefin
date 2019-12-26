@@ -108,6 +108,9 @@ public class ServiceListActivity extends AppCompatActivity {
     private int thour = 0;
     private String bath;
     private String strcount;
+    private String nonPay;
+    private int intnonPay = 0;
+    private String dateDay;
 
 
     @Override
@@ -195,6 +198,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 intNursingTotal = 0;
                 intTotalDayCareIndivi = 0;
                 intTotalDayCarePublic = 0;
+                intnonPay = 0;
                 cal.add(Calendar.MONTH, -1);
                 String preMonthYear = tv_month.getText().toString();
                 sdf = calformater.format(cal.getTime());
@@ -207,6 +211,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 startMon = strDate + "-" + "01";
                 endMon = strDate + "-" + "32";
                 mTask = new ServiceSyncTask().execute();
+
             }
         });
 
@@ -221,6 +226,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 intNursingTotal = 0;
                 intTotalDayCareIndivi = 0;
                 intTotalDayCarePublic = 0;
+                intnonPay = 0;
                 cal.add(Calendar.MONTH, +1);
                 String preMonthYear = tv_month.getText().toString();
                 sdf = calformater.format(cal.getTime());
@@ -263,10 +269,6 @@ public class ServiceListActivity extends AppCompatActivity {
 //                ratingPrice = resultRatingPay.getString("금액");
 //            }
 //            ResultSet serviceResultSetlist = statement.executeQuery("select A.*,B.목욕여부,B.날짜 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON A.일자=B.날짜 where (A.수급자명='"+name+"' AND B.수급자명='"+name+"') AND (A.일자 BETWEEN '2019-12-01' AND '2019-12-32') ");
-            ResultSet rs = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
-            while (rs.next()) {
-                nonPayServiceCount++;
-            }
 
             ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
             while (recipientRS.next()) {
@@ -289,14 +291,14 @@ public class ServiceListActivity extends AppCompatActivity {
                 intTotalDayCareIndivi = (int) (intTotalDayCareIndivi + indiviYearBathSupport);
                 intTotalDayCarePublic = (int) (intTotalDayCarePublic + publicYearBathSupport);
 
-                if (count != null && count.equals("TRUE")) {
-                    bathCount++;
-                }
+//                if (count != null && count.equals("TRUE")) {
+//                    bathCount++;
+//                }
             }
 
             ResultSet nursingPriceRS = statement.executeQuery("select A.방문횟수,B.금액 from Su_방문간호정보 as A left join Su_년도별금액 as B on B.상세구분=A.총시간이름 where B.년도='" + thisYear + "' AND (A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') AND A.수급자명='" + name + "'");
             while (nursingPriceRS.next()) {
-                nursingCount = nursingPriceRS.getString("방문횟수");
+//                nursingCount = nursingPriceRS.getString("방문횟수");
                 String yearNursingSupport = nursingPriceRS.getString("금액");
                 int indiviYearNursingSupport = (int) Math.round(Integer.parseInt(yearNursingSupport) * 0.15);
                 int publicYearNursingSupport = Integer.parseInt(yearNursingSupport) - indiviYearNursingSupport;
@@ -304,16 +306,17 @@ public class ServiceListActivity extends AppCompatActivity {
                 intTotalDayCareIndivi = intTotalDayCareIndivi + indiviYearNursingSupport;
                 intTotalDayCarePublic = intTotalDayCarePublic + publicYearNursingSupport;
 
-                if (nursingCount != null && nursingCount.equals("1")) {
-                    intNursingCount++;
-                }
+//                if (nursingCount != null && nursingCount.equals("1")) {
+//                    intNursingCount++;
+//                }
 
             }
 
-            ResultSet serviceResultSetlist = statement.executeQuery("select A.수급자명 AS 요양수급자,COALESCE(A.일자,B.일자,C.일자) AS 요양일자,A.신체사용시간계,A.인지사용시간계,A.일상생활시간계,A.정서사용시간계,A.생활지원사용시간계,B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명)" +
-                    "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명) or (A.일자=C.일자 AND A.수급자명=C.수급자명)" +
-                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "')" +
-                    "order by 요양일자");
+            ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명,D.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자,D.서비스제공일자) AS 요양일자,A.신체사용시간계,A.인지사용시간계,A.일상생활시간계,A.정서사용시간계,A.생활지원사용시간계,B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간,D.서비스제공,D.서비스제공일자 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
+                    "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
+                    "FULL OUTER JOIN Su_비급여신청자 D ON (D.서비스제공일자=A.일자 AND D.수급자명=A.수급자명 AND D.번호=A.번호) or (D.서비스제공일자=B.일자 AND D.수급자명=B.수급자명 AND D.번호=B.번호) or (D.서비스제공일자=C.일자 AND D.수급자명=C.수급자명 AND D.번호=C.번호)" +
+                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
+                    "order by 요양일자,A.번호");
 
 //            ResultSet serviceResultSetlist = statement.executeQuery("select A.일자 AS 요양일자,B.일자 AS 목욕일자,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,목욕여부 from Su_방문요양급여정보 AS A JOIN Su_방문목욕정보 AS B " +
 //                    "ON A.일자=B.일자 WHERE A.수급자명='"+name+"' AND B.수급자명='"+name+"' ORDER BY A.일자,B.일자" );
@@ -341,6 +344,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 nursingTotal = serviceResultSetlist.getString("총시간");
                 carService = serviceResultSetlist.getString("차량이용");
                 bath = serviceResultSetlist.getString("목욕여부");
+                nonPay = serviceResultSetlist.getString("서비스제공");
 
 
                 if (usingTime1 == null || usingTime1.equals("") || usingTime1.equals("null")) {
@@ -384,13 +388,24 @@ public class ServiceListActivity extends AppCompatActivity {
 //                }
 
 
+                if (nonPay != null && nonPay.equals("제공")) {
+                    intnonPay++;
+                }
+                if(bath !=null && bath.equals("TRUE")){
+                    bathCount++;
+                }
+
+
                 if (nursingTotal != null && !nursingTotal.equals("")) {
                     int nursing = Integer.parseInt(nursingTotal);
                     intNursingTotal = nursing + intNursingTotal;
+                    intNursingCount++;
                 }
 
-                Date dDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
-                String dateDay = new SimpleDateFormat("dd(EE)", Locale.KOREAN).format(dDate);
+                if (date != null) {
+                    Date dDate = new SimpleDateFormat("yyyy-MM-dd").parse(date);
+                    dateDay = new SimpleDateFormat("dd(EE)", Locale.KOREAN).format(dDate);
+                }
                 strDayCareIndivi = timeformatter.format(sumUsingTimeDay);
                 if (sumUsingTimeDay != 0) {
                     intDayCareIndivi = (int) Math.round(intyearsupport * 0.15);
@@ -403,13 +418,12 @@ public class ServiceListActivity extends AppCompatActivity {
 
                 sumUsingTimeMonth = sumUsingTimeMonth + sumUsingTimeDay;
 
-                serviceList.add(new Service(name, dateDay, sumUsingTimeDay, bath, nursingCount, nursingTotal));
+                    serviceList.add(new Service(name, dateDay, sumUsingTimeDay, bath, nursingCount, nursingTotal, nonPay));
+
 
                 sumUsingTimeDay = 0;
 
-
             }
-
             connection.close();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -421,10 +435,6 @@ public class ServiceListActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-//
-
-
                 mServiceAdapter.setItems(serviceList);
                 recyclerView.setAdapter(mServiceAdapter);
                 int totalhour = (int) sumUsingTimeMonth / 60000;
@@ -449,7 +459,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 int nmin = intNursingTotal % 60;
                 tv_nursingTotalTT.setText(nhour + "시간" + nmin + "분");
                 //tv_nursingTotalTT.setText(intNursingTotal + "분");
-                tv_nonPayServiceCount.setText(nonPayServiceCount + "");
+                tv_nonPayServiceCount.setText(intnonPay + "");
                 DecimalFormat myFormatter = new DecimalFormat("###,###");
                 tv_indiviPrice.setText(myFormatter.format(intTotalDayCareIndivi) + "원");
                 tv_publicPrice.setText(myFormatter.format(intTotalDayCarePublic) + "원");
@@ -472,16 +482,15 @@ public class ServiceListActivity extends AppCompatActivity {
             case android.R.id.home:
                 Intent intent = new Intent(ServiceListActivity.this, MenuMain.class);
                 intent.putExtra("name", name);
-//                intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
-//                intent.putExtra("birth", birth);
-//                intent.putExtra("pastdisease", mhistory);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 return true;
             case R.id.action_notice:
                 Intent intent1 = new Intent(ServiceListActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
