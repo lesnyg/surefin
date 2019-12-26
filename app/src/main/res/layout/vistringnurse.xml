@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#26ab74"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/img_back"
+            android:layout_width="15dp"
+            android:layout_height="21dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/icon_back" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="방문간호"
+            android:textColor="#ffffff"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/lin_nurseAll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/tv_rating1"
+                        android:layout_width="48dp"
+                        android:layout_height="40dp"
+                        android:layout_margin="16dp"
+                        android:background="@drawable/icon_heart"
+                        android:gravity="center"
+                        android:padding="8dp"
+                        android:text="등급"
+                        android:textColor="#ffffff"
+                        android:textSize="12dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:text="이름"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/tv_mdiv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:text="전화번호"
+                            android:textSize="16dp" />
+
+                        <LinearLayout
+                            android:id="@+id/lin_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="4dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/tv_information"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="홍길동님 정보" />
+
+                            <ImageView
+                                android:layout_width="17dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/icon_arrow" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="2dp"
+                        android:layout_weight="1"
+                        android:gravity="right"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_sumTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/tv_remainingTime"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="2dp"
+                            android:textSize="16dp" />
+
+                        <LinearLayout
+                            android:id="@+id/lin_service"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="4dp"
+                            android:gravity="right"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="서비스 사용 내역" />
+
+                            <ImageView
+                                android:layout_width="17dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center_vertical"
+                                android:src="@drawable/icon_arrow" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/scrolledge"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/green_bar"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="21dp"
+                            android:layout_height="20dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/icon_cal" />
+
+                        <TextView
+                            android:id="@+id/vtxt1"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_weight="1"
+                            android:text="날짜"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp" />
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="19dp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginRight="8dp"
+                            android:src="@drawable/icon_clock" />
+
+                        <TextView
+                            android:id="@+id/stimet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:text="~"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/etimet"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="16dp"
+                            android:textColor="#ffffff"
+                            android:textSize="16dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="223dp"
+                            android:layout_height="83dp"
+                            android:src="@drawable/nursing_exp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="4dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:text="혈압"
+                                    android:textColor="#26ab74"
+                                    android:textSize="16dp" />
+
+                                <EditText
+                                    android:id="@+id/vtxt2"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="24dp"
+                                    android:layout_weight="3"
+                                    android:background="@drawable/edge"
+                                    android:inputType="numberSigned"
+                                    android:textSize="16dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="2dp"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:text="맥박"
+                                    android:textColor="#26ab74"
+                                    android:textSize="16dp" />
+
+                                <EditText
+                                    android:id="@+id/vtxt3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="24dp"
+                                    android:layout_weight="3"
+                                    android:background="@drawable/edge"
+                                    android:inputType="numberSigned"
+                                    android:textSize="16dp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_weight="1"
+                                    android:text="체온"
+                                    android:textColor="#26ab74"
+                                    android:textSize="16dp" />
+
+                                <EditText
+                                    android:id="@+id/vtxt4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="24dp"
+                                    android:layout_weight="3"
+                                    android:background="@drawable/edge"
+                                    android:inputType="numberSigned"
+                                    android:textSize="16dp" />
+                            </LinearLayout>
+
+
+                            <!--                    <LinearLayout-->
+                            <!--                        android:layout_width="wrap_content"-->
+                            <!--                        android:layout_height="wrap_content"-->
+                            <!--                        android:orientation="horizontal">-->
+                            <!--                        -->
+                            <!--                        -->
+                            <!--                        <Button-->
+                            <!--                            android:id="@+id/vbtn_start"-->
+                            <!--                            android:layout_width="wrap_content"-->
+                            <!--                            android:layout_height="wrap_content"-->
+                            <!--                            android:text="시작시간"/>-->
+                            <!--                        <Button-->
+                            <!--                            android:id="@+id/vbtn_end"-->
+                            <!--                            android:layout_width="wrap_content"-->
+                            <!--                            android:layout_height="wrap_content"-->
+                            <!--                            android:text="종료시간"/>-->
+                            <!--                    </LinearLayout>-->
+                            <!--                    <TextView-->
+                            <!--                        android:id="@+id/v_time"-->
+                            <!--                        android:layout_width="match_parent"-->
+                            <!--                        android:layout_height="wrap_content"-->
+                            <!--                        android:layout_gravity="center"-->
+                            <!--                        android:background="@drawable/edge"-->
+                            <!--                        android:gravity="center"-->
+                            <!--                        android:text="총시간"-->
+                            <!--                        android:textSize="24dp" />-->
+
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="33dp"
+                        android:background="#d9dde4"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="서비스금액"
+                            android:textSize="16dp" />
+
+                        <TextView
+                            android:id="@+id/tv_price"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            android:text="0원"
+                            android:textSize="16dp" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="8dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="84dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/icon_nursing1" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="간호관리"
+                                android:textColor="#26ab74"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="6dp"
+                                android:layout_weight="1"
+                                android:ellipsize="none"
+                                android:scrollHorizontally="false"
+                                android:singleLine="false"
+                                android:text="욕창관리,영양관리,통증관리,배설관리,당뇨발관리,호흡기간호,투석간호,구강간호"
+                                android:textSize="16dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/v_time3"
+                                    android:layout_width="0dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edge"
+                                    android:gravity="center"
+                                    android:inputType="numberSigned"
+                                    android:textSize="16dp" />
+
+                                <Button
+                                    android:id="@+id/vbtn_start3"
+                                    android:layout_width="80dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="2dp"
+                                    android:background="@drawable/buttonedge"
+                                    android:text="분"
+                                    android:textColor="#ffffff"
+                                    android:textSize="16dp" />
+
+                            </LinearLayout>
+                            <CheckBox
+                                android:id="@+id/ck_nurse1"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="욕창관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="영양관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse3"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="통증관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse4"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="배설관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse5"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="당뇨발관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse6"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="호흡기간호"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse7"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="투석간호"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse8"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="구강간호"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:background="#e0e0e0" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:background="#e0e0e0" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="84dp"
+                            android:layout_height="90dp"
+                            android:src="@drawable/icon_nursing4" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="건강관리"
+                                android:textColor="#26ab74"
+                                android:textSize="20dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="2dp"
+                                android:layout_marginBottom="6dp"
+                                android:layout_weight="1"
+                                android:ellipsize="none"
+                                android:scrollHorizontally="false"
+                                android:singleLine="false"
+                                android:text="관절오그라듦 예방,투약관리,기초건강관리,인지훈련"
+                                android:textSize="16dp" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <EditText
+                                    android:id="@+id/v_time6"
+                                    android:layout_width="0dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/edge"
+                                    android:gravity="center"
+                                    android:inputType="numberSigned"
+                                    android:textSize="16dp" />
+
+                                <Button
+                                    android:id="@+id/vbtn_start6"
+                                    android:layout_width="80dp"
+                                    android:layout_height="32dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="2dp"
+                                    android:background="@drawable/buttonedge"
+                                    android:text="분"
+                                    android:textColor="#ffffff"
+                                    android:textSize="16dp" />
+
+                            </LinearLayout>
+                            <CheckBox
+                                android:id="@+id/ck_nurse9"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="관절오그라듦 예방"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse10"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="투약관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse11"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="기초건강관리"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+
+                            <CheckBox
+                                android:id="@+id/ck_nurse12"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="인지훈련"
+                                android:textColor="#717171"
+                                android:textSize="16dp" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:background="#e0e0e0" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_centerInParent="true"
+                        android:background="#e0e0e0" />
+
+                    <ImageView
+                        android:layout_width="65dp"
+                        android:layout_height="19dp"
+                        android:layout_margin="8dp"
+                        android:paddingLeft="8dp"
+                        android:src="@drawable/icon_uniqe" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:ellipsize="none"
+                        android:scrollHorizontally="false"
+                        android:singleLine="false"
+                        android:text="수급자 상태, 처치내용 또는 가족상담, 교육 내용 등을 자세히 적어주세요. 예) 욕창부위 및 드레싱빈도, 방광훈련방법, 가족지지체계 및 지역사회 지원 등 상담"
+                        android:textColor="#717171" />
+
+                    <EditText
+                        android:id="@+id/et_etc"
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:background="@drawable/edge"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_marginBottom="16dp" />
+
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/vbtn2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#26ab74"
+                    android:text="저장하기"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/animation_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                app:lottie_autoPlay="true"
+                app:lottie_fileName="success.json" />
+        </FrameLayout>
+    </ScrollView>
+
+</LinearLayout>

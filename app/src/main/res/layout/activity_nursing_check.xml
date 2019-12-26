@@ -1,0 +1,376 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context="com.jubumam.SureFin.NursingCheckActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="간호처치"
+                android:textSize="24dp" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="호흡기간호"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_breath1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="흡인실시"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_breath2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="가습기"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_breath3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="네브라이저 제공"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_breath4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="산소공급"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="피부간호"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_skin1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="외상처치"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_skin2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="봉대교환"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_skin3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="연고바르기"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_skin4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="욕창간호"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_skin5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="양용제공"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="통증간호"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_ache1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="온,냉습포 제공"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="배설간호"
+                android:textSize="20dp" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_excretion1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="방광훈련 실시"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_excretion2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유치도뇨과 유치 및 교환"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_excretion3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="단순 도뇨 실시"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_excretion4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Finger evacustion 실시"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_excretion5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="관장"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_excretion6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="장루간호"
+                    android:textSize="16dp" />
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="그밖의 처치"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/cb_etc1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="복막투석"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_etc2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="기관절개관 간호"
+                    android:textSize="16dp" />
+
+                <CheckBox
+                    android:id="@+id/cb_etc3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="위독시 간호"
+                    android:textSize="16dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <CheckBox
+                        android:id="@+id/cb_etc4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="기타"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_etc"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginRight="4dp" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="상세처치내용"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+
+                    <EditText
+                        android:id="@+id/et_treatment"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp" />
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+
+
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="확인사항"
+                android:textSize="20dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edge"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="식사"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_meal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="배설"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_excretion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+                        android:text="기타"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:id="@+id/et_etc2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="4dp"
+                        android:paddingRight="4dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전송" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
