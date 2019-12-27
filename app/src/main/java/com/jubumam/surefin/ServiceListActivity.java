@@ -45,6 +45,7 @@ public class ServiceListActivity extends AppCompatActivity {
     private TextView tv_thisMonth2;
     private TextView tv_rating1;
     private TextView tv_name;
+    private TextView tv_noList;
 
     private ImageView img_left;
     private ImageView img_right;
@@ -155,6 +156,7 @@ public class ServiceListActivity extends AppCompatActivity {
         tv_name = findViewById(R.id.tv_name);
         img_left = findViewById(R.id.img_left);
         img_right = findViewById(R.id.img_right);
+        tv_noList = findViewById(R.id.tv_noList);
         tv_rating1.setText(rating);
         tv_name.setText(name + "님");
 
@@ -315,7 +317,7 @@ public class ServiceListActivity extends AppCompatActivity {
             ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명,D.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자,D.서비스제공일자) AS 요양일자,A.신체사용시간계,A.인지사용시간계,A.일상생활시간계,A.정서사용시간계,A.생활지원사용시간계,B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간,D.서비스제공,D.서비스제공일자 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
                     "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
                     "FULL OUTER JOIN Su_비급여신청자 D ON (D.서비스제공일자=A.일자 AND D.수급자명=A.수급자명 AND D.번호=A.번호) or (D.서비스제공일자=B.일자 AND D.수급자명=B.수급자명 AND D.번호=B.번호) or (D.서비스제공일자=C.일자 AND D.수급자명=C.수급자명 AND D.번호=C.번호)" +
-                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
+                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
                     "order by 요양일자,A.번호");
 
 //            ResultSet serviceResultSetlist = statement.executeQuery("select A.일자 AS 요양일자,B.일자 AS 목욕일자,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,목욕여부 from Su_방문요양급여정보 AS A JOIN Su_방문목욕정보 AS B " +
@@ -463,6 +465,15 @@ public class ServiceListActivity extends AppCompatActivity {
                 DecimalFormat myFormatter = new DecimalFormat("###,###");
                 tv_indiviPrice.setText(myFormatter.format(intTotalDayCareIndivi) + "원");
                 tv_publicPrice.setText(myFormatter.format(intTotalDayCarePublic) + "원");
+
+                if(intTotalDayCareIndivi==0 && intTotalDayCarePublic == 0){
+                    tv_noList.setVisibility(View.VISIBLE);
+                }else{
+                    tv_noList.setVisibility(View.GONE);
+                }
+
+
+
 
 
             }

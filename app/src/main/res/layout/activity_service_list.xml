@@ -411,15 +411,33 @@
             android:src="@drawable/ic_right" />
     </LinearLayout>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview_servicelist"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="match_parent"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/scrolledge"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_servicelist" />
+
+        <TextView
+            android:id="@+id/tv_noList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
+            android:gravity="center_horizontal"
+            android:text="서비스 사용 내역이 없습니다."
+            android:textSize="20dp"
+            android:visibility="gone" />
+    </FrameLayout>
 </LinearLayout>
