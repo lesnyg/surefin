@@ -1,16 +1,12 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.ImageDecoder;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.OrientationEventListener;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -38,9 +34,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-
-import javax.sql.RowSetEvent;
-import javax.sql.RowSetListener;
 
 public class ServiceListActivity extends AppCompatActivity {
     private TextView tv_sumTime;

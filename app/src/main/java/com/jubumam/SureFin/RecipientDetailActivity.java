@@ -1,9 +1,7 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.MessageQueue;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -42,8 +39,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-
-import javax.sql.RowSetListener;
 
 public class RecipientDetailActivity extends AppCompatActivity {
     private EditText et_name;
