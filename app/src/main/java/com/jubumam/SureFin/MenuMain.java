@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -39,8 +39,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.channels.ConnectionPendingException;
-import java.nio.channels.ReadableByteChannel;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

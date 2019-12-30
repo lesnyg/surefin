@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.animation.Animator;
 import android.app.AlertDialog;

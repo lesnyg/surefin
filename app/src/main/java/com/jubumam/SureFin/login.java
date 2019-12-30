@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.app.Activity;
 import android.content.Intent;

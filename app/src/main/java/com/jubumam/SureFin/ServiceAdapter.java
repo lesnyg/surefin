@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.view.LayoutInflater;
 import android.view.View;

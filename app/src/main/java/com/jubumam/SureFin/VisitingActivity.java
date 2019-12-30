@@ -1,9 +1,8 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,14 +24,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-import java.nio.channels.MembershipKey;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;

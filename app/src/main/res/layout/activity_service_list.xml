@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#eeeeee"
     android:orientation="vertical"
-    tools:context="com.jubumam.surefin.ServiceListActivity">
+    tools:context="com.jubumam.SureFin.ServiceListActivity">
 
     <include
         android:id="@+id/toolbar"
