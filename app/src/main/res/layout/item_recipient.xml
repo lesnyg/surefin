@@ -14,7 +14,7 @@
             android:id="@+id/img_person"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:padding="4dp"
+            android:padding="8dp"
             app:srcCompat="@android:drawable/ic_lock_lock" />
 
         <LinearLayout

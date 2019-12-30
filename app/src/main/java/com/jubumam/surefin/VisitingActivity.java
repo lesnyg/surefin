@@ -1103,12 +1103,14 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 Intent i5 = new Intent(VisitingActivity.this, EditRecipientActivity.class);
                 i5.putExtra("name", name);
                 i5.putExtra("rating", rating);
+                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VisitingActivity.this, signActivity.class);
                 i8.putExtra("name", name);
                 i8.putExtra("rating", rating);
+                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
 

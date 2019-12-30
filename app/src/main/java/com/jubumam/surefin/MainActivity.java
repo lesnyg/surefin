@@ -468,12 +468,14 @@ public class MainActivity extends AppCompatActivity {
                 Intent i5 = new Intent(MainActivity.this, EditRecipientActivity.class);
                 i5.putExtra("name", name);
                 i5.putExtra("rating", rating);
+                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(MainActivity.this, signActivity.class);
                 i8.putExtra("name", name);
                 i8.putExtra("rating", rating);
+                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
 
