@@ -340,6 +340,7 @@ public class ServiceListActivity extends AppCompatActivity {
                     "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
                     "order by 요양일자,A.번호");
 
+
 //            ResultSet serviceResultSetlist = statement.executeQuery("select A.일자 AS 요양일자,B.일자 AS 목욕일자,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,목욕여부 from Su_방문요양급여정보 AS A JOIN Su_방문목욕정보 AS B " +
 //                    "ON A.일자=B.일자 WHERE A.수급자명='"+name+"' AND B.수급자명='"+name+"' ORDER BY A.일자,B.일자" );
 
