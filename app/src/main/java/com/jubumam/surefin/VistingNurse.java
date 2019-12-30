@@ -2,6 +2,7 @@ package com.jubumam.surefin;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -210,9 +212,18 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private String dbCheck;
     private LottieAnimationView animationView;
     private LinearLayout lin_nurseAll;
+
+    private String schedule_date;//일자
+    private String scheduletime;//근무시간
+    private String contracttime; //계약시간
+    private String schedulename;//계약수급자명
+    private String divisiontotal;
     private int number = 0;
     private int totaltime1 = 0;
+    private String date3;
+    private String date2;
 
+    private AsyncTask<String, String, String> cTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -284,7 +295,15 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
         vbtn2 = findViewById(R.id.vbtn2);
 
+
+
+      //  vbtn_start1 = findViewById(R.id.vbtn_start1);
+     //   vbtn_start2 = findViewById(R.id.vbtn_start2);
+
         vbtn_start3 = findViewById(R.id.vbtn_start3);
+      //  vbtn_start4 = findViewById(R.id.vbtn_start4);
+      //  vbtn_start5 = findViewById(R.id.vbtn_start5);
+
         vbtn_start6 = findViewById(R.id.vbtn_start6);
 
         tv_name = findViewById(R.id.tv_name);
@@ -299,6 +318,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 finish();
             }
         });
+
+
 
 
         findViewById(R.id.lin_info).setOnClickListener(new View.OnClickListener() {
@@ -796,6 +817,92 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+
+    public class CalSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            calQuery();
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+
+    public void calQuery(){
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+
+            while (calres.next()){
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division =  calres.getString("구분");//구분
+
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    if (schedule_date != null) {
+                        divisiontotal = "어르신 : " + schedulename+"  "
+                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
+                        //                      cal_txt1.setText("어르신:" + schedulename);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
+                        builder.setTitle("일정관리");
+                        builder.setPositiveButton(divisiontotal,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
+                                    }
+
+                                });
+                        builder.show();
+                    }else if (schedule_date == null){
+                        Toast.makeText(VistingNurse.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public class MySyncTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -823,6 +930,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
         }
     }
+
+
 
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -863,6 +972,39 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 i8.putExtra("name", name);
                 i8.putExtra("rating", rating);
                 startActivity(i8);
+                break;
+
+            case R.id.action_cal:
+                final Calendar cal = Calendar.getInstance();
+                Log.e(TAG, cal.get(Calendar.YEAR) + "");
+                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
+                Log.e(TAG, cal.get(Calendar.DATE) + "");
+                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
+                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+                DatePickerDialog dialog = new DatePickerDialog(VistingNurse.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+
+
+                        date2 = String.format("%d-%d-%d", year, month + 1, date);
+                        date3 = date2;
+
+                        cTask = new CalSyncTask().execute();
+                        //       cal_btn.setText(date1);
+                        //vtxt1.setText(date1);
+
+
+
+                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
+
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
+                //dialog.getDatePicker().setMaxDate(new Date().getTime());
+
+                dialog.show();
+
                 break;
 
 
