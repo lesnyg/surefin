@@ -1,5 +1,8 @@
 package com.jubumam.surefin;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,8 +12,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,9 +27,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -78,6 +85,23 @@ public class Non_Payment_Item extends AppCompatActivity {
     private String dbDate;
     private TextView tv_thisMonth;
     private Date date;
+
+    private String schedule_date;//일자
+    private String scheduletime;//근무시간
+    private String contracttime; //계약시간
+    private String schedulename;//계약수급자명
+    private String divisiontotal;
+    private String division;
+    private String divisiondate;
+    private String divisiontime;
+
+    private String date2;
+    private String date1;
+    private String TAG = "PickerActivity";
+
+
+    private AsyncTask<String, String, String> cTask;
+
 
 
     @Override
@@ -332,6 +356,38 @@ public class Non_Payment_Item extends AppCompatActivity {
                 startActivity(i8);
                 break;
 
+            case R.id.action_cal:
+                final Calendar cal = Calendar.getInstance();
+                Log.e(TAG, cal.get(Calendar.YEAR) + "");
+                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
+                Log.e(TAG, cal.get(Calendar.DATE) + "");
+                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
+                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+                DatePickerDialog dialog = new DatePickerDialog(Non_Payment_Item.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+
+
+                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date2 = date1;
+
+                        cTask = new CalSyncTask().execute();
+                        //       cal_btn.setText(date1);
+                        //vtxt1.setText(date1);
+
+
+
+                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
+
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
+                //dialog.getDatePicker().setMaxDate(new Date().getTime());
+
+                dialog.show();
+
+                break;
 
             //   startActivity(intent);
             //  return true;
@@ -339,6 +395,86 @@ public class Non_Payment_Item extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    public class CalSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            calQuery();
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+
+    public void calQuery(){
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+
+            while (calres.next()){
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division =  calres.getString("구분");//구분
+
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    if (schedule_date != null) {
+
+                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(Non_Payment_Item.this);
+
+                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+
+                    }else if (schedule_date == null){
+                        Toast.makeText(Non_Payment_Item.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     private static class NonAdapter extends RecyclerView.Adapter<NonAdapter.NonViewHolder> {
         public Non item;

@@ -1,5 +1,6 @@
 package com.jubumam.surefin;
 
+import android.accessibilityservice.AccessibilityButtonController;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
@@ -18,13 +19,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.solver.widgets.Optimizer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Blob;
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     private String schedulename;//계약수급자명
     private String division;
     private String divisiontotal;
+    private String divisiondate;
+    private String divisiontime;
 
 
 
@@ -85,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test);
+        setContentView(R.layout.activity_main);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         mTask = new MySyncTask().execute();
         et_search = findViewById(R.id.et_search);
-        btn_check = findViewById(R.id.btn_check);
+       // btn_check = findViewById(R.id.btn_check);
         recyclerView = findViewById(R.id.recyclerview);
 
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -115,6 +121,8 @@ public class MainActivity extends AppCompatActivity {
         cal_btn = findViewById(R.id.cal_btn);
 
 
+
+/*
         final Calendar cal = Calendar.getInstance();
 
         Log.e(TAG, cal.get(Calendar.YEAR) + "");
@@ -181,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });*/
-
 
     }
 
@@ -262,11 +269,20 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                        +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+          //              divisiontotal = "어르신 : " + schedulename+"  "
+          //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
 //                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
   //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(MainActivity.this);
+
+                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+
+         /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("일정관리");
                         builder.setPositiveButton(divisiontotal,
                                 new DialogInterface.OnClickListener() {
@@ -276,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                 });
-                        builder.show();
+                        builder.show();*/
                     }else if (schedule_date == null){
                         Toast.makeText(MainActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
 
@@ -462,6 +478,44 @@ public class MainActivity extends AppCompatActivity {
                 i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
+
+            case R.id.action_cal:
+                final Calendar cal = Calendar.getInstance();
+                Log.e(TAG, cal.get(Calendar.YEAR) + "");
+                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
+                Log.e(TAG, cal.get(Calendar.DATE) + "");
+                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
+                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+
+
+
+
+                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+
+
+
+                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date2 = date1;
+
+                        cTask = new CalSyncTask().execute();
+                        //       cal_btn.setText(date1);
+                        //vtxt1.setText(date1);
+
+
+
+                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
+
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+
+                //dialog.getDatePicker().setMaxDate(new Date().getTime());
+
+                dialog.show();
+
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
