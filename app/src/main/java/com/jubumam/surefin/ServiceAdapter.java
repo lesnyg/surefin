@@ -58,6 +58,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceH
         service = mItems.get(position);
         holder.tv_servicedate.setText(service.getDate());
 
+
         if(service.getSumUsingTime1() == 0){
             holder.tv_careDayTime.setText("0");
         }else{
@@ -95,10 +96,6 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceH
         TextView tv_nursingDayTime;
         TextView tv_tenObjectDayCount;
 
-
-
-        ServiceAdapter adapter;
-
         public ServiceHolder(@NonNull View itemView) {
             super(itemView);
             tv_servicedate = itemView.findViewById(R.id.tv_servicedate);
@@ -107,8 +104,6 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceH
             tv_nursingDayCount = itemView.findViewById(R.id.tv_nursingDayCount);
             tv_nursingDayTime = itemView.findViewById(R.id.tv_nursingDayTime);
             tv_tenObjectDayCount = itemView.findViewById(R.id.tv_tenObjectDayCount);
-
-
         }
     }
 }
