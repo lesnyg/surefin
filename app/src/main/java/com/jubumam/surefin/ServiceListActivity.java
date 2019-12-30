@@ -570,6 +570,9 @@ public class ServiceListActivity extends AppCompatActivity {
 
                         schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
 
+
+
+
                     }else if (schedule_date == null){
                         Toast.makeText(ServiceListActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
 
