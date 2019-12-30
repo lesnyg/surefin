@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.MessageQueue;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -41,6 +42,8 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import javax.sql.RowSetListener;
 
 public class RecipientDetailActivity extends AppCompatActivity {
     private EditText et_name;
@@ -111,6 +114,8 @@ public class RecipientDetailActivity extends AppCompatActivity {
     private String schedulename;//계약수급자명
     private String division;
     private String divisiontotal;
+    private String divisiondate;
+    private String divisiontime;
     private AsyncTask<String, String, String> cTask;
 
 
@@ -197,6 +202,8 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 iup.putExtra("pastdisease", pastdisease);
                 iup.putExtra("responsibility", responsibility);
                 startActivity(iup);
+
+
             }
         });
 
@@ -480,6 +487,8 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
             while (calres.next()){
 
+
+
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
@@ -494,11 +503,23 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
 
                     if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+                        //              divisiontotal = "어르신 : " + schedulename+"  "
+                        //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
 //                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
                         //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RecipientDetailActivity.this);
+
+
+
+                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(RecipientDetailActivity.this);
+
+                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+
+         /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("일정관리");
                         builder.setPositiveButton(divisiontotal,
                                 new DialogInterface.OnClickListener() {
@@ -508,13 +529,10 @@ public class RecipientDetailActivity extends AppCompatActivity {
                                     }
 
                                 });
-                        builder.show();
+                        builder.show();*/
                     }else if (schedule_date == null){
                         Toast.makeText(RecipientDetailActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
-
                     }
-
-
 
                 }
             });

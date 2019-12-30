@@ -158,6 +158,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String contracttime; //계약시간
     private String schedulename;//계약수급자명
     private String divisiontotal;
+    private String divisiondate;
+    private String divisiontime;
 
     private String date2;
     private String date1;
@@ -575,21 +577,15 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
 
 
                     if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
-//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-                        //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                        builder.setTitle("일정관리");
-                        builder.setPositiveButton(divisiontotal,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
 
-                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                    }
+                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
 
-                                });
-                        builder.show();
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(VisitingBathActivity.this);
+
+                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+
                     }else if (schedule_date == null){
                         Toast.makeText(VisitingBathActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
 

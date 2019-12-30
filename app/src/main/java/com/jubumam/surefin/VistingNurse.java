@@ -222,6 +222,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private int totaltime1 = 0;
     private String date3;
     private String date2;
+    private String divisiondate;
+    private String divisiontime;
 
     private AsyncTask<String, String, String> cTask;
 
@@ -869,21 +871,16 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
 
                     if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
-//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-                        //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
-                        builder.setTitle("일정관리");
-                        builder.setPositiveButton(divisiontotal,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
+                     
+                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
 
-                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                    }
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(VistingNurse.this);
 
-                                });
-                        builder.show();
+                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+
+
                     }else if (schedule_date == null){
                         Toast.makeText(VistingNurse.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
 

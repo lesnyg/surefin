@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.solver.widgets.Optimizer;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Blob;
@@ -78,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
     private String schedulename;//계약수급자명
     private String division;
     private String divisiontotal;
+    private String divisiondate;
+    private String divisiontime;
 
 
 
@@ -187,7 +190,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-
     }
 
 
@@ -267,11 +269,20 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                        +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+          //              divisiontotal = "어르신 : " + schedulename+"  "
+          //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
 //                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
   //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(MainActivity.this);
+
+                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+
+         /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("일정관리");
                         builder.setPositiveButton(divisiontotal,
                                 new DialogInterface.OnClickListener() {
@@ -281,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
 
                                 });
-                        builder.show();
+                        builder.show();*/
                     }else if (schedule_date == null){
                         Toast.makeText(MainActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
 
@@ -473,6 +484,10 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, cal.get(Calendar.DATE) + "");
                 Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
                 Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+
+
+
+
                 DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
