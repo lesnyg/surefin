@@ -2,7 +2,6 @@ package com.jubumam.surefin;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,10 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -49,7 +46,6 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -178,23 +174,11 @@ public class MenuMain extends AppCompatActivity {
     ImageView dialog_imageview;
     TextView nowTime;
 
-    private String date1;
-    private String date2;
+
     final String TAG = getClass().getSimpleName();
     private String recipientBasicTime;
     private String thisYear;
     private Date currentTime;
-
-
-    private String schedule_date;//일자
-    private String scheduletime;//근무시간
-    private String contracttime; //계약시간
-    private String schedulename;//계약수급자명
-    private String division;
-    private String divisiontotal;
-
-    private AsyncTask<String, String, String> cTask;
-
 
 
     @Override
@@ -225,10 +209,6 @@ public class MenuMain extends AppCompatActivity {
         birth = intent.getExtras().getString("birth");
         pastdisease = intent.getExtras().getString("pastdisease");
         responsibility = intent.getExtras().getString("responsibility");
-//        myi = (TextView) findViewById(R.id.i);
-
-
-//        name = "홍길동";
 
         currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -281,20 +261,6 @@ public class MenuMain extends AppCompatActivity {
         init();
 
         mRecipientTask = new RecipientTask().execute();
-
-        findViewById(R.id.btn_offwork).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MenuMain.this, cameraActivity.class);
-                // intent.putExtra("time",s3);
-                intent.putExtra("name", name);
-
-                // intent.putExtra("ymd",ymd1);
-                // intent.putExtra("hms",hms1);
-                // Toast.makeText(cameraActivity.this,s3,Toast.LENGTH_SHORT).show();
-                startActivity(intent);
-            }
-        });
 
         findViewById(R.id.lin_care).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -668,7 +634,7 @@ public class MenuMain extends AppCompatActivity {
             public void run() {
                 handler.post(Update);
             }
-        }, 2000, 2000);
+        }, 4000, 4000);
 
         // Pager listener over indicator
         indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -944,11 +910,12 @@ public class MenuMain extends AppCompatActivity {
                 if (count != null && count.equals("TRUE")) {
                     bathCount++;
                 }
-                if (nursingCount != null && nursingCount.equals("1")) {
-                    intNursingCount++;
-                }
+//                if (nursingCount != null && nursingCount.equals("1")) {
+//                    intNursingCount++;
+//                }
                 if (nursingTotal != null) {
                     intNursingTotal = Integer.parseInt(nursingTotal) + intNursingTotal;
+                    intNursingCount++;
                 }
 
                 sumUsingTimeMonth = sumUsingTimeMonth + sumUsingTimeDay;
@@ -965,7 +932,7 @@ public class MenuMain extends AppCompatActivity {
                     totalhour = (int)totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60 ;
-                    tv_careTotalTime.setText(thour+":"+tmin+"분");
+                    tv_careTotalTime.setText(thour+":"+tmin);
 //                    tv_careTotalTime.setText(Integer.toString(totalhour)+ "분");
 
                     vistime = sumUsingTimeMonth / 60000;
@@ -999,92 +966,6 @@ public class MenuMain extends AppCompatActivity {
 
 
     }
-
-
-    public class CalSyncTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-            calQuery();
-            return null;
-
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
-
-
-
-    public void calQuery(){
-
-        Connection conn = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
-
-            while (calres.next()){
-
-                schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
-                schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
-
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
-//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-                        //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(MenuMain.this);
-                        builder.setTitle("일정관리");
-                        builder.setPositiveButton(divisiontotal,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                    }
-
-                                });
-                        builder.show();
-                    }else if (schedule_date == null){
-                        Toast.makeText(MenuMain.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-
-                }
-            });
-
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
     private void bnquery() {
 
@@ -1136,9 +1017,6 @@ public class MenuMain extends AppCompatActivity {
 //                    bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
                 imageModelArrayList.add(new ImageModel(bitmap));
 
-
-
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -1154,8 +1032,10 @@ public class MenuMain extends AppCompatActivity {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
 
+
+
+    }
 
 
     @Override
@@ -1180,6 +1060,8 @@ public class MenuMain extends AppCompatActivity {
             case R.id.action_notice:
                 Intent intent1 = new Intent(MenuMain.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
@@ -1194,41 +1076,6 @@ public class MenuMain extends AppCompatActivity {
                 i8.putExtra("rating", rating);
                 startActivity(i8);
                 break;
-
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG, cal.get(Calendar.DATE) + "");
-                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-                DatePickerDialog dialog = new DatePickerDialog(MenuMain.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
-                        date1 = String.format("%d-%d-%d", year, month + 1, date);
-                        date2 = date1;
-
-                        cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
-                dialog.show();
-
-                break;
-
-
         }
         return super.onOptionsItemSelected(item);
     }

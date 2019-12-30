@@ -78,8 +78,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
     private String pastdisease;
     private String responsibility;
     private String phoneNumber;
-    private String date1;
-    private String date2;
 
     private ResultSet resultSet;
     private ResultSet resultSetPhoto;
@@ -102,15 +100,18 @@ public class RecipientDetailActivity extends AppCompatActivity {
     final static int TAKE_PICTURE = 1;
     ImageView dialog_imageview;
 
+    private String date1;
+    private String date2;
+    private String TAG1 = "PickerActivity";
+    private TextView cal_txt;
+    private TextView cal_txt1;
     private String schedule_date;//일자
     private String scheduletime;//근무시간
     private String contracttime; //계약시간
     private String schedulename;//계약수급자명
     private String division;
     private String divisiontotal;
-
     private AsyncTask<String, String, String> cTask;
-
 
 
     private AsyncTask<String,String,String> caTask;
@@ -443,6 +444,92 @@ public class RecipientDetailActivity extends AppCompatActivity {
     }
 
 
+    public class CalSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            calQuery();
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+
+    public void calQuery(){
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+
+            while (calres.next()){
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division =  calres.getString("구분");//구분
+
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    if (schedule_date != null) {
+                        divisiontotal = "어르신 : " + schedulename+"  "
+                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
+                        //                      cal_txt1.setText("어르신:" + schedulename);
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RecipientDetailActivity.this);
+                        builder.setTitle("일정관리");
+                        builder.setPositiveButton(divisiontotal,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
+                                    }
+
+                                });
+                        builder.show();
+                    }else if (schedule_date == null){
+                        Toast.makeText(RecipientDetailActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+
 
     public class MySyncTask extends AsyncTask<String, String, String> {
 
@@ -598,93 +685,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
 
 
-    public class CalSyncTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-            calQuery();
-            return null;
-
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
-
-
-
-    public void calQuery(){
-
-        Connection conn = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
-
-            while (calres.next()){
-
-                schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
-                schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
-
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    if (schedule_date != null) {
-                        divisiontotal = "어르신 : " + schedulename+"  "
-                                +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
-//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-                        //                      cal_txt1.setText("어르신:" + schedulename);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(RecipientDetailActivity.this);
-                        builder.setTitle("일정관리");
-                        builder.setPositiveButton(divisiontotal,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                    }
-
-                                });
-                        builder.show();
-                    }else if (schedule_date == null){
-                        Toast.makeText(RecipientDetailActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-
-                }
-            });
-
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.appbar_action,menu);
@@ -707,6 +707,8 @@ public class RecipientDetailActivity extends AppCompatActivity {
             case R.id.action_notice:
                 Intent intent1 = new Intent(RecipientDetailActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
@@ -723,11 +725,11 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_cal:
                 final Calendar cal = Calendar.getInstance();
-                Log.e(TAG, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG, cal.get(Calendar.DATE) + "");
-                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
+                Log.e(TAG1, cal.get(Calendar.YEAR) + "");
+                Log.e(TAG1, cal.get(Calendar.MONTH) + 1 + "");
+                Log.e(TAG1, cal.get(Calendar.DATE) + "");
+                Log.e(TAG1, cal.get(Calendar.HOUR_OF_DAY) + "");
+                Log.e(TAG1, cal.get(Calendar.MINUTE) + "");
                 DatePickerDialog dialog = new DatePickerDialog(RecipientDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
@@ -753,7 +755,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 dialog.show();
 
                 break;
-
 
         }
         return super.onOptionsItemSelected(item);

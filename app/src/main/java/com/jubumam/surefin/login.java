@@ -21,7 +21,7 @@ import java.sql.Statement;
 
 public class login extends Activity {
 
-    private Button btn1;
+    Button btn1;
     EditText txthp;
     private String hp,name,hp1,pass1;
     String PhoneNum;
@@ -89,8 +89,9 @@ public class login extends Activity {
             @Override
             public void onClick(View v) {
 
-                hp = txthp.getText().toString();
-                pass = txt_pass.getText().toString();
+
+               hp = txthp.getText().toString();
+               pass = txt_pass.getText().toString();
 
 
                 //Toast.makeText(login.this,PhoneNum,Toast.LENGTH_SHORT).show();

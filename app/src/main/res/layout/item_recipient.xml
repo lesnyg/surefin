@@ -33,8 +33,7 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="8dp"
                     android:padding="4dp"
-                    android:text="이름   :"
-                    android:textSize="10dp"
+                    android:text="수급자명   :"
 
                     />
 
@@ -93,8 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:padding="4dp"
-                    android:text="연락처:"
-                    android:textSize="10dp"/>
+                    android:text="전화번호:" />
 
                 <TextView
                     android:id="@+id/tv_number"
@@ -114,8 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="5dp"
                     android:padding="4dp"
-                    android:text="주소   :"
-                    android:textSize="10dp"/>
+                    android:text="주소   :" />
 
                 <TextView
                     android:id="@+id/tv_adress"

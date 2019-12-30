@@ -8,18 +8,28 @@ public class Service {
     private String count;
     private String nursingCount;
     private String nursingTotal;
+    private String nonPay;
 
 
     public Service() {
     }
 
-    public Service(String name, String date, long sumUsingTime1, String count, String nursingCount, String nursingTotal) {
+    public Service(String name, String date, long sumUsingTime1, String count, String nursingCount, String nursingTotal, String nonPay) {
         this.name = name;
         this.date = date;
         this.sumUsingTime1 = sumUsingTime1;
         this.count = count;
         this.nursingCount = nursingCount;
         this.nursingTotal = nursingTotal;
+        this.nonPay = nonPay;
+    }
+
+    public String getNonPay() {
+        return nonPay;
+    }
+
+    public void setNonPay(String nonPay) {
+        this.nonPay = nonPay;
     }
 
     public String getName() {

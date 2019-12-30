@@ -337,6 +337,8 @@ public class Non_Payment_Item extends AppCompatActivity {
             case R.id.action_notice:
                 Intent intent1 = new Intent(Non_Payment_Item.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
+                intent1.putExtra("responsibility", responsibility);
+                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
