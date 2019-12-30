@@ -399,7 +399,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_marginTop="8dp"
-                android:layout_height="100dp">
+                android:layout_height="105dp">
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/pager"
@@ -429,6 +429,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_marginTop="8dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp">
 
@@ -436,7 +437,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+
                     android:orientation="horizontal">
 
                     <ImageView
