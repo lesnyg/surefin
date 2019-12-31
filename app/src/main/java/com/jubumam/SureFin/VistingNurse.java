@@ -296,18 +296,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         tv_endTime = findViewById(R.id.tv_endTime);
 
         vbtn2 = findViewById(R.id.vbtn2);
-
-
-
-      //  vbtn_start1 = findViewById(R.id.vbtn_start1);
-     //   vbtn_start2 = findViewById(R.id.vbtn_start2);
-
         vbtn_start3 = findViewById(R.id.vbtn_start3);
-      //  vbtn_start4 = findViewById(R.id.vbtn_start4);
-      //  vbtn_start5 = findViewById(R.id.vbtn_start5);
-
         vbtn_start6 = findViewById(R.id.vbtn_start6);
-
         tv_name = findViewById(R.id.tv_name);
         tv_phone1 = findViewById(R.id.tv_mdiv);
         tv_rating1 = findViewById(R.id.tv_rating1);
@@ -320,8 +310,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 finish();
             }
         });
-
-
 
 
         findViewById(R.id.lin_info).setOnClickListener(new View.OnClickListener() {
@@ -371,24 +359,20 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                     try {
                         Date endtimes = timeformatter.parse(strEndTime);
                         Date starttimes = timeformatter.parse(strStartTime);
-
-                        //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
                         diff = endtimes.getTime() - starttimes.getTime();
-
-
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
 
                     if (tv_time.getText().equals("")) {
-                        clockusingTime=Long.toString(diff/(60*1000));
+                        clockusingTime = Long.toString(diff / (60 * 1000));
                         tv_time.setText(clockusingTime);
                     } else {
                         try {
                             totalnumber = tv_time.getText().toString();
                             Date s1 = timeformatter.parse(totalnumber);
                             tdiff = diff + s1.getTime();
-                            clockusingTime=Long.toString(diff/(60*1000));
+                            clockusingTime = Long.toString(diff / (60 * 1000));
                             tv_time.setText(clockusingTime);
                         } catch (Exception e) {
 
@@ -480,22 +464,17 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                     ck_string12 = "False";
                 }
 
-
                 int totaltime;
-
-                //  totaltime = Integer.parseInt(usingTime1)+Integer.parseInt(usingTime2)+Integer.parseInt(usingTime3)+Integer.parseInt(usingTime4)+Integer.parseInt(usingTime5)+Integer.parseInt(usingTime6);
                 totaltime = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
                 totime = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
 
                 if (totime < 30) {
                     ptime = "30분미만";
-
                 } else if (totime >= 60) {
                     ptime = "60분이상";
                 } else if ((totime >= 30) && (totime < 60)) {
                     ptime = "30분~60분미만";
                 }
-
 
                 int thour = totaltime / 60;
                 int tmin = totaltime % 60;
@@ -509,18 +488,16 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 usingTime = Integer.toString(totaltime1);
                 AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
                 builder.setTitle("내용전송");
-                builder.setMessage("총시간" +usingTime + "분을 전송하시겠습니까?");
-                //builder.setMessage("총시간 "+totaltime+" 분을 전송하시겠습니까?");
+                builder.setMessage("총시간" + usingTime + "분을 전송하시겠습니까?");
                 builder.setPositiveButton("예",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
 
 
-                                if(dateCheck!=null && dateCheck.equals(date1)){
+                                if (dateCheck != null && dateCheck.equals(date1)) {
                                     AlertDialog.Builder builder2 = new AlertDialog.Builder(VistingNurse.this);
                                     builder2.setTitle("방문간호");
                                     builder2.setMessage("오늘 방문간호는 이미 진행되었습니다. 그래도 전송하시겠습니까?");
-                                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
                                     builder2.setPositiveButton("예",
                                             new DialogInterface.OnClickListener() {
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -536,7 +513,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                                                 }
                                             });
                                     builder2.show();
-                                }else {
+                                } else {
                                     number = 1;
                                     mTask = new MySyncTask().execute();
                                     dbCheckSyncTask = new DbCheckSyncTask().execute();
@@ -552,13 +529,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                 builder.show();
-
-
                 Toast.makeText(VistingNurse.this, ptime, Toast.LENGTH_LONG).show();
-
-                //  Toast.makeText(VistingNurse.this,totalhour+"/"+tmoney1+"/"+hourmoney1+"/"+batime1+"/"+vistime, Toast.LENGTH_LONG).show();
-                //Toast.makeText(VistingNurse.this,"입력완료",Toast.LENGTH_SHORT).show();
-                //
             }
         });
 
@@ -626,7 +597,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
             }
 
-            //ResultSet res = sts.executeQuery("select * from Su_년도별금액 where 상세구분 = '"+ptime+"'");
             ResultSet res = sts.executeQuery("select * from Su_년도별적용급액 where 상세구분 = '30분미만'");
             while (res.next()) {
 
@@ -650,11 +620,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
 
-//            tmoney = money - smoney;
-//
-//            totaltime1 = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
-//
-//            usingTime = Integer.toString(totaltime1);
             ResultSet resultSet = statement.executeQuery("insert into Su_방문간호정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호,의료기관명칭,발급일자,유효기간," +
                     "의사면허번호,방문횟수,시작시간,종료시간,총시간,혈압,맥박,체온," +
                     "간호시간계,건강시간계,특이사항,금액,지점,담당,기본시간,급여" +
@@ -663,7 +628,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                     "'" + birth + "','" + acceptnumber + "','" + agency + "','" + issuedate + "','" + edate + "','" + mlicense + "'," +
                     "'" + vnumber + "','" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + bpressure + "','" + pressure + "'," + "'" + btemperature + "'," +
                     "'" + usingTime1 + "','" + usingTime4 + "','" + uniqueness + "','" + smoney + "','" + place + "','" + responsibility + "','" + baseTime + "','" + tmoney + "','" + gender + "','" + division + "','" + mhistory + "'," +
-                    "'" + ck_string1 + "','" + ck_string2 + "','" + ck_string3 + "','" + ck_string4 + "','" + ck_string5 + "','" + ck_string6 + "','" + ck_string7 + "','" + ck_string8 + "','" + ck_string9 + "','" + ck_string10 + "','" + ck_string11 + "','" + ck_string12 + "','" + ptime + "','" + dbCheck + "','"+number+"')");
+                    "'" + ck_string1 + "','" + ck_string2 + "','" + ck_string3 + "','" + ck_string4 + "','" + ck_string5 + "','" + ck_string6 + "','" + ck_string7 + "','" + ck_string8 + "','" + ck_string9 + "','" + ck_string10 + "','" + ck_string11 + "','" + ck_string12 + "','" + ptime + "','" + dbCheck + "','" + number + "')");
 //                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
 //                    "건강관리,간호관리,시작시간,종료시간,총시간,방문종류구분,디비체크)" +
 //                    "values('" + date1 + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "','" + organization + "','" + organizationId + "'," +
@@ -820,7 +785,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     public class CalSyncTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -845,23 +809,22 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
+                division = calres.getString("구분");//구분
 
             }
 
@@ -871,21 +834,20 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
 
                     if (schedule_date != null) {
-                     
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
                         Schedule_dialog schedule_dialog = new Schedule_dialog(VistingNurse.this);
 
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
 
 
-                    }else if (schedule_date == null){
-                        Toast.makeText(VistingNurse.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                    } else if (schedule_date == null) {
+                        Toast.makeText(VistingNurse.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
-
 
 
                 }
@@ -927,8 +889,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
         }
     }
-
-
 
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -983,36 +943,15 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 DatePickerDialog dialog = new DatePickerDialog(VistingNurse.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
                         date2 = String.format("%d-%d-%d", year, month + 1, date);
                         date3 = date2;
-
                         cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
                 dialog.show();
 
                 break;
-
-
-            //   startActivity(intent);
-            //  return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }

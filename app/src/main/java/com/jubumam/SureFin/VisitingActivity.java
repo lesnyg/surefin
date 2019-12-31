@@ -119,19 +119,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private SimpleDateFormat timeformatter;
     private SimpleDateFormat formatter;
     private long diff;
-    private long diff1;
-    private long diff1_1;
-    private long diff2;
-    private long diff3;
     private long tdiff;
-    private long tdiff1;
-    private long tdiff1_1;
-    private long tdiff2;
-    private long tdiff3;
-    private long ndiff;
-
-    private Button btn_decrease;
-    private Button btn_increase;
 
     private TextView tv_time;
     private String strStartTime;    //시작시간
@@ -212,7 +200,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private AsyncTask<String, String, String> cTask;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -220,7 +207,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Get the ActionBar here to configure the way it behaves.
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
         actionBar.setDisplayShowTitleEnabled(false);
@@ -236,19 +222,17 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         pastdisease = intent.getExtras().getString("pastdisease");
         responsibility = intent.getExtras().getString("responsibility");
         vistime = intent.getExtras().getFloat("vistime");
-//        name = "홍길동";
 
         tv_date = findViewById(R.id.tv_date);
         TextView tv_information = findViewById(R.id.tv_information);
         tv_information.setText(name + "님");
 
         Date currentTime = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String today = new SimpleDateFormat("yyyy.MM.dd").format(currentTime);
-        String month = sdf.format(currentTime);
 
-//        String thisYearStart = thisYear+ "-01-01";
-//        String thisYearEnd = thisYear+"-12-32";
+        //매달 해당 자료를 가져오기 위한 날짜 설정 단계
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String month = sdf.format(currentTime);
         startMon = month + "-" + "01";
         endMon = month + "-" + "32";
 
@@ -256,26 +240,11 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         tv_date.setText(today);
 
 
-        //   totalhour =  (tmoney/rmoney)/totalmin;
-
         aTask = new mSyncTask().execute();
 
 
         minhour = 60;
-
-
-        //totalhour = (tmoney/hourmoney)/minhour*batime;
-
-
         tv_remainingTime = findViewById(R.id.tv_remainingTime);
-        //tv_remainingTime.setText(Integer.toString(totalhour) + "시간");
-
-        //totalhour = (tmoney/hourmoney)/minhour*batime;
-
-        //totalhour1 = (tmoney1/hourmoney1)/minhour*batime1;
-        // totalhour = (int)totalhour1;
-
-
         tv_remainingTime.setText(totalhour + "분");
 
 
@@ -415,14 +384,14 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     }
 
                     if (tv_time.getText().equals("")) {
-                        totalUsingTime=Long.toString(diff/(60*1000));
+                        totalUsingTime = Long.toString(diff / (60 * 1000));
                         tv_time.setText(totalUsingTime);
                     } else {
                         try {
                             totalnumber = tv_time.getText().toString();
                             Date s1 = timeformatter.parse(totalnumber);
                             tdiff = diff + s1.getTime();
-                            totalUsingTime=Long.toString(diff/(60*1000));
+                            totalUsingTime = Long.toString(diff / (60 * 1000));
                             tv_time.setText(totalUsingTime);
 
 
@@ -521,7 +490,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 int tmin = totaltime % 60;
                 AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
                 builder.setTitle("내용전송");
-                builder.setMessage("총시간"  + totaltime + "분을 전송하시겠습니까?");
+                builder.setMessage("총시간" + totaltime + "분을 전송하시겠습니까?");
                 // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
                 builder.setPositiveButton("예",
                         new DialogInterface.OnClickListener() {
@@ -596,34 +565,33 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                                 dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
 
 
-
-                                                if(dateCheck!=null && dateCheck.equals(currentDate)){
-                                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
-                                                    builder2.setTitle("방문요양");
-                                                    builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
-                                                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                                                    builder2.setPositiveButton("예",
-                                                            new DialogInterface.OnClickListener() {
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    number++;
-                                                                    mTask = new MySyncTask().execute();
-                                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
-                                                                }
-                                                            });
-                                                    builder2.setNegativeButton("아니오",
-                                                            new DialogInterface.OnClickListener() {
-                                                                public void onClick(DialogInterface dialog, int which) {
-                                                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                                                                }
-                                                            });
-                                                    builder2.show();
-                                                }else {
-                                                    number = 1;
+                                if (dateCheck != null && dateCheck.equals(currentDate)) {
+                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
+                                    builder2.setTitle("방문요양");
+                                    builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                    builder2.setPositiveButton("예",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    number++;
                                                     mTask = new MySyncTask().execute();
                                                     dbCheckSyncTask = new DbCheckSyncTask().execute();
                                                 }
-                                            }
-                                        });
+                                            });
+                                    builder2.setNegativeButton("아니오",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+                                    builder2.show();
+                                } else {
+                                    number = 1;
+                                    mTask = new MySyncTask().execute();
+                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                }
+                            }
+                        });
 
                 builder.setNegativeButton("아니오",
                         new DialogInterface.OnClickListener() {
@@ -635,18 +603,11 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                             }
                         });
                 builder.show();
-
-
-                //Toast.makeText(VisitingActivity.this,Integer.toString(totalhour)+"/"+Integer.toString(tmoney)+"/"+Integer.toString(hourmoney)+"/"+Integer.toString(batime), Toast.LENGTH_LONG).show();
-                //totalhour1 = (tmoney1/hourmoney1)/minhour*batime1;
-                // totalhour = (int)totalhour1;
-                // Toast.makeText(VisitingActivity.this,totalhour+"/"+tmoney1+"/"+hourmoney1+"/"+batime1+"/"+vistime, Toast.LENGTH_LONG).show();
-
-
             }
         });
 
     }
+
     public class DateSyncTask extends AsyncTask<String, String, String> {
         protected void onPreExecute() {
         }
@@ -880,9 +841,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
 
             ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' ");
 
-            //  ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='"+baseTime+"' ");
-            //   ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='30분' ");
-
             while (rs2.next()) {
                 batime = Integer.parseInt(rs2.getString("기본시간"));
                 // hourmoney = rs2.getInt("금액");
@@ -897,24 +855,16 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 public void run() {
                     tv_phone.setText(phone);
                     tv_rating.setText(rating);
-/*
-                    TextView tv_sumTime = findViewById(R.id.tv_sumTime);
-                    tv_sumTime.setText("총 " + time1Sum + "분 사용");
-                    TextView tv_remainingTime = findViewById(R.id.tv_remainingTime);
-                    tv_remainingTime.setText(remainingTime + "분 남음");
-*/
 
                     totalhour1 = (tmoney1 / hourmoney1) * batime1;
                     totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60;
                     tv_sumTime.setText("총시간:" + Integer.toString(thour) + ":" + Integer.toString(tmin));
-                    //  tv_sumTime.setText("총시간"+totalhour+"분");
                     vistime1 = totalhour - (int) vistime;
                     int nhour = vistime1 / 60;
                     int nmin = vistime1 % 60;
-                    tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin) );
-                    //   tv_remainingTime.setText("남은시간"+vistime1+"분");
+                    tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
 
                 }
             });
@@ -947,7 +897,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     "'" + body + "','" + meal + "','" + cognitive + "','" + mNumber4 + "','" + mNumber5 + "','" + uniqueness + "'," +
                     "'" + stime + "','" + stime1 + "','" + stime2 + "','" + stime3 + "'," +
                     "'" + usingTime1_1 + "','" + bodyactiv1 + "','" + bodyactiv2 + "','" + bodyactiv3 + "','" + bodyactiv4 + "','" + bodyactiv5 + "','" + bodyactiv6 + "','" + housework1 + "','" + housework2 + "'," +
-                    "'" + dbCheck + "','"+strStartTime+"','"+strEndTime+"','"+totaltime+"','요양','"+number+"')");
+                    "'" + dbCheck + "','" + strStartTime + "','" + strEndTime + "','" + totaltime + "','요양','" + number + "')");
 
 
             connection.close();
@@ -983,46 +933,40 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
-
+                division = calres.getString("구분");//구분
             }
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-
                     if (schedule_date != null) {
 
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
                         Schedule_dialog schedule_dialog = new Schedule_dialog(VisitingActivity.this);
 
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
 
-                    }else if (schedule_date == null){
-                        Toast.makeText(VisitingActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                    } else if (schedule_date == null) {
+                        Toast.makeText(VisitingActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
-
 
 
                 }
@@ -1122,32 +1066,17 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 DatePickerDialog dialog = new DatePickerDialog(VisitingActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
                         date1 = String.format("%d-%d-%d", year, month + 1, date);
                         date2 = date1;
-
                         cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
 
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
                 dialog.show();
 
                 break;
         }
         return super.onOptionsItemSelected(item);
-
-
     }
 
 }

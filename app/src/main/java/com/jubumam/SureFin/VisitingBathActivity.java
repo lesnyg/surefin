@@ -166,7 +166,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String TAG = "PickerActivity";
 
 
-
     private AsyncTask<String, String, String> cTask;
 
 
@@ -177,9 +176,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-// Get the ActionBar here to configure the way it behaves.
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
+        actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
@@ -189,7 +187,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         name = intent.getExtras().getString("name");
         responsibility = intent.getExtras().getString("responsibility");
 
-//        name = "홍길동";
         Date currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String month = sdf.format(currentTime);
@@ -323,8 +320,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                     try {
                         Date endtimes = timeformatter.parse(strEndTime);
                         Date starttimes = timeformatter.parse(strStartTime);
-
-                        //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
                         diff = endtimes.getTime() - starttimes.getTime();
 
 
@@ -333,7 +328,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                     }
 
                     if (tv_time.getText().equals("")) {
-                        usingTime=Long.toString(diff/(60*1000));
+                        usingTime = Long.toString(diff / (60 * 1000));
 //                        usingTime = utctime.format(diff);
 
                         tv_time.setText(usingTime);
@@ -342,7 +337,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                             totalnumber = tv_time.getText().toString();
                             Date s1 = timeformatter.parse(totalnumber);
                             tdiff = diff + s1.getTime();
-                            usingTime=Long.toString(diff/(60*1000));
+                            usingTime = Long.toString(diff / (60 * 1000));
 //                            usingTime = utctime.format(diff);
                             tv_time.setText(usingTime);
 
@@ -353,13 +348,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
 
                     }
 
-
                     btn_start.setText("시작");
                     btn_end.setText("종료");
-                    // usingTime = utctime.format(diff);
-
-                    // tv_time.setText(usingTime);
-
                 }
             }
         });
@@ -477,13 +467,13 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
                             builder.setTitle("내용전송");
-                            builder.setMessage("총시간"  + usingTime + "분을 전송하시겠습니까?");
+                            builder.setMessage("총시간" + usingTime + "분을 전송하시겠습니까?");
                             // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
                             builder.setPositiveButton("예",
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                            if(dateCheck!=null && dateCheck.equals(strDate)){
+                                            if (dateCheck != null && dateCheck.equals(strDate)) {
                                                 AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingBathActivity.this);
                                                 builder2.setTitle("방문목욕");
                                                 builder2.setMessage("오늘 방문목욕은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
@@ -503,7 +493,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                                                             }
                                                         });
                                                 builder2.show();
-                                            }else {
+                                            } else {
                                                 number = 1;
                                                 bathSyncTask = new BathSyncTask().execute();
                                                 dbCheckSyncTask = new DbCheckSyncTask().execute();
@@ -515,7 +505,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                                         public void onClick(DialogInterface dialog, int which) {
                                             Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
                                         }
-                            });
+                                    });
                             builder.show();
                         }
                     }
@@ -524,7 +514,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
-
 
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
@@ -551,23 +540,22 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
+                division = calres.getString("구분");//구분
 
             }
 
@@ -578,19 +566,18 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
 
                     if (schedule_date != null) {
 
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
                         Schedule_dialog schedule_dialog = new Schedule_dialog(VisitingBathActivity.this);
 
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
 
-                    }else if (schedule_date == null){
-                        Toast.makeText(VisitingBathActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                    } else if (schedule_date == null) {
+                        Toast.makeText(VisitingBathActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
-
 
 
                 }
@@ -669,7 +656,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-        private void dbCheckQuery() {
+    private void dbCheckQuery() {
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
@@ -863,7 +850,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                     "VALUES('" + strDate + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "','" + birth + "','" + acceptnumber + "'," +
                     "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + strCar + "','" + carNumber + "','" + strNoCar + "','" + providing + "','" + beforeCK01 + "','" + beforeCK02 + "','" + beforeCK03 + "'," +
                     "'" + afterCK01 + "','" + afterCK02 + "','" + afterCK03 + "','" + etc + "','" + nonPayment + "'," +
-                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','"+number+"')");
+                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "')");
 //                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
 //                    "시작시간,종료시간,총시간,방문종류구분,디비체크)" +
 //                    "values('" + strDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "','" + organization + "','" + organizationId + "'," +
@@ -895,7 +882,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                     @Override
                     public void run() {
                         tv_price.setText(formattedPrice + " 원");
-//                        tv_nonPayment.setText(formattednonPayment+" 원");
                         provide = price - nonPayment;
                     }
                 });
@@ -949,8 +935,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
-
-
             case R.id.action_cal:
                 final Calendar cal = Calendar.getInstance();
                 Log.e(TAG, cal.get(Calendar.YEAR) + "");
@@ -961,27 +945,12 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 DatePickerDialog dialog = new DatePickerDialog(VisitingBathActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
                         date1 = String.format("%d-%d-%d", year, month + 1, date);
                         date2 = date1;
-
                         cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
                 dialog.show();
-
                 break;
         }
         return super.onOptionsItemSelected(item);

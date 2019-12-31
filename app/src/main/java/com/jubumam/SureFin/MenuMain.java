@@ -168,9 +168,9 @@ public class MenuMain extends AppCompatActivity {
     private String ttime;
 
     String imageString;
-    String s3,s4;
-    String ymd1,hms1;
-    int s1,s2;
+    String s3, s4;
+    String ymd1, hms1;
+    int s1, s2;
     byte[] s5;
     final static int TAKE_PICTURE = 1;
     ImageView dialog_imageview;
@@ -195,23 +195,15 @@ public class MenuMain extends AppCompatActivity {
     private AsyncTask<String, String, String> cTask;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m);
 
-   /*     Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
-        actionBar.setDisplayShowTitleEnabled(false);
-*/
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Get the ActionBar here to configure the way it behaves.
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
+        actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
@@ -238,11 +230,7 @@ public class MenuMain extends AppCompatActivity {
         n2 = findViewById(R.id.n2);
         n3 = findViewById(R.id.n3);
         n4 = findViewById(R.id.n4);
-        // n5 = findViewById(R.id.n5);
         n6 = findViewById(R.id.n6);
-        //    n7 = findViewById(R.id.n7);
-        //  n8 = findViewById(R.id.n8);
-        //   n9 = findViewById(R.id.n9);
         n10 = findViewById(R.id.n10);
 
         tv_name = findViewById(R.id.tv_name);
@@ -287,6 +275,8 @@ public class MenuMain extends AppCompatActivity {
                 i1.putExtra("birth", birth);
                 i1.putExtra("pastdisease", pastdisease);
                 i1.putExtra("responsibility", responsibility);
+                i1.putExtra("vistime", vistime);
+
                 startActivity(i1);
             }
         });
@@ -356,7 +346,7 @@ public class MenuMain extends AppCompatActivity {
                 i1.putExtra("birth", birth);
                 i1.putExtra("pastdisease", pastdisease);
                 i1.putExtra("responsibility", responsibility);
-                i1.putExtra("vistime",vistime);
+                i1.putExtra("vistime", vistime);
                 startActivity(i1);
 
             }
@@ -406,25 +396,11 @@ public class MenuMain extends AppCompatActivity {
             }
         });
 
-     /*   n5.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i5 = new Intent(MenuMain.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("gender", gender);
-                i5.putExtra("rating", rating);
-                i5.putExtra("birth", birth);
-                i5.putExtra("pastdisease", pastdisease);
-                i5.putExtra("responsibility", responsibility);
-                startActivity(i5);
-            }
-        });*/
-
         n6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                Intent i6 = new Intent(MenuMain.this,Non_Payment_Item.class);
+                Intent i6 = new Intent(MenuMain.this, Non_Payment_Item.class);
                 i6.putExtra("name", name);
                 i6.putExtra("gender", gender);
                 i6.putExtra("rating", rating);
@@ -435,54 +411,10 @@ public class MenuMain extends AppCompatActivity {
             }
         });
 
-      /*  n7.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i7 = new Intent(MenuMain.this, CustomerServiceActivity.class);
-                i7.putExtra("name", name);
-                i7.putExtra("gender", gender);
-                i7.putExtra("rating", rating);
-                i7.putExtra("birth", birth);
-                i7.putExtra("pastdisease", pastdisease);
-                i7.putExtra("responsibility", responsibility);
-                startActivity(i7);
-            }
-        });*/
-
-
-      /*  n8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("gender", gender);
-                i8.putExtra("rating", rating);
-                i8.putExtra("birth", birth);
-                i8.putExtra("pastdisease", pastdisease);
-                i8.putExtra("responsibility", responsibility);
-                startActivity(i8);
-
-            }
-        });
-
-        n9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i9 = new Intent(MenuMain.this,NursingCheckActivity.class);
-                i9.putExtra("name", name);
-                i9.putExtra("gender", gender);
-                i9.putExtra("rating", rating);
-                i9.putExtra("birth", birth);
-                i9.putExtra("pastdisease", pastdisease);
-                i9.putExtra("responsibility", responsibility);
-                startActivity(i9);
-            }
-        });*/
-
         n10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i10 = new Intent(MenuMain.this,VisitingBathActivity.class);
+                Intent i10 = new Intent(MenuMain.this, VisitingBathActivity.class);
                 i10.putExtra("name", name);
                 i10.putExtra("gender", gender);
                 i10.putExtra("rating", rating);
@@ -494,14 +426,11 @@ public class MenuMain extends AppCompatActivity {
         });
 
 
-
-
-
         btn_offwork = (Button) findViewById(R.id.btn_offwork);
         btn_offwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[] options = { "사인하기","퇴근하기" };
+                final CharSequence[] options = {"사인하기", "퇴근하기"};
                 AlertDialog.Builder builder = new AlertDialog.Builder(MenuMain.this);
                 builder.setTitle("퇴근관리");
 
@@ -534,9 +463,8 @@ public class MenuMain extends AppCompatActivity {
         });
 
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "권한 설정 완료");
             } else {
                 Log.d(TAG, "권한 설정 요청");
@@ -550,7 +478,7 @@ public class MenuMain extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(TAG, "onRequestPermissionsResult");
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
         }
     }
@@ -562,13 +490,10 @@ public class MenuMain extends AppCompatActivity {
                 if (resultCode == RESULT_OK && intent.hasExtra("data")) {
 
 
-
-
                     Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
 
                     dialog_imageview.setImageBitmap(bitmap);
                     dialog_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
-
 
 
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -594,9 +519,6 @@ public class MenuMain extends AppCompatActivity {
                         String nowDate = time.format(date);
                         SimpleDateFormat hm = new SimpleDateFormat("HH:mm");
 
-                     //   nowTime = (TextView) findViewById(R.id.nowtime);
-                      //  nowTime.setText(nowDate);
-
                         s3 = nowDate;
                         ymd1 = ymd.format(date);
                         hms1 = hms.format(date);
@@ -612,7 +534,6 @@ public class MenuMain extends AppCompatActivity {
                     tTask = new TSyncTask().execute();
 
 
-
                 }
 
                 break;
@@ -624,13 +545,10 @@ public class MenuMain extends AppCompatActivity {
         mPager = findViewById(R.id.pager);
         indicator = findViewById(R.id.indicator);
 
-
         final float density = getResources().getDisplayMetrics().density;
 
-//Set circle indicator radius
+        //Set circle indicator radius
         indicator.setRadius(3 * density);
-
-
 
         // Auto start of viewpager
         final Handler handler = new Handler();
@@ -675,8 +593,6 @@ public class MenuMain extends AppCompatActivity {
     }
 
     private static class MyPagerAdapter extends PagerAdapter {
-
-
         private ArrayList<ImageModel> imageModelArrayList;
         private LayoutInflater inflater;
         private Context context;
@@ -795,12 +711,8 @@ public class MenuMain extends AppCompatActivity {
 
         protected void onCancelled() {
             super.onCancelled();
-
-
         }
-
     }
-
 
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
@@ -827,22 +739,22 @@ public class MenuMain extends AppCompatActivity {
     }
 
 
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
+                division = calres.getString("구분");//구분
 
             }
 
@@ -850,40 +762,18 @@ public class MenuMain extends AppCompatActivity {
                 @Override
                 public void run() {
 
-
                     if (schedule_date != null) {
-                        //              divisiontotal = "어르신 : " + schedulename+"  "
-                        //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
-//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-                        //                      cal_txt1.setText("어르신:" + schedulename);
 
-
-
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
-
                         Schedule_dialog schedule_dialog = new Schedule_dialog(MenuMain.this);
-
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
-
-         /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("일정관리");
-                        builder.setPositiveButton(divisiontotal,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                    }
-
-                                });
-                        builder.show();*/
-                    }else if (schedule_date == null){
-                        Toast.makeText(MenuMain.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
+                    } else if (schedule_date == null) {
+                        Toast.makeText(MenuMain.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
-
 
 
                 }
@@ -899,7 +789,6 @@ public class MenuMain extends AppCompatActivity {
     }
 
 
-
     public void query1() {
         Connection connection = null;
 
@@ -907,7 +796,7 @@ public class MenuMain extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("update Su_직원출퇴근정보 set 퇴근시간 = '"+ttime+"' where 직원명 ='"+responsibility+"' and 일자 = '"+startWork+"' and 출근시간 = '"+stime+"'");
+            ResultSet resultSet = statement.executeQuery("update Su_직원출퇴근정보 set 퇴근시간 = '" + ttime + "' where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
 
             connection.close();
 
@@ -923,36 +812,23 @@ public class MenuMain extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-//
-//            ResultSet resultRatingPay = statement.executeQuery("select * from Su_년도별금액 where 상세구분='" + rating + "'");
-//
-//            while(resultRatingPay.next()){
-//                ratingPrice = resultRatingPay.getString("금액");
-//            }
-//            ResultSet serviceResultSetlist = statement.executeQuery("select A.*,B.목욕여부,B.날짜 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON A.일자=B.날짜 where (A.수급자명='"+name+"' AND B.수급자명='"+name+"') AND (A.일자 BETWEEN '2019-12-01' AND '2019-12-32') ");
-
             ResultSet rs = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (rs.next()) {
                 nosupport++;
             }
 
-            ResultSet surs = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명 = '"+name+"'");
-            while (surs.next()){
+            ResultSet surs = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명 = '" + name + "'");
+            while (surs.next()) {
                 basetime = surs.getString("기본시간");
-
             }
 
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='"+rating+"' and 년도 ='2019'");
+            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='2019'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
-
             }
 
-            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '"+basetime+"'");
-            while (rs2.next()){
-
-               // batime = Integer.parseInt(rs2.getString("기본시간"));
-
+            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '" + basetime + "'");
+            while (rs2.next()) {
                 hourmoney = Integer.parseInt(rs2.getString("금액"));
                 batime = rs2.getFloat("기본시간");
 
@@ -967,12 +843,7 @@ public class MenuMain extends AppCompatActivity {
 
 
             while (serviceResultSetlist.next()) {
-//                serviceId = serviceResultSetlist.getInt("id");
-//                if (serviceResultSetlist.getString("일자").equals(null)) {
-//                    date = serviceResultSetlist.getString("날짜");
-//                } else {
                 date = serviceResultSetlist.getString("일자");
-//                }
                 name = serviceResultSetlist.getString("수급자명");
                 count = serviceResultSetlist.getString("목욕여부");
                 usingTime1 = serviceResultSetlist.getString("신체사용시간계");
@@ -982,7 +853,6 @@ public class MenuMain extends AppCompatActivity {
                 usingTime5 = serviceResultSetlist.getString("생활지원사용시간계");
                 nursingCount = serviceResultSetlist.getString("방문횟수");
                 nursingTotal = serviceResultSetlist.getString("총시간");
-
 
 
                 if (usingTime1 == null || usingTime1.equals("") || usingTime1.equals("null")) {
@@ -1023,9 +893,6 @@ public class MenuMain extends AppCompatActivity {
                 if (count != null && count.equals("TRUE")) {
                     bathCount++;
                 }
-//                if (nursingCount != null && nursingCount.equals("1")) {
-//                    intNursingCount++;
-//                }
                 if (nursingTotal != null) {
                     intNursingTotal = Integer.parseInt(nursingTotal) + intNursingTotal;
                     intNursingCount++;
@@ -1037,33 +904,25 @@ public class MenuMain extends AppCompatActivity {
             }
 
 
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    totalhour1 = (tmoney/hourmoney)*batime;
-                    totalhour = (int)totalhour1;
+                    totalhour1 = (tmoney / hourmoney) * batime;
+                    totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
-                    int tmin = totalhour % 60 ;
-                    tv_careTotalTime.setText(thour+":"+tmin);
-//                    tv_careTotalTime.setText(Integer.toString(totalhour)+ "분");
-
+                    int tmin = totalhour % 60;
+                    tv_careTotalTime.setText(thour + ":" + tmin);
                     vistime = sumUsingTimeMonth / 60000;
-                    int sumtime = (int)sumUsingTimeMonth / 60000;
+                    int sumtime = (int) sumUsingTimeMonth / 60000;
                     int sumth = sumtime / 60;
                     int sumtm = sumtime % 60;
-                      tv_careSumTime.setText(Integer.toString(sumth)+":"+Integer.toString(sumtm)+"");
-                    //tv_careSumTime.setText(sumUsingTimeMonth / 60000 + "");
+                    tv_careSumTime.setText(Integer.toString(sumth) + ":" + Integer.toString(sumtm) + "");
                     tv_bathSumTime.setText(bathCount + "");
                     tv_nurseSumCount.setText(intNursingCount + "회");
                     int nhour = intNursingTotal / 60;
                     int nmin = intNursingTotal % 60;
-                    tv_nurseSumTotal.setText(Integer.toString(nhour)+":"+Integer.toString(nmin)+"");
-                    //tv_nurseSumTotal.setText(intNursingTotal + "분");
+                    tv_nurseSumTotal.setText(Integer.toString(nhour) + ":" + Integer.toString(nmin) + "");
                     tv_nosupport.setText(nosupport + "");
-
-
-
 
 
                 }
@@ -1090,8 +949,8 @@ public class MenuMain extends AppCompatActivity {
             Statement statement = connection.createStatement();
 
 
-            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='"+name+"'");
-            while (recipientRS.next()){
+            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
+            while (recipientRS.next()) {
                 recipientBasicTime = recipientRS.getString("기본시간");
 
                 runOnUiThread(new Runnable() {
@@ -1104,9 +963,8 @@ public class MenuMain extends AppCompatActivity {
             }
 
 
-
-            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='"+responsibility+"' AND 일자='"+startWork+"' and 수급자명 ='"+name+"'");
-            while (startWorkRS.next()){
+            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='" + responsibility + "' AND 일자='" + startWork + "' and 수급자명 ='" + name + "'");
+            while (startWorkRS.next()) {
 
                 stime = startWorkRS.getString("출근시간");
                 runOnUiThread(new Runnable() {
@@ -1125,9 +983,6 @@ public class MenuMain extends AppCompatActivity {
             while (bannerResultSet.next()) {
                 b = Base64.decode(bannerResultSet.getBytes(2), Base64.DEFAULT);
                 bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-//                    Blob blob = bannerResultSet.getBlob(4);
-//                    b = blob.getBytes(1, (int) blob.length());
-//                    bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
                 imageModelArrayList.add(new ImageModel(bitmap));
 
                 runOnUiThread(new Runnable() {
@@ -1147,22 +1002,21 @@ public class MenuMain extends AppCompatActivity {
         }
 
 
-
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action,menu);
+        getMenuInflater().inflate(R.menu.appbar_action, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(MenuMain.this,MenuMain.class);
-                intent.putExtra("name",name);
+                Intent intent = new Intent(MenuMain.this, MenuMain.class);
+                intent.putExtra("name", name);
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
                 intent.putExtra("birth", birth);
@@ -1201,32 +1055,15 @@ public class MenuMain extends AppCompatActivity {
                 Log.e(TAG1, cal.get(Calendar.MINUTE) + "");
 
 
-
-
                 DatePickerDialog dialog = new DatePickerDialog(MenuMain.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
                         date1 = String.format("%d-%d-%d", year, month + 1, date);
                         date2 = date1;
-
                         cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
                 dialog.show();
-
                 break;
         }
         return super.onOptionsItemSelected(item);

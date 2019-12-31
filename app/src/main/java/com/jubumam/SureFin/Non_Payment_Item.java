@@ -101,7 +101,6 @@ public class Non_Payment_Item extends AppCompatActivity {
     private AsyncTask<String, String, String> cTask;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -129,7 +128,6 @@ public class Non_Payment_Item extends AppCompatActivity {
 //        birth = intent.getExtras().getString("birth");
 //        pastdisease = intent.getExtras().getString("pastdisease");
 //        responsibility = intent.getExtras().getString("responsibility");
-
 
 
 //        suntext = findViewById(R.id.suntext);
@@ -278,11 +276,11 @@ public class Non_Payment_Item extends AppCompatActivity {
             public void run() {
                 mNonAdapter.setItems(nonList);
                 nonRecycler.setAdapter(mNonAdapter);
-                if(dbDate==null){
-                    nonList.add(new Non("","신청내역이 없습니다.", "",""));
+                if (dbDate == null) {
+                    nonList.add(new Non("", "신청내역이 없습니다.", "", ""));
                     String d = new SimpleDateFormat("MM", Locale.KOREAN).format(date);
                     tv_thisMonth.setText(d + "월");
-                }else {
+                } else {
                     String currentMonth = dbDate.substring(5, 7);
                     tv_thisMonth.setText(currentMonth + "월");
                 }
@@ -353,7 +351,6 @@ public class Non_Payment_Item extends AppCompatActivity {
                 i8.putExtra("rating", rating);
                 startActivity(i8);
                 break;
-
             case R.id.action_cal:
                 final Calendar cal = Calendar.getInstance();
                 Log.e(TAG, cal.get(Calendar.YEAR) + "");
@@ -364,31 +361,14 @@ public class Non_Payment_Item extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(Non_Payment_Item.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
                         date1 = String.format("%d-%d-%d", year, month + 1, date);
                         date2 = date1;
-
                         cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
                 dialog.show();
 
                 break;
-
-            //   startActivity(intent);
-            //  return true;
 
         }
         return super.onOptionsItemSelected(item);
@@ -419,23 +399,22 @@ public class Non_Payment_Item extends AppCompatActivity {
     }
 
 
-
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
+                division = calres.getString("구분");//구분
 
             }
 
@@ -446,19 +425,18 @@ public class Non_Payment_Item extends AppCompatActivity {
 
                     if (schedule_date != null) {
 
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
                         Schedule_dialog schedule_dialog = new Schedule_dialog(Non_Payment_Item.this);
 
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
 
-                    }else if (schedule_date == null){
-                        Toast.makeText(Non_Payment_Item.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                    } else if (schedule_date == null) {
+                        Toast.makeText(Non_Payment_Item.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
-
 
 
                 }

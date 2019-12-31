@@ -89,21 +89,18 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Get the ActionBar here to configure the way it behaves.
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
+        actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
 
         final Intent intent = getIntent();
-//        caregiverPhone = intent.getExtras().getString("caregiverPhone");
         responsibility = intent.getExtras().getString("responsibility");
 
         mTask = new MySyncTask().execute();
         et_search = findViewById(R.id.et_search);
-       // btn_check = findViewById(R.id.btn_check);
         recyclerView = findViewById(R.id.recyclerview);
 
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -113,76 +110,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         cal_btn = findViewById(R.id.cal_btn);
-
-
-
-/*
-        final Calendar cal = Calendar.getInstance();
-
-        Log.e(TAG, cal.get(Calendar.YEAR) + "");
-        Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-        Log.e(TAG, cal.get(Calendar.DATE) + "");
-        Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-        Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-
-
-
-
-        findViewById(R.id.cal_btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-                        date1 = String.format("%d-%d-%d", year, month + 1, date);
-                        date2 = date1;
-
-                        cTask = new CalSyncTask().execute();
-                     //       cal_btn.setText(date1);
-                            //vtxt1.setText(date1);
-
-
-
-                      //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
-                dialog.show();
-
-
-
-
-            }
-
-
-        });
-
-
-
-        /*
-
-        btn_check.setOnClickListener(new View.OnClickListener() {
-          @Override
-           public void onClick(View view) {
-              tname = et_name.getText().toString();
-
-               Toast.makeText(MainActivity.this, tname, Toast.LENGTH_SHORT).show();
-          }
-       });*/
-/*
-        btn_ratingPay = findViewById(R.id.btn_ratingPay);
-        btn_ratingPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RatingPayActivity.class);
-                startActivity(intent);
-            }
-        });*/
 
     }
 

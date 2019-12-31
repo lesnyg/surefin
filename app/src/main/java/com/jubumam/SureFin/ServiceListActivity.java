@@ -106,7 +106,6 @@ public class ServiceListActivity extends AppCompatActivity {
     private String strNursingTime;
     private int intDayCareIndivi;
     private int intDayCarePublic;
-    private String careDayTime;
 
     private SimpleDateFormat utctime;
     private Calendar cal;
@@ -133,17 +132,15 @@ public class ServiceListActivity extends AppCompatActivity {
     private AsyncTask<String, String, String> cTask;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-// Get the ActionBar here to configure the way it behaves.
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
+        actionBar.setDisplayShowCustomEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
@@ -152,9 +149,6 @@ public class ServiceListActivity extends AppCompatActivity {
         name = intent.getExtras().getString("name");
         rating = intent.getExtras().getString("rating");
         responsibility = intent.getExtras().getString("responsibility");
-//        responsibility = "김철수";
-//        name = "홍길동";
-//        rating = "1등급";
 
 
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
@@ -267,6 +261,7 @@ public class ServiceListActivity extends AppCompatActivity {
 
     }
 
+    ////////////////////////////////서비스 사용내역  리스트 시작
     public class ServiceSyncTask extends AsyncTask<String, String, String> {
 
         @Override
@@ -284,13 +279,6 @@ public class ServiceListActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-//
-//            ResultSet resultRatingPay = statement.executeQuery("select * from Su_년도별금액 where 상세구분='" + rating + "'");
-//
-//            while(resultRatingPay.next()){
-//                ratingPrice = resultRatingPay.getString("금액");
-//            }
-//            ResultSet serviceResultSetlist = statement.executeQuery("select A.*,B.목욕여부,B.날짜 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON A.일자=B.날짜 where (A.수급자명='"+name+"' AND B.수급자명='"+name+"') AND (A.일자 BETWEEN '2019-12-01' AND '2019-12-32') ");
 
             ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
             while (recipientRS.next()) {
@@ -313,14 +301,11 @@ public class ServiceListActivity extends AppCompatActivity {
                 intTotalDayCareIndivi = (int) (intTotalDayCareIndivi + indiviYearBathSupport);
                 intTotalDayCarePublic = (int) (intTotalDayCarePublic + publicYearBathSupport);
 
-//                if (count != null && count.equals("TRUE")) {
-//                    bathCount++;
-//                }
             }
 
             ResultSet nursingPriceRS = statement.executeQuery("select A.방문횟수,B.금액 from Su_방문간호정보 as A left join Su_년도별금액 as B on B.상세구분=A.총시간이름 where B.년도='" + thisYear + "' AND (A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') AND A.수급자명='" + name + "'");
             while (nursingPriceRS.next()) {
-//                nursingCount = nursingPriceRS.getString("방문횟수");
+
                 String yearNursingSupport = nursingPriceRS.getString("금액");
                 int indiviYearNursingSupport = (int) Math.round(Integer.parseInt(yearNursingSupport) * 0.15);
                 int publicYearNursingSupport = Integer.parseInt(yearNursingSupport) - indiviYearNursingSupport;
@@ -328,9 +313,6 @@ public class ServiceListActivity extends AppCompatActivity {
                 intTotalDayCareIndivi = intTotalDayCareIndivi + indiviYearNursingSupport;
                 intTotalDayCarePublic = intTotalDayCarePublic + publicYearNursingSupport;
 
-//                if (nursingCount != null && nursingCount.equals("1")) {
-//                    intNursingCount++;
-//                }
 
             }
 
@@ -339,16 +321,6 @@ public class ServiceListActivity extends AppCompatActivity {
                     "FULL OUTER JOIN Su_비급여신청자 D ON (D.서비스제공일자=A.일자 AND D.수급자명=A.수급자명 AND D.번호=A.번호) or (D.서비스제공일자=B.일자 AND D.수급자명=B.수급자명 AND D.번호=B.번호) or (D.서비스제공일자=C.일자 AND D.수급자명=C.수급자명 AND D.번호=C.번호)" +
                     "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
                     "order by 요양일자,A.번호");
-
-
-//            ResultSet serviceResultSetlist = statement.executeQuery("select A.일자 AS 요양일자,B.일자 AS 목욕일자,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,목욕여부 from Su_방문요양급여정보 AS A JOIN Su_방문목욕정보 AS B " +
-//                    "ON A.일자=B.일자 WHERE A.수급자명='"+name+"' AND B.수급자명='"+name+"' ORDER BY A.일자,B.일자" );
-
-//            ResultSet serviceResultSetlist = statement.executeQuery("select A.수급자명 AS 요양수급자,A.일자 AS 요양일자,B.일자 AS 목욕일자,C.일자 AS 간호일자,A.신체사용시간계,A.인지사용시간계,A.일상생활시간계,A.정서사용시간계,A.생활지원사용시간계,B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간,isnull(sum(convert(int,A.신체사용시간계)),'')+isnull(sum(convert(int,A.인지사용시간계)),'')+isnull(sum(convert(int,A.일상생활시간계)),'')+isnull(sum(convert(int,A.정서사용시간계)),'')+isnull(sum(convert(int,A.생활지원사용시간계)),'') AS 요양시간계 from Su_방문요양급여정보 as A FULL OUTER JOIN Su_방문목욕정보 as B ON (A.일자=B.일자 AND A.수급자명=B.수급자명)" +
-//                    "FULL OUTER JOIN Su_방문간호정보 as C ON (B.일자=C.일자 AND B.수급자명=C.수급자명) or (A.일자=C.일자 AND A.수급자명=C.수급자명)" +
-//                    "where ((A.일자 BETWEEN '2019-12-01' AND '2019-12-31') or (B.일자 BETWEEN '2019-12-01' AND '2019-12-31') or (C.일자 BETWEEN '2019-12-01' AND '2019-12-31')) AND (A.수급자명='홍길동' or B.수급자명='홍길동' or C.수급자명='홍길동') GROUP BY A.수급자명,A.일자, B.일자,C.일자,A.신체사용시간계,A.인지사용시간계,A.일상생활시간계,A.정서사용시간계,A.생활지원사용시간계,B.목욕여부,B.차량이용,C.방문횟수,C.총시간" +
-//                    "order by 요양일자,목욕일자,간호일자");
-
 
             serviceList = new ArrayList<>();
 
@@ -362,7 +334,6 @@ public class ServiceListActivity extends AppCompatActivity {
                 usingTime3 = serviceResultSetlist.getString("일상생활시간계");
                 usingTime4 = serviceResultSetlist.getString("정서사용시간계");
                 usingTime5 = serviceResultSetlist.getString("생활지원사용시간계");
-//                careDayTime = serviceResultSetlist.getString("요양시간계");
                 nursingCount = serviceResultSetlist.getString("방문횟수");
                 nursingTotal = serviceResultSetlist.getString("총시간");
                 carService = serviceResultSetlist.getString("차량이용");
@@ -406,15 +377,11 @@ public class ServiceListActivity extends AppCompatActivity {
                     sumUsingTimeDay = d5.getTime() + sumUsingTimeDay;
                 }
 
-//                if(careDayTime != null){
-//                    sumUsingTimeDay = sumUsingTimeMonth+Integer.parseInt(careDayTime);
-//                }
-
 
                 if (nonPay != null && nonPay.equals("제공")) {
                     intnonPay++;
                 }
-                if(bath !=null && bath.equals("TRUE")){
+                if (bath != null && bath.equals("TRUE")) {
                     bathCount++;
                 }
 
@@ -441,7 +408,7 @@ public class ServiceListActivity extends AppCompatActivity {
 
                 sumUsingTimeMonth = sumUsingTimeMonth + sumUsingTimeDay;
 
-                    serviceList.add(new Service(name, dateDay, sumUsingTimeDay, bath, nursingCount, nursingTotal, nonPay));
+                serviceList.add(new Service(name, dateDay, sumUsingTimeDay, bath, nursingCount, nursingTotal, nonPay));
 
 
                 sumUsingTimeDay = 0;
@@ -487,21 +454,18 @@ public class ServiceListActivity extends AppCompatActivity {
                 tv_indiviPrice.setText(myFormatter.format(intTotalDayCareIndivi) + "원");
                 tv_publicPrice.setText(myFormatter.format(intTotalDayCarePublic) + "원");
 
-                if(intTotalDayCareIndivi==0 && intTotalDayCarePublic == 0){
+                if (intTotalDayCareIndivi == 0 && intTotalDayCarePublic == 0) {
                     tv_noList.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     tv_noList.setVisibility(View.GONE);
                 }
-
-
-
 
 
             }
         });
 
     }
-
+////////////////////////////////서비스 사용내역  리스트 끝
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
 
@@ -527,24 +491,22 @@ public class ServiceListActivity extends AppCompatActivity {
     }
 
 
-
-
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
+                division = calres.getString("구분");//구분
 
             }
 
@@ -553,22 +515,19 @@ public class ServiceListActivity extends AppCompatActivity {
                 public void run() {
 
 
-
                     if (schedule_date != null) {
 
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
                         Schedule_dialog schedule_dialog = new Schedule_dialog(ServiceListActivity.this);
 
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
 
 
-
-
-                    }else if (schedule_date == null){
-                        Toast.makeText(ServiceListActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                    } else if (schedule_date == null) {
+                        Toast.makeText(ServiceListActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -622,7 +581,6 @@ public class ServiceListActivity extends AppCompatActivity {
                 startActivity(i8);
                 break;
 
-
             case R.id.action_cal:
                 final Calendar cal = Calendar.getInstance();
                 Log.e(TAG, cal.get(Calendar.YEAR) + "");
@@ -633,27 +591,12 @@ public class ServiceListActivity extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(ServiceListActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-
                         date1 = String.format("%d-%d-%d", year, month + 1, date);
                         date2 = date1;
-
                         cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
                 dialog.show();
-
                 break;
         }
         return super.onOptionsItemSelected(item);

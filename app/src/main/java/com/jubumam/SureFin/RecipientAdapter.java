@@ -42,8 +42,6 @@ class RecipientAdapter extends RecyclerView.Adapter<RecipientAdapter.RecipientHo
         final Recipient recipient = mList.get(position);
         holder.img_person.setImageBitmap(recipient.getBitmap());
         holder.tv_name.setText(recipient.getName());
-        //holder.tv_indiviPay.setText(recipient.getIndiviPay());
-        // holder.tv_rating.setText(recipient.getRating());
         holder.tv_number.setText(recipient.getNumber());
         holder.tv_adress.setText(recipient.getAdress());
         holder.tv_gender.setText("("+recipient.getGender()+")");
@@ -74,8 +72,6 @@ class RecipientAdapter extends RecyclerView.Adapter<RecipientAdapter.RecipientHo
     public class RecipientHolder extends RecyclerView.ViewHolder {
         ImageView img_person;
         TextView tv_name;
-        TextView tv_indiviPay;
-        TextView tv_rating;
         TextView tv_number;
         TextView tv_adress;
         TextView tv_gender;
@@ -85,8 +81,6 @@ class RecipientAdapter extends RecyclerView.Adapter<RecipientAdapter.RecipientHo
             super(itemView);
             img_person = itemView.findViewById(R.id.img_person);
             tv_name = itemView.findViewById(R.id.tv_name);
-            // tv_indiviPay = itemView.findViewById(R.id.tv_indiviPay);
-            // tv_rating = itemView.findViewById(R.id.tv_rating);
             tv_adress = itemView.findViewById(R.id.tv_adress);
             tv_number = itemView.findViewById(R.id.tv_number);
             img_phone = itemView.findViewById(R.id.img_phone);
