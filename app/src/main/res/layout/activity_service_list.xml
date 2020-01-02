@@ -199,12 +199,12 @@
                     android:id="@+id/tv_sumTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="180" />
+                    android:text="00" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="분 사용" />
+                    android:text=" 사용" />
             </LinearLayout>
 
             <LinearLayout
@@ -233,7 +233,7 @@
                     android:id="@+id/tv_bathCount"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="1" />
+                    android:text="0" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -267,7 +267,7 @@
                     android:id="@+id/tv_nursingCountTT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1회" />
+                    android:text="0회" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -278,7 +278,11 @@
                     android:id="@+id/tv_nursingTotalTT"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="30분" />
+                    android:text="00분" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 사용" />
             </LinearLayout>
 
             <LinearLayout

@@ -81,9 +81,8 @@ public class EditRecipientActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-// Get the ActionBar here to configure the way it behaves.
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
+        actionBar.setDisplayShowCustomEnabled(true); 
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
