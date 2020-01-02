@@ -130,6 +130,11 @@ public class ServiceListActivity extends AppCompatActivity {
 
 
     private AsyncTask<String, String, String> cTask;
+    private int tmin;
+    private String strThour;
+    private String strTmin;
+    private String strNhour;
+    private String strNmin;
 
 
     @Override
@@ -427,18 +432,23 @@ public class ServiceListActivity extends AppCompatActivity {
             public void run() {
                 mServiceAdapter.setItems(serviceList);
                 recyclerView.setAdapter(mServiceAdapter);
-                int totalhour = (int) sumUsingTimeMonth / 60000;
 
+                //방문요양 총 사용 시간
+                int totalhour = (int) sumUsingTimeMonth / 60000;
                 if (totalhour != 0) {
                     thour = totalhour / 60;
                 } else {
                     totalhour = 0;
                 }
-                int tmin = totalhour % 60;
+                tmin = totalhour % 60;
+                strThour = String.format("%02d", thour);
+                strTmin = String.format("%02d", tmin);
+                tv_sumTime.setText(strThour + "시간" + strTmin + "분");
 
-                tv_sumTime.setText(thour + "시간" + tmin + "");
-                //tv_sumTime.setText(sumUsingTimeMonth / 60000 + "");
+                //방문목욕 총 사용 횟수
                 tv_bathCount.setText(bathCount + "");
+
+                //방문간호 총 사용시간및 횟수
                 tv_nursingCountTT.setText(intNursingCount + "회");
                 int nhour;
                 if (intNursingTotal != 0) {
@@ -447,8 +457,11 @@ public class ServiceListActivity extends AppCompatActivity {
                     nhour = 0;
                 }
                 int nmin = intNursingTotal % 60;
-                tv_nursingTotalTT.setText(nhour + "시간" + nmin + "분");
-                //tv_nursingTotalTT.setText(intNursingTotal + "분");
+                strNhour = String.format("%02d", nhour);
+                strNmin = String.format("%02d", nmin);
+                tv_nursingTotalTT.setText(strNhour + "시간" + strNmin + "분");
+
+                //개인부담 비용 및 공단부담 비용
                 tv_nonPayServiceCount.setText(intnonPay + "");
                 DecimalFormat myFormatter = new DecimalFormat("###,###");
                 tv_indiviPrice.setText(myFormatter.format(intTotalDayCareIndivi) + "원");

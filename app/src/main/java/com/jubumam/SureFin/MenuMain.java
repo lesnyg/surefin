@@ -39,6 +39,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.io.ByteArrayOutputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -193,6 +194,12 @@ public class MenuMain extends AppCompatActivity {
     private String divisiondate;
     private String divisiontime;
     private AsyncTask<String, String, String> cTask;
+    private String strThour;
+    private String strTmin;
+    private String strSumth;
+    private String strSumtm;
+    private String strNhour;
+    private String strNmin;
 
 
     @Override
@@ -726,7 +733,6 @@ public class MenuMain extends AppCompatActivity {
                 return null;
             calQuery();
             return null;
-
         }
 
         protected void onPostExecute(String result) {
@@ -908,20 +914,34 @@ public class MenuMain extends AppCompatActivity {
                 @Override
                 public void run() {
                     totalhour1 = (tmoney / hourmoney) * batime;
+
+                    //방문요양 사용할 수 있는 총 시간
                     totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60;
-                    tv_careTotalTime.setText(thour + ":" + tmin);
+                    strThour = String.format("%02d", thour);
+                    strTmin = String.format("%02d", tmin);
+                    tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
+
+                    //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;
                     int sumth = sumtime / 60;
                     int sumtm = sumtime % 60;
-                    tv_careSumTime.setText(Integer.toString(sumth) + ":" + Integer.toString(sumtm) + "");
+                    strSumth = String.format("%02d", sumth);
+                    strSumtm = String.format("%02d", sumtm);
+                    tv_careSumTime.setText(strSumth + ":" + strSumtm);
+
+                    //방문목욕 사용 횟수
                     tv_bathSumTime.setText(bathCount + "");
+
+                    //방문 간호 사용시간 및 횟수
                     tv_nurseSumCount.setText(intNursingCount + "회");
                     int nhour = intNursingTotal / 60;
                     int nmin = intNursingTotal % 60;
-                    tv_nurseSumTotal.setText(Integer.toString(nhour) + ":" + Integer.toString(nmin) + "");
+                    strNhour = String.format("%02d", nhour);
+                    strNmin = String.format("%02d", nmin);
+                    tv_nurseSumTotal.setText(strNhour + ":" + strNmin);
                     tv_nosupport.setText(nosupport + "");
 
 
@@ -981,7 +1001,8 @@ public class MenuMain extends AppCompatActivity {
             mList = new ArrayList<>();
 
             while (bannerResultSet.next()) {
-                b = Base64.decode(bannerResultSet.getBytes(2), Base64.DEFAULT);
+                Blob blob = bannerResultSet.getBlob(2);
+                b = blob.getBytes(1, (int) blob.length());
                 bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
                 imageModelArrayList.add(new ImageModel(bitmap));
 
