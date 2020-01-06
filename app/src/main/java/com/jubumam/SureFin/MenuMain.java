@@ -218,10 +218,10 @@ public class MenuMain extends AppCompatActivity {
 
         final Intent intent = getIntent();
         name = intent.getExtras().getString("name");
-        gender = intent.getExtras().getString("gender");
+//        gender = intent.getExtras().getString("gender");
         rating = intent.getExtras().getString("rating");
-        birth = intent.getExtras().getString("birth");
-        pastdisease = intent.getExtras().getString("pastdisease");
+//        birth = intent.getExtras().getString("birth");
+//        pastdisease = intent.getExtras().getString("pastdisease");
         responsibility = intent.getExtras().getString("responsibility");
 
         currentTime = new Date();
@@ -398,6 +398,7 @@ public class MenuMain extends AppCompatActivity {
                 i4.putExtra("birth", birth);
                 i4.putExtra("pastdisease", pastdisease);
                 i4.putExtra("responsibility", responsibility);
+                i4.putExtra("route", "MenuMain");
                 startActivity(i4);
 
             }
@@ -995,7 +996,7 @@ public class MenuMain extends AppCompatActivity {
                 });
             }
 
-            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
+            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지");
 
             byte b[];
             mList = new ArrayList<>();

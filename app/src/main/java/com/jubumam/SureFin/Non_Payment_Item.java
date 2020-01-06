@@ -324,10 +324,10 @@ public class Non_Payment_Item extends AppCompatActivity {
             case android.R.id.home:
                 Intent intent = new Intent(Non_Payment_Item.this, MenuMain.class);
                 intent.putExtra("name", name);
-
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
                 intent.putExtra("birth", birth);
+                intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
 
                 startActivity(intent);
@@ -343,12 +343,15 @@ public class Non_Payment_Item extends AppCompatActivity {
                 Intent i5 = new Intent(Non_Payment_Item.this, EditRecipientActivity.class);
                 i5.putExtra("name", name);
                 i5.putExtra("rating", rating);
+                i5.putExtra("responsibility", responsibility);
+
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(Non_Payment_Item.this, signActivity.class);
                 i8.putExtra("name", name);
                 i8.putExtra("rating", rating);
+                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
             case R.id.action_cal:

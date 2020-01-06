@@ -128,6 +128,7 @@ public class login extends Activity {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("caregiverPhone",hp);
                         intent.putExtra("responsibility",name);
+                        intent.putExtra("route","login");
                         startActivity(intent);
                         finish();
 

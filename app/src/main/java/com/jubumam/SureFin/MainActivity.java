@@ -40,8 +40,10 @@ public class MainActivity extends AppCompatActivity {
     Button btn_check;
     //Button btn_ratingPay;
     String name;
+    String currentname;
     String indiviPay;
     String rating;
+    String currentrating;
     private RecipientAdapter mAdapter;
     List<Recipient> list;
     List<Recipient> arrayList;
@@ -75,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     private String divisiontotal;
     private String divisiondate;
     private String divisiontime;
+    private String route;   //경로
 
 
 
@@ -98,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
 
         final Intent intent = getIntent();
         responsibility = intent.getExtras().getString("responsibility");
+        route = intent.getExtras().getString("route");
+        if(route.equals("MenuMain") || route.equals("RecipientDetail")){
+            currentname = intent.getExtras().getString("name");
+            currentrating = intent.getExtras().getString("rating");
+        }
 
         mTask = new MySyncTask().execute();
         et_search = findViewById(R.id.et_search);
@@ -373,22 +381,22 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(MainActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("rating", rating);
+                intent.putExtra("name", currentname);
+                intent.putExtra("rating", currentrating);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 return true;
             case R.id.action_notice:
                 Intent intent1 = new Intent(MainActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", name);
+                intent1.putExtra("name", currentname);
                 intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", rating);
+                intent1.putExtra("rating", currentrating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(MainActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("rating", rating);
+                i5.putExtra("name", currentname);
+                i5.putExtra("rating", currentrating);
                 i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
