@@ -28,7 +28,9 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 public class EditRecipientActivity extends AppCompatActivity {
@@ -54,7 +56,7 @@ public class EditRecipientActivity extends AppCompatActivity {
     EditText r_gbirth_insert;
     EditText r_gnumber_insert;
     EditText r_gadress_insert;
-
+    private byte[] imageBytes;
     private byte[] imgb;
     String r_name;
     String r_phone;
@@ -229,28 +231,21 @@ public class EditRecipientActivity extends AppCompatActivity {
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
 
-
                     imgb = imageBytes;
            /*         Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                     img_person.setImageBitmap(bitmap);
                     img_person.setScaleType(ImageView.ScaleType.FIT_XY);
-
 
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
                     imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 */
-
-
-
                     //s1 = 8;
 
      //               s2 = 32;
        //             s4 = imageString;
             //        s5 = imageBytes;
-
-
 
                 }
                 break;
@@ -415,28 +410,40 @@ public class EditRecipientActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-           // ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_사진(이름,BLOBData)VALUES ('"+ymd1+"','"+responsibility+"','"+hms1+"',convert(VARBINARY(max),'"+s4+"'))");
-           // ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+imageString+"') WHERE 이름 = '"+name+"'");
+            // ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_사진(이름,BLOBData)VALUES ('"+ymd1+"','"+responsibility+"','"+hms1+"',convert(VARBINARY(max),'"+s4+"'))");
+            // ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+imageString+"') WHERE 이름 = '"+name+"'");
             //ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+blob+"') WHERE 이름 = '"+name+"'");
-          // ResultSet resultSet = statement.executeQuery("INSERT INTO Su_사진(BLOBData) VALUES(?);");
-            
-            ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData ='"+blob+"'WHERE 이름 = '"+name+"'");
+            // ResultSet resultSet = statement.executeQuery("INSERT INTO Su_사진(BLOBData) VALUES(?);");
+
+            // PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_배너이미지(BLOBData) VALUES (?)");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET (BLOBData) VALUES (?) WHERE 이름 ='" + name + "'");
+            //  ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData ='"+blob+"'WHERE 이름 = '"+name+"'");
+
+            byte[] buf = imageBytes;
+            ps.setBytes(1, buf);
+            ps.executeUpdate();
+            ps.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
-
-           blob.setBytes(1,imgb);
-           resultSet.updateBlob("BLOBData",blob);
+         //  blob.setBytes(1,imgb);
+         //  resultSet.updateBlob("BLOBData",blob);
          //  resultSet.updateBytes("BLOBData",imgb);
 
-            while (resultSet.next()) {
+          //  while (resultSet.next()) {
 
 
-            }
-            connection.close();
+          //  }
+        //    connection.close();
 
-        } catch (Exception e) {
-            Log.w("Error connection", "" + e.getMessage());
-        }
+    //    } catch (Exception e) {
+        //    Log.w("Error connection", "" + e.getMessage());
+      //  }
 
     }
 
