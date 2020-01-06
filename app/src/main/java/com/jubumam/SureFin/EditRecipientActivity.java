@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -46,9 +47,9 @@ public class EditRecipientActivity extends AppCompatActivity {
     Button rbtn_update;
     Button rbtn_return;
 
-    EditText r_name_insert;
+    TextView r_name_insert;
     EditText r_phone_insert;
-    EditText r_rating_insert;
+    TextView r_rating_insert;
     EditText r_birth_insert;
     EditText r_adress_insert;
     EditText r_guardian_insert;
@@ -100,9 +101,9 @@ public class EditRecipientActivity extends AppCompatActivity {
         rbtn_update = (Button)findViewById(R.id.rbtn_update);
         rbtn_return = (Button)findViewById(R.id.rbtn_return);
 
-        r_name_insert = (EditText)findViewById(R.id.r_name_insert);
+        r_name_insert = findViewById(R.id.r_name_insert);
         r_phone_insert = (EditText)findViewById(R.id.r_phone_insert);
-        r_rating_insert = (EditText)findViewById(R.id.r_rating_insert);
+        r_rating_insert = findViewById(R.id.r_rating_insert);
         r_birth_insert = (EditText)findViewById(R.id.r_birth_insert);
         r_adress_insert = (EditText)findViewById(R.id.r_adress_insert);
         r_guardian_insert = (EditText)findViewById(R.id.r_guardian_insert);
@@ -505,7 +506,6 @@ public class EditRecipientActivity extends AppCompatActivity {
         switch (item.getItemId()){
             case android.R.id.home:
                 Intent intent = new Intent(EditRecipientActivity.this,MenuMain.class);
-                intent.putExtra("name",name);
                 intent.putExtra("name",name);
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);

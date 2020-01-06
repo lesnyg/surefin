@@ -187,6 +187,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent il = new Intent(RecipientDetailActivity.this,MainActivity.class);
                 il.putExtra("responsibility",responsibility);
+                il.putExtra("route","RecipientDetail");
                 startActivity(il);
 
 

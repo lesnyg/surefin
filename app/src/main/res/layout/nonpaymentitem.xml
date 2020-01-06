@@ -103,7 +103,10 @@
                     android:layout_marginBottom="1dp"
                     android:background="#f8f8f8"
                     android:gravity="center_vertical"
-                    android:padding="8dp"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"
+                    android:paddingLeft="8dp"
+                    android:paddingRight="8dp"
                     android:text="날짜"
                     android:textSize="20dp" />
 
@@ -401,7 +404,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:padding="8dp"
-                                android:text="24시간 안전관리(RFID 시스템_), 너스콜 시스템"
+                                android:text="24시간 안전관리(RFID 시스템), 너스콜 시스템"
                                 android:textSize="16dp" />
 
                         </LinearLayout>

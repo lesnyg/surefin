@@ -884,6 +884,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60;
+
                     strThour = String.format("%02d", thour);
                     strTmin = String.format("%02d", tmin);
                     tv_sumTime.setText("총시간:" + strThour + ":" + strTmin);
@@ -895,6 +896,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     strSumtm = String.format("%02d", nmin);
                     tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
                   //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
+
 
                 }
             });
