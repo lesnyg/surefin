@@ -126,6 +126,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private TextView tv_time;
     private String strStartTime;    //시작시간
     private String strEndTime;      //종료시간
+    private String thisYear;
 
     String gender;
     String rating;
@@ -171,6 +172,10 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private float hourmoney1;
     private int minhour;
     private TextView tv_sumTime;
+    private String strThour;
+    private String strTmin;
+    private String strSumth;
+    private String strSumtm;
 
     private TextView tv_remainingTime;
 
@@ -233,6 +238,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
 
         Date currentTime = new Date();
         String today = new SimpleDateFormat("yyyy.MM.dd").format(currentTime);
+        thisYear = new SimpleDateFormat("yyyy").format(currentTime);
 
         //매달 해당 자료를 가져오기 위한 날짜 설정 단계
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -850,14 +856,14 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 responsibility = rs.getString(13);
                 phone = rs.getString("hp");
             }
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='2019'");
+            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='"+thisYear+"'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
                 tmoney1 = rs1.getFloat("한도액");
             }
 
 
-            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' ");
+            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' and 년도 = '"+thisYear+"'");
 
             while (rs2.next()) {
                 batime = Integer.parseInt(rs2.getString("기본시간"));
@@ -878,11 +884,17 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60;
-                    tv_sumTime.setText("총시간:" + Integer.toString(thour) + ":" + Integer.toString(tmin));
+                    strThour = String.format("%02d", thour);
+                    strTmin = String.format("%02d", tmin);
+                    tv_sumTime.setText("총시간:" + strThour + ":" + strTmin);
+                   //tv_sumTime.setText("총시간:" + Integer.toString(thour) + ":" + Integer.toString(tmin));
                     vistime1 = totalhour - (int) vistime;
                     int nhour = vistime1 / 60;
                     int nmin = vistime1 % 60;
-                    tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
+                    strSumth = String.format("%02d", nhour);
+                    strSumtm = String.format("%02d", nmin);
+                    tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
+                  //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
 
                 }
             });
