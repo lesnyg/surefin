@@ -429,6 +429,7 @@ public class MenuMain extends AppCompatActivity {
                 i10.putExtra("pastdisease", pastdisease);
                 i10.putExtra("responsibility", responsibility);
                 startActivity(i10);
+
             }
         });
 
@@ -457,9 +458,12 @@ public class MenuMain extends AppCompatActivity {
                             i8.putExtra("responsibility", responsibility);
                             startActivity(i8);
 
+                            
+
                         } else if (options[item].equals("퇴근하기")) {
                             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                             startActivityForResult(cameraIntent, TAKE_PICTURE);
+
                         }
                     }
                 });
@@ -468,7 +472,6 @@ public class MenuMain extends AppCompatActivity {
 
             }
         });
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -845,6 +848,7 @@ public class MenuMain extends AppCompatActivity {
                     "UNION (select 일자, 수급자명,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,NULL AS 목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문요양급여정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
                     "UNION (select 일자, 수급자명,NULL AS 신체사용시간계,NULL AS 인지사용시간계,NULL AS 일상생활시간계,NULL AS 정서사용시간계,NULL AS 생활지원사용시간계,NULL AS 목욕여부, 방문횟수, 총시간 from Su_방문간호정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) ORDER BY 일자");
 
+
             timeformatter = new SimpleDateFormat("mm");
 
 
@@ -994,8 +998,8 @@ public class MenuMain extends AppCompatActivity {
                     }
                 });
             }
-
-            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
+/*
+      ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
 
             byte b[];
             mList = new ArrayList<>();
@@ -1014,7 +1018,7 @@ public class MenuMain extends AppCompatActivity {
                     }
                 });
             }
-            NUM_PAGES = imageModelArrayList.size();
+            NUM_PAGES = imageModelArrayList.size();*/
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
