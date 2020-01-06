@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.DefaultDatabaseErrorHandler;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -167,6 +168,7 @@ public class MenuMain extends AppCompatActivity {
     private String startWork;
     private String stime;
     private String ttime;
+
 
     String imageString;
     String s3, s4;
@@ -430,6 +432,7 @@ public class MenuMain extends AppCompatActivity {
                 i10.putExtra("pastdisease", pastdisease);
                 i10.putExtra("responsibility", responsibility);
                 startActivity(i10);
+
             }
         });
 
@@ -458,9 +461,12 @@ public class MenuMain extends AppCompatActivity {
                             i8.putExtra("responsibility", responsibility);
                             startActivity(i8);
 
+                            
+
                         } else if (options[item].equals("퇴근하기")) {
                             Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                             startActivityForResult(cameraIntent, TAKE_PICTURE);
+
                         }
                     }
                 });
@@ -469,7 +475,6 @@ public class MenuMain extends AppCompatActivity {
 
             }
         });
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -537,10 +542,14 @@ public class MenuMain extends AppCompatActivity {
 
                     }
 
-                    Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
-                    startActivity(i8);
+                  //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
+                  //  startActivity(i8);
                     tTask = new TSyncTask().execute();
 
+
+                    finishAffinity();
+                    System.runFinalization();
+                    System.exit(0); //앱종료
 
                 }
 
@@ -829,7 +838,7 @@ public class MenuMain extends AppCompatActivity {
                 basetime = surs.getString("기본시간");
             }
 
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='2019'");
+            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='"+thisYear+"'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
             }
@@ -845,6 +854,7 @@ public class MenuMain extends AppCompatActivity {
             ResultSet serviceResultSetlist = statement.executeQuery("(select 일자, 수급자명,NULL AS 신체사용시간계,NULL AS 인지사용시간계,NULL AS 일상생활시간계,NULL AS 정서사용시간계,NULL AS 생활지원사용시간계,목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문목욕정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
                     "UNION (select 일자, 수급자명,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,NULL AS 목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문요양급여정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
                     "UNION (select 일자, 수급자명,NULL AS 신체사용시간계,NULL AS 인지사용시간계,NULL AS 일상생활시간계,NULL AS 정서사용시간계,NULL AS 생활지원사용시간계,NULL AS 목욕여부, 방문횟수, 총시간 from Su_방문간호정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) ORDER BY 일자");
+
 
             timeformatter = new SimpleDateFormat("mm");
 
@@ -916,7 +926,8 @@ public class MenuMain extends AppCompatActivity {
                 public void run() {
                     totalhour1 = (tmoney / hourmoney) * batime;
 
-                    //방문요양 사용할 수 있는 총 시간
+                    //방문요양 사용
+                    // 할 수 있는 총 시간
                     totalhour = (int) totalhour1;
                     int thour = totalhour / 60;
                     int tmin = totalhour % 60;
@@ -924,6 +935,7 @@ public class MenuMain extends AppCompatActivity {
                     strTmin = String.format("%02d", tmin);
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
+                    Toast.makeText(MenuMain.this,tmoney+"/"+hourmoney+"/"+batime,Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;
@@ -996,7 +1008,29 @@ public class MenuMain extends AppCompatActivity {
                 });
             }
 
-            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지");
+
+            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
+            byte b[];
+            mList = new ArrayList<>();
+            while (bannerResultSet.next()) {
+                Blob blob = bannerResultSet.getBlob(2);
+                b = blob.getBytes(1, (int) blob.length());
+                bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                imageModelArrayList.add(new ImageModel(bitmap));
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
+                        indicator.setViewPager(mPager);
+                    }
+                });
+            }
+            NUM_PAGES = imageModelArrayList.size();
+
+/*
+      ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
+
 
             byte b[];
             mList = new ArrayList<>();
@@ -1015,7 +1049,7 @@ public class MenuMain extends AppCompatActivity {
                     }
                 });
             }
-            NUM_PAGES = imageModelArrayList.size();
+            NUM_PAGES = imageModelArrayList.size();*/
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

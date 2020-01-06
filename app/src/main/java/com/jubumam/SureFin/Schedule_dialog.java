@@ -21,11 +21,8 @@ public class Schedule_dialog {
 
 
         final Dialog dlg = new Dialog(context);
-
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         dlg.setContentView(R.layout.schedule_dialog);
-
         dlg.show();
 
 
@@ -41,8 +38,11 @@ public class Schedule_dialog {
             public void onClick(View view) {
 
                 dlg.dismiss();
+
+
             }
         });
 
     }
+
 }

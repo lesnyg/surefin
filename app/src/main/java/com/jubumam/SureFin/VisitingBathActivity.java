@@ -123,6 +123,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String carPrice;
     private String startMon;
     private String endMon;
+    private String thisYear;
 
     private AsyncTask<String, String, String> bathSyncTask;
     private AsyncTask<String, String, String> dbCheckSyncTask;
@@ -294,6 +295,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
         strDate = formatter.format(currentTime);
+        thisYear = new SimpleDateFormat("yyyy").format(currentTime);
         String strDateScreen = formatterScreen.format(currentTime);
         tv_date.setText(strDateScreen);
         dateSyncTask = new DateSyncTask().execute();
@@ -305,6 +307,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 strStartTime = timeformatter.format(startTime);
                 btn_start.setText(strStartTime);
                 tv_startTime.setText(strStartTime);
+
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {
@@ -338,11 +341,12 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                             Date s1 = timeformatter.parse(totalnumber);
                             tdiff = diff + s1.getTime();
                             usingTime = Long.toString(diff / (60 * 1000));
-//                            usingTime = utctime.format(diff);
                             tv_time.setText(usingTime);
+//                            usingTime = utctime.format(diff);
 
 
                         } catch (Exception e) {
+
 
                         }
 
@@ -869,7 +873,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet priceResultSet = statement.executeQuery("select * from Su_년도별적용급액 where 상세구분='" + carPrice + "'");
+            ResultSet priceResultSet = statement.executeQuery("select * from Su_년도별적용급액 where 상세구분='" + carPrice + "' and 년도 = '"+thisYear+"'");
             while (priceResultSet.next()) {
                 price = Integer.parseInt(priceResultSet.getString("금액"));
                 nonPayment = Integer.parseInt(priceResultSet.getString("비급여액"));

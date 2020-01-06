@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -111,9 +112,15 @@ public class RecipientDetailActivity extends AppCompatActivity {
     private String divisiontotal;
     private String divisiondate;
     private String divisiontime;
+
+    private String mImage;
+    private ImageView img_binery;
+
+    private Bitmap mBitmap;
+    private byte[] imageBytes;
+    private ByteArrayOutputStream baos;
+
     private AsyncTask<String, String, String> cTask;
-
-
     private AsyncTask<String,String,String> caTask;
     private AsyncTask<String, String, String> mTask;
 
@@ -342,7 +349,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
-                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                    //imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
                     //s1 = 8;
 
@@ -445,7 +452,14 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 break;
         }
     }
+/*
+    public void BitmapToString(Bitmap bitmap) {
+        baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);    //bitmap compress
+        imageBytes = baos.toByteArray();
 
+
+    }*/
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
 
@@ -570,6 +584,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
         }
 
     }
+  /*
     public void query1() {
         Connection connection = null;
 
@@ -591,8 +606,35 @@ public class RecipientDetailActivity extends AppCompatActivity {
         }
 
     }
+*/
+  private void query1() {
+      Connection connection = null;
+      try {
+          Class.forName("net.sourceforge.jtds.jdbc.Driver");
+          connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
 
-    public class caAsyncTask extends AsyncTask<String,String,String> {
+          PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_직원출퇴근정보(수급자명,일자,직원명,출근시간,BLOBData)VALUES (?,?,?,?,?)");
+
+          byte[] buf = imageBytes;
+          ps.setString(1,name);
+          ps.setString(2,ymd1);
+          ps.setString(3,responsibility);
+          ps.setString(4,hms1);
+          ps.setBytes(5, s5);
+          ps.executeUpdate();
+          ps.close();
+          connection.close();
+
+      } catch (SQLException e) {
+          e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+          e.printStackTrace();
+      }
+
+  }
+
+
+      public class caAsyncTask extends AsyncTask<String,String,String> {
 
         protected void onPreExecute(){}
 
@@ -647,9 +689,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 formattedindividualPrice = myFormatter.format(indiviPrice);
                 formattedsum = myFormatter.format(sum);
 
-
-
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -678,12 +717,10 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 b = blob.getBytes(1, (int) blob.length());
                 bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
 
-
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         img_person.setImageBitmap(bitmap);
-
 
                     }
                 });
