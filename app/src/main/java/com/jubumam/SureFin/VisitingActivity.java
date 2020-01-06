@@ -26,6 +26,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.SubMenuBuilder;
+import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -195,13 +197,15 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String date2;
     private String date1;
     private String TAG = "PickerActivity";
-
+    private float add_total; //가산 총금액
+    private float add_time; //가산적용시간
+    private float add_offertime; //총 급여 제공시간
 
     private AsyncTask<String, String, String> cTask;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visiting);
 
@@ -485,6 +489,18 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 }
 
 
+
+
+                add_total = 1;
+                add_time = 20;
+                add_offertime = 4;
+                String rst = "1";
+
+                int rint = Integer.parseInt(rst);
+                double torf = rint *0.2* add_time/add_offertime;
+
+                Toast.makeText(getApplicationContext(),Integer.toString((int)torf)+Integer.toString(rint)+"/"+Integer.toString((int)add_offertime)+"/"+Integer.toString((int)add_total)+"/"+Integer.toString((int)add_offertime),Toast.LENGTH_SHORT).show();
+
                 totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
                 int thour = totaltime / 60;
                 int tmin = totaltime % 60;
@@ -502,6 +518,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                                 String sr = Integer.toString(bodyId);
                                 String or = Integer.toString(mealId);
                                 String co = Integer.toString(cognitiveId);
+
                                 // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
 
                                 if (sr.equals("-1")) {
@@ -584,6 +601,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                                                     Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
                                                 }
                                             });
+
                                     builder2.show();
                                 } else {
                                     number = 1;
@@ -969,6 +987,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     }
 
 
+
                 }
             });
 
@@ -1009,7 +1028,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 tv_number5.setText(mNumber5 + "");
 
                 break;
-
 
         }
     }
@@ -1075,6 +1093,8 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 dialog.show();
 
                 break;
+
+
         }
         return super.onOptionsItemSelected(item);
     }
