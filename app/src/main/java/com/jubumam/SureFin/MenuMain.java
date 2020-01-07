@@ -68,6 +68,7 @@ public class MenuMain extends AppCompatActivity {
 
     private String basetime;
     private float vistime;
+    private Timer swipeTimer;
 
 
     private float tmoney;
@@ -255,6 +256,7 @@ public class MenuMain extends AppCompatActivity {
         tv_startWork = findViewById(R.id.tv_startWork);
         TextView tv_rating = findViewById(R.id.tv_rating);
 
+
         tv_rating.setText(rating);
 
 
@@ -268,7 +270,7 @@ public class MenuMain extends AppCompatActivity {
 
         dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
-        mTask = new BannerTask().execute();
+       // mTask = new BannerTask().execute();
 
         init();
 
@@ -578,7 +580,7 @@ public class MenuMain extends AppCompatActivity {
 
             }
         };
-        Timer swipeTimer = new Timer();
+        swipeTimer = new Timer();
         swipeTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -657,7 +659,7 @@ public class MenuMain extends AppCompatActivity {
             return null;
         }
     }
-
+/*
     public class BannerTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -680,7 +682,7 @@ public class MenuMain extends AppCompatActivity {
         protected void onCancelled() {
             super.onCancelled();
         }
-    }
+    }*/
 
 
     public class RecipientTask extends AsyncTask<String, String, String> {
@@ -755,6 +757,7 @@ public class MenuMain extends AppCompatActivity {
     }
 
 
+
     public void calQuery() {
 
         Connection conn = null;
@@ -773,6 +776,7 @@ public class MenuMain extends AppCompatActivity {
                 division = calres.getString("구분");//구분
 
             }
+
 
             runOnUiThread(new Runnable() {
                 @Override
@@ -850,6 +854,39 @@ public class MenuMain extends AppCompatActivity {
 
             }
 
+            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
+            while (recipientRS.next()) {
+                recipientBasicTime = recipientRS.getString("기본시간");
+
+
+            }
+
+
+            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='" + responsibility + "' AND 일자='" + startWork + "' and 수급자명 ='" + name + "'");
+            while (startWorkRS.next()) {
+
+                stime = startWorkRS.getString("출근시간");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tv_startWork.setText(stime);
+                    }
+                });
+            }
+
+
+            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
+            byte b[];
+            mList = new ArrayList<>();
+            while (bannerResultSet.next()) {
+                Blob blob = bannerResultSet.getBlob(2);
+                b = blob.getBytes(1, (int) blob.length());
+                bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
+                imageModelArrayList.add(new ImageModel(bitmap));
+
+            }
+            NUM_PAGES = imageModelArrayList.size();
+
 
             ResultSet serviceResultSetlist = statement.executeQuery("(select 일자, 수급자명,NULL AS 신체사용시간계,NULL AS 인지사용시간계,NULL AS 일상생활시간계,NULL AS 정서사용시간계,NULL AS 생활지원사용시간계,목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문목욕정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
                     "UNION (select 일자, 수급자명,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,NULL AS 목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문요양급여정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
@@ -921,6 +958,7 @@ public class MenuMain extends AppCompatActivity {
             }
 
 
+
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -935,7 +973,8 @@ public class MenuMain extends AppCompatActivity {
                     strTmin = String.format("%02d", tmin);
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
-                    Toast.makeText(MenuMain.this,tmoney+"/"+hourmoney+"/"+batime,Toast.LENGTH_SHORT).show();
+
+                    Toast.makeText(MenuMain.this,Integer.toString(thour)+"/"+Integer.toString(tmin)+"/"+strThour+"/"+strTmin,Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;
@@ -957,6 +996,12 @@ public class MenuMain extends AppCompatActivity {
                     tv_nurseSumTotal.setText(strNhour + ":" + strNmin);
                     tv_nosupport.setText(nosupport + "");
 
+                  //  TextView tv_careTotalTime = findViewById(R.id.tv_careTotalTime);
+                //    tv_careTotalTime.setText(recipientBasicTime);
+
+                    mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
+                    indicator.setViewPager(mPager);
+
 
                 }
             });
@@ -971,7 +1016,7 @@ public class MenuMain extends AppCompatActivity {
 
 
     }
-
+/*
     private void bnquery() {
 
         Connection connection = null;
@@ -1023,33 +1068,12 @@ public class MenuMain extends AppCompatActivity {
                     public void run() {
                         mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
                         indicator.setViewPager(mPager);
+
                     }
                 });
             }
             NUM_PAGES = imageModelArrayList.size();
 
-/*
-      ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
-
-
-            byte b[];
-            mList = new ArrayList<>();
-
-            while (bannerResultSet.next()) {
-                Blob blob = bannerResultSet.getBlob(2);
-                b = blob.getBytes(1, (int) blob.length());
-                bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                imageModelArrayList.add(new ImageModel(bitmap));
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
-                        indicator.setViewPager(mPager);
-                    }
-                });
-            }
-            NUM_PAGES = imageModelArrayList.size();*/
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -1058,7 +1082,8 @@ public class MenuMain extends AppCompatActivity {
         }
 
 
-    }
+    }*/
+
 
 
     @Override
@@ -1123,6 +1148,11 @@ public class MenuMain extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+    @Override
+    protected void onPause() {
+        swipeTimer.cancel();
+        super.onPause();
     }
 
 }
