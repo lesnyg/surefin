@@ -205,6 +205,7 @@ public class Non_Payment_Item extends AppCompatActivity {
 
             while (resultSet.next()) {
                 //일자
+
                 dbDate = resultSet.getString("일자");
                 classification = resultSet.getString("대분류"); //대분류
                 htitle = resultSet.getString("Title"); //비급여타이틀
