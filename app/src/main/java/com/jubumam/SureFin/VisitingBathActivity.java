@@ -917,7 +917,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(VisitingBathActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);

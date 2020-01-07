@@ -571,7 +571,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 intent.putExtra("rating", rating);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(ServiceListActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);

@@ -80,12 +80,6 @@
                     android:text="어르신 리스트"
                     android:textSize="15dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text=" \u0399 "
-                    android:textSize="20sp" />
-
 
             </LinearLayout>
 
@@ -131,8 +125,6 @@
                             android:layout_weight="1"
                             android:textColor="#00207c"
                             android:textSize="16dp" />
-
-
                     </LinearLayout>
 
                     <LinearLayout

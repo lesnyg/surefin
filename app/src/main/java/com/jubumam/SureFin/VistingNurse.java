@@ -903,14 +903,13 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
             case android.R.id.home:
                 Intent intent = new Intent(VistingNurse.this, MenuMain.class);
                 intent.putExtra("name", name);
-
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
                 intent.putExtra("birth", birth);
                 intent.putExtra("pastdisease", mhistory);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(VistingNurse.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
