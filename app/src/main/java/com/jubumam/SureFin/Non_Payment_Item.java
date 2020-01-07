@@ -329,9 +329,8 @@ public class Non_Payment_Item extends AppCompatActivity {
                 intent.putExtra("birth", birth);
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
-
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(Non_Payment_Item.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);
@@ -344,7 +343,6 @@ public class Non_Payment_Item extends AppCompatActivity {
                 i5.putExtra("name", name);
                 i5.putExtra("rating", rating);
                 i5.putExtra("responsibility", responsibility);
-
                 startActivity(i5);
                 break;
             case R.id.action_sign:

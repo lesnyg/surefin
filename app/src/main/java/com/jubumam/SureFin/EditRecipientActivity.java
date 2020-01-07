@@ -513,7 +513,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(EditRecipientActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", name);

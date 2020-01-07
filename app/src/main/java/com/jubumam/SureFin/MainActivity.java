@@ -385,7 +385,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("rating", currentrating);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
-                return true;
+                break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(MainActivity.this, CustomerServiceActivity.class);
                 intent1.putExtra("name", currentname);
