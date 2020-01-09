@@ -443,36 +443,9 @@ public class MenuMain extends AppCompatActivity {
         btn_offwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final CharSequence[] options = {"사인하기", "퇴근하기"};
-                AlertDialog.Builder builder = new AlertDialog.Builder(MenuMain.this);
-                builder.setTitle("퇴근관리");
 
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-
-                        if (options[item].equals("사인하기")) {
-
-                            Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                            i8.putExtra("name", name);
-                            i8.putExtra("gender", gender);
-                            i8.putExtra("rating", rating);
-                            i8.putExtra("birth", birth);
-                            i8.putExtra("pastdisease", pastdisease);
-                            i8.putExtra("responsibility", responsibility);
-                            startActivity(i8);
-
-
-
-                        } else if (options[item].equals("퇴근하기")) {
-                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                            startActivityForResult(cameraIntent, TAKE_PICTURE);
-
-                        }
-                    }
-                });
-                builder.show();
+                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, TAKE_PICTURE);
 
 
             }
@@ -549,9 +522,16 @@ public class MenuMain extends AppCompatActivity {
                     tTask = new TSyncTask().execute();
 
 
-                    finishAffinity();
-                    System.runFinalization();
-                    System.exit(0); //앱종료
+
+                    Intent i8 = new Intent(MenuMain.this, signActivity.class);
+                    i8.putExtra("name", name);
+                    i8.putExtra("gender", gender);
+                    i8.putExtra("rating", rating);
+                    i8.putExtra("birth", birth);
+                    i8.putExtra("pastdisease", pastdisease);
+                    i8.putExtra("responsibility", responsibility);
+
+                    startActivity(i8);
 
                 }
 
@@ -975,7 +955,7 @@ public class MenuMain extends AppCompatActivity {
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
 
-                    Toast.makeText(MenuMain.this,Integer.toString(thour)+"/"+Integer.toString(tmin)+"/"+strThour+"/"+strTmin,Toast.LENGTH_SHORT).show();
+                  //  Toast.makeText(MenuMain.this,Integer.toString(thour)+"/"+Integer.toString(tmin)+"/"+strThour+"/"+strTmin,Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;

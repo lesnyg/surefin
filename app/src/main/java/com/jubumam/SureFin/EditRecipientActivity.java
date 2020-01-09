@@ -69,6 +69,7 @@ public class EditRecipientActivity extends AppCompatActivity {
     String r_gbirth;
     String r_gnumber;
     String r_gadress;
+    private int Idno;
     private ImageView img_person;
     private Bitmap bitmap;
     final static int TAKE_PICTURE = 1;
@@ -99,7 +100,7 @@ public class EditRecipientActivity extends AppCompatActivity {
         responsibility = intent.getExtras().getString("responsibility");
 
         rbtn_update = (Button)findViewById(R.id.rbtn_update);
-        rbtn_return = (Button)findViewById(R.id.rbtn_return);
+      //  rbtn_return = (Button)findViewById(R.id.rbtn_return);
 
         r_name_insert = findViewById(R.id.r_name_insert);
         r_phone_insert = (EditText)findViewById(R.id.r_phone_insert);
@@ -161,7 +162,7 @@ public class EditRecipientActivity extends AppCompatActivity {
 
                 caTask = new caAsyncTask().execute();
               //  Toast.makeText(EditRecipientActivity.this,imgb.toString(),Toast.LENGTH_SHORT).show();
-               // Toast.makeText(EditRecipientActivity.this,"수정완료",Toast.LENGTH_SHORT).show();
+               Toast.makeText(EditRecipientActivity.this,"수정완료",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -181,16 +182,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 r_gnumber = r_gnumber_insert.getText().toString();
                 r_gadress = r_gadress_insert.getText().toString();
                 Toast.makeText(EditRecipientActivity.this,"입력완료",Toast.LENGTH_SHORT).show();
-
-
-
                 rtTask = new RTAsyncTask().execute();
-            }
-        });
-
-        rbtn_return.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 Intent intent = new Intent(EditRecipientActivity.this, MenuMain.class);
                 intent.putExtra("name", name);
                 intent.putExtra("gender", gender);
@@ -202,8 +194,15 @@ public class EditRecipientActivity extends AppCompatActivity {
 
             }
         });
+/*
+        rbtn_return.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
 
+*/
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -227,16 +226,16 @@ public class EditRecipientActivity extends AppCompatActivity {
 
                     Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                     img_person.setImageBitmap(bitmap);
-                    img_person.setScaleType(ImageView.ScaleType.FIT_XY);
+                 //   img_person.setScaleType(ImageView.ScaleType.FIT_XY);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageBytes = baos.toByteArray();
+                    imageBytes = baos.toByteArray();
+                  //  byte[] imageBytes = baos.toByteArray();
 
                     imgb = imageBytes;
            /*         Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                     img_person.setImageBitmap(bitmap);
                     img_person.setScaleType(ImageView.ScaleType.FIT_XY);
-
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     byte[] imageBytes = baos.toByteArray();
@@ -248,14 +247,11 @@ public class EditRecipientActivity extends AppCompatActivity {
        //             s4 = imageString;
             //        s5 = imageBytes;
 
+
                 }
                 break;
         }
     }
-
-
-
-
 
     public class RTAsyncTask extends AsyncTask<String,String,String> {
 
@@ -378,6 +374,8 @@ public class EditRecipientActivity extends AppCompatActivity {
                 r_gadress = resultSet.getString(23);
                 r_gadress_insert.setText(r_gadress);
 
+                Idno = resultSet.getInt("id");
+
             }
 
             ResultSet resultSetPhoto = statement.executeQuery("select * from Su_사진 where 이름='" + name + "'");
@@ -410,17 +408,15 @@ public class EditRecipientActivity extends AppCompatActivity {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = connection.createStatement();
-            // ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_사진(이름,BLOBData)VALUES ('"+ymd1+"','"+responsibility+"','"+hms1+"',convert(VARBINARY(max),'"+s4+"'))");
-            // ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+imageString+"') WHERE 이름 = '"+name+"'");
-            //ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData = convert(VARBINARY(max),'"+blob+"') WHERE 이름 = '"+name+"'");
-            // ResultSet resultSet = statement.executeQuery("INSERT INTO Su_사진(BLOBData) VALUES(?);");
 
             // PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_배너이미지(BLOBData) VALUES (?)");
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET (BLOBData) VALUES (?) WHERE 이름 ='" + name + "'");
+            //PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_사진(Idno,이름,BLOBData) VALUES(?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET BLOBData = ? where 이름 = '"+name+"'and Idno ='"+Idno+"'");
             //  ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData ='"+blob+"'WHERE 이름 = '"+name+"'");
 
             byte[] buf = imageBytes;
+         //   ps.setString(1,"25");
+          //  ps.setString(2,name);
             ps.setBytes(1, buf);
             ps.executeUpdate();
             ps.close();
@@ -437,7 +433,6 @@ public class EditRecipientActivity extends AppCompatActivity {
          //  resultSet.updateBytes("BLOBData",imgb);
 
           //  while (resultSet.next()) {
-
 
           //  }
         //    connection.close();
