@@ -2,8 +2,8 @@ package com.jubumam.SureFin;
 import android.graphics.Bitmap;
 
 public class Recipient {
-    private String personId;
-    private String photoId;
+    private int personId;
+    private int photoId;
     private String name;
     private String indiviPay;
     private String rating;
@@ -11,23 +11,8 @@ public class Recipient {
     private String adress;
     private String number;
     private String gender;
+    private String responsibility;
 
-
-    public String getAdress() {
-        return adress;
-    }
-
-    public void setAdress(String adress) {
-        this.adress = adress;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
 
     public Recipient(Bitmap bitmap,String name, String number, String adress,String gender){
         this.bitmap = bitmap;
@@ -45,7 +30,33 @@ public class Recipient {
     }
 
  */
-    public Recipient(String photoId,Bitmap bitmap){
+
+    public String getResponsibility() {
+        return responsibility;
+    }
+
+    public void setResponsibility(String responsibility) {
+        this.responsibility = responsibility;
+    }
+
+    public String getAdress() {
+        return adress;
+    }
+
+    public void setAdress(String adress) {
+        this.adress = adress;
+    }
+
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+
+    public Recipient(int photoId,Bitmap bitmap){
         this.photoId = photoId;
         this.bitmap = bitmap;
     }
@@ -53,19 +64,19 @@ public class Recipient {
 
     }
 
-    public String getPhotoId() {
+    public int getPhotoId() {
         return photoId;
     }
 
-    public void setPhotoId(String photoId) {
+    public void setPhotoId(int photoId) {
         this.photoId = photoId;
     }
 
-    public String getPersonId() {
+    public int getPersonId() {
         return personId;
     }
 
-    public void setPersonId(String personId) {
+    public void setPersonId(int personId) {
         this.personId = personId;
     }
 

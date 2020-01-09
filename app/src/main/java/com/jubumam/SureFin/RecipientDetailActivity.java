@@ -60,6 +60,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
     private int personId;
     private String name;
+    private String commute;
     private String date;
     private String rating;
     private String kounggam;
@@ -129,17 +130,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-// Get the ActionBar here to configure the way it behaves.
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-
-
-
         LayoutInflater inflater = LayoutInflater.from(RecipientDetailActivity.this);
         final View view = inflater.inflate(R.layout.camera_image, null);
 
@@ -170,15 +160,34 @@ public class RecipientDetailActivity extends AppCompatActivity {
             }
         });
 
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
+
         final Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
         title = intent.getExtras().getString("title");
-        if(title.equals("title")){
+        if(commute==null){
+            name = intent.getExtras().getString("name");
+            responsibility = intent.getExtras().getString("responsibility");
+            btn_camera.setVisibility(View.VISIBLE);
+        }else{
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
             btn_camera.setVisibility(View.INVISIBLE);
         }
-        if(title.equals("main")){
-            btn_camera.setVisibility(View.VISIBLE);
-        }
+
+//        if(title.equals("title")){
+//            btn_camera.setVisibility(View.INVISIBLE);
+//        }
+//        if(title.equals("main")){
+//            btn_camera.setVisibility(View.VISIBLE);
+//        }
 
 
 
@@ -186,8 +195,10 @@ public class RecipientDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent il = new Intent(RecipientDetailActivity.this,MainActivity.class);
-                il.putExtra("responsibility",responsibility);
                 il.putExtra("route","RecipientDetail");
+                il.putExtra("name",name);
+                il.putExtra("rating",rating);
+                il.putExtra("responsibility",responsibility);
                 startActivity(il);
 
 
@@ -199,10 +210,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent iup = new Intent(RecipientDetailActivity.this,EditRecipientActivity.class);
                 iup.putExtra("name", name);
-                iup.putExtra("gender", gender);
                 iup.putExtra("rating", rating);
-                iup.putExtra("birth", birth);
-                iup.putExtra("pastdisease", pastdisease);
                 iup.putExtra("responsibility", responsibility);
                 startActivity(iup);
 
@@ -226,6 +234,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                // startActivityForResult(cameraIntent, TAKE_PICTURE);
 
                // caTask = new caAsyncTask().execute();
+                new CommuteRecipient(personId,name,rating,phoneNumber,responsibility,"true");
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
@@ -673,7 +682,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 gongdanprice = resultSet.getString(37);
                 individualper = resultSet.getString(38);
                 individualprice = resultSet.getString(39);
-                phoneNumber = resultSet.getString(20);
+                phoneNumber = resultSet.getString("hp");
                 gender = resultSet.getString(11);
                 birth = resultSet.getString(22);
                 pastdisease = resultSet.getString("과거병력");
@@ -747,33 +756,18 @@ public class RecipientDetailActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(RecipientDetailActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(RecipientDetailActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", name);
-                intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(RecipientDetailActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("rating", rating);
-                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(RecipientDetailActivity.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("rating", rating);
-                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
             case R.id.action_cal:

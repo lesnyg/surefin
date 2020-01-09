@@ -1,6 +1,7 @@
 package com.jubumam.SureFin;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
@@ -55,6 +57,7 @@ public class ServiceListActivity extends AppCompatActivity {
     private ImageView img_right;
 
     private String name;
+    private String commute;
     private String date;
     private String responsibility;
     private String usingTime1;
@@ -142,18 +145,18 @@ public class ServiceListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_list);
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
         actionBar.setDisplayShowTitleEnabled(false);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
-        Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-        rating = intent.getExtras().getString("rating");
-        responsibility = intent.getExtras().getString("responsibility");
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
 
 
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
@@ -206,7 +209,6 @@ public class ServiceListActivity extends AppCompatActivity {
         cal = Calendar.getInstance();
         cal.setTime(date);
         mTask = new ServiceSyncTask().execute();
-
 
         img_left.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -567,30 +569,18 @@ public class ServiceListActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(ServiceListActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("rating", rating);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(ServiceListActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", name);
-                intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(ServiceListActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("rating", rating);
-                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(ServiceListActivity.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("rating", rating);
-                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
 

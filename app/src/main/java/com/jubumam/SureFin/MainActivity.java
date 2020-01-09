@@ -1,6 +1,7 @@
 package com.jubumam.SureFin;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -37,30 +39,30 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     EditText et_search;
-    Button btn_check;
-    //Button btn_ratingPay;
-    String name;
-    String currentname;
-    String indiviPay;
-    String rating;
-    String currentrating;
+    private Button btn_check;
+    private String name;
+    private String currentname;
+    private String indiviPay;
+    private String rating;
+    private String currentrating;
     private RecipientAdapter mAdapter;
-    List<Recipient> list;
-    List<Recipient> arrayList;
+    private List<Recipient> list;
+    private List<Recipient> arrayList;
     private AsyncTask<String, String, String> mTask;
     private AsyncTask<String, String, String> cTask;
-    RecyclerView recyclerView;
-    String personId;
-    Bitmap bitmap;
-    Connection connection;
-    ResultSet resultSetlist;
-    String responsibility;   //요양사 이름
-    String caregiverPhone;  //요양사 핸드폰
-    String s1;
-    String tname;
-    String number;
-    String adress;
-    String title;
+    private RecyclerView recyclerView;
+    private String personId;
+    private String commute;
+    private Bitmap bitmap;
+    private Connection connection;
+    private ResultSet resultSetlist;
+    private String responsibility;   //요양사 이름
+    private String caregiverPhone;  //요양사 핸드폰
+    private String s1;
+    private String tname;
+    private String number;
+    private String adress;
+    private String title;
     private Button btn_search;
 
     private Button cal_btn;
@@ -78,11 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private String divisiondate;
     private String divisiontime;
     private String route;   //경로
-
-
-
     private String gender;
-
 
 
     @Override
@@ -90,25 +88,30 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        responsibility = commuteRecipient.getResponsibility();
+        commute = commuteRecipient.getCommute();
 
         final Intent intent = getIntent();
-        responsibility = intent.getExtras().getString("responsibility");
         route = intent.getExtras().getString("route");
-        if(route.equals("MenuMain") || route.equals("RecipientDetail")){
-            currentname = intent.getExtras().getString("name");
-            currentrating = intent.getExtras().getString("rating");
+        if (commute == null) {
+            name = intent.getExtras().getString("name");
+            rating = intent.getExtras().getString("rating");
+            responsibility = intent.getExtras().getString("responsibility");
+        } else {
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
         }
 
         mTask = new MySyncTask().execute();
         et_search = findViewById(R.id.et_search);
+
         recyclerView = findViewById(R.id.recyclerview);
 
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -120,8 +123,6 @@ public class MainActivity extends AppCompatActivity {
         cal_btn = findViewById(R.id.cal_btn);
 
     }
-
-
 
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
@@ -148,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public class MySyncTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -158,6 +158,7 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             if (isCancelled())
                 return null;
+
             listQuery();
             return null;
 
@@ -173,22 +174,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void calQuery(){
+    public void calQuery() {
 
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='"+date2+"';");
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
-            while (calres.next()){
+            while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division =  calres.getString("구분");//구분
+                division = calres.getString("구분");//구분
 
             }
 
@@ -198,18 +199,18 @@ public class MainActivity extends AppCompatActivity {
 
 
                     if (schedule_date != null) {
-          //              divisiontotal = "어르신 : " + schedulename+"  "
-          //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+                        //              divisiontotal = "어르신 : " + schedulename+"  "
+                        //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
 //                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-  //                      cal_txt1.setText("어르신:" + schedulename);
+                        //                      cal_txt1.setText("어르신:" + schedulename);
 
-                        divisiontotal = "어르신 : " + schedulename+"  "  +"일정 : " + division ;
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
                         divisiondate = schedule_date + "일";
                         divisiontime = scheduletime + "(" + contracttime + ")";
 
                         Schedule_dialog schedule_dialog = new Schedule_dialog(MainActivity.this);
 
-                        schedule_dialog.callFunction(divisiondate,divisiontime,divisiontotal);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
 
          /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                         builder.setTitle("일정관리");
@@ -222,30 +223,31 @@ public class MainActivity extends AppCompatActivity {
 
                                 });
                         builder.show();*/
-                    }else if (schedule_date == null){
-                        Toast.makeText(MainActivity.this,"선택하신 날짜에 일정이 없습니다",Toast.LENGTH_SHORT).show();
+                    } else if (schedule_date == null) {
+                        Toast.makeText(MainActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
 
                     }
-
 
 
                 }
             });
 
-                    conn.close();
+            conn.close();
         } catch (ClassNotFoundException e) {
-        e.printStackTrace();
+            e.printStackTrace();
         } catch (SQLException e) {
-        e.printStackTrace();
+            e.printStackTrace();
         }
 
     }
+
     public void listQuery() {
+
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 left join Su_사진 on Su_수급자기본정보.id=Su_사진.Idno where 담당='"+ responsibility +"' order by Su_수급자기본정보.수급자명");
+            resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 left join Su_사진 on Su_수급자기본정보.id=Su_사진.Idno where 담당='" + responsibility + "' order by Su_수급자기본정보.수급자명");
             //resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 full outer join Su_사진 on Su_수급자기본정보.");
 
 
@@ -277,7 +279,8 @@ public class MainActivity extends AppCompatActivity {
                             bitmap = null;
                         }
                         // list.add(new Recipient(bitmap, name, indiviPay, rating));
-                        list.add(new Recipient(bitmap, name, number, adress,gender));
+
+                        list.add(new Recipient(bitmap, name, number, adress, gender));
 
 
                     }
@@ -324,9 +327,9 @@ public class MainActivity extends AppCompatActivity {
 
                     }
 
-                    public void onPhoneClick(String phone){
+                    public void onPhoneClick(String phone) {
                         Intent intent = new Intent(Intent.ACTION_DIAL);
-                        intent.setData(Uri.parse("tel:"+phone));
+                        intent.setData(Uri.parse("tel:" + phone));
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivity(intent);
                         }
@@ -381,30 +384,17 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(MainActivity.this, MenuMain.class);
-                intent.putExtra("name", currentname);
-                intent.putExtra("rating", currentrating);
-                intent.putExtra("responsibility", responsibility);
-                startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(MainActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", currentname);
-                intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", currentrating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(MainActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", currentname);
-                i5.putExtra("rating", currentrating);
-                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(MainActivity.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("rating", rating);
-                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
 
@@ -417,12 +407,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, cal.get(Calendar.MINUTE) + "");
 
 
-
-
                 DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
 
 
                         date1 = String.format("%d-%d-%d", year, month + 1, date);
@@ -431,7 +418,6 @@ public class MainActivity extends AppCompatActivity {
                         cTask = new CalSyncTask().execute();
                         //       cal_btn.setText(date1);
                         //vtxt1.setText(date1);
-
 
 
                         //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
@@ -477,7 +463,6 @@ public class MainActivity extends AppCompatActivity {
         // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
         mAdapter.notifyDataSetChanged();
     }
-
 
 
 }

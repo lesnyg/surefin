@@ -184,9 +184,10 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
 
-        Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-        responsibility = intent.getExtras().getString("responsibility");
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
 
         Date currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -255,7 +256,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void onClick(View v) {
                 Intent intent1 = new Intent(VisitingBathActivity.this, ServiceListActivity.class);
-                intent1.putExtra("name", name);
                 startActivity(intent1);
             }
         });
@@ -910,33 +910,18 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(VisitingBathActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(VisitingBathActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", name);
-                intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(VisitingBathActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("rating", rating);
-                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VisitingBathActivity.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("rating", rating);
-                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
             case R.id.action_cal:
