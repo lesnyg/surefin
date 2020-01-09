@@ -9,6 +9,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -110,7 +111,7 @@ public class signActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                //Toast.makeText(signActivity.this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(signActivity.this, "저장 되었습니다.", Toast.LENGTH_SHORT).show();
                 //Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                 //Bitmap bitmap = (Bitmap)signaturePad.getSignatureBitmap();
                 //signaturePad.setSignatureBitmap(bitmap);
@@ -141,14 +142,19 @@ public class signActivity extends AppCompatActivity {
         btnok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(signActivity.this,MenuMain.class);
+     /*           Intent intent = new Intent(signActivity.this,MenuMain.class);
                 intent.putExtra("name", name);
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
                 intent.putExtra("birth", birth);
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
-                startActivity(intent);
+                startActivity(intent);*/
+
+                finishAffinity();
+                System.runFinalization();
+                System.exit(0); //앱종료
+
             }
         });
     }
