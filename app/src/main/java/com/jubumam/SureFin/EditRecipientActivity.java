@@ -42,8 +42,8 @@ public class EditRecipientActivity extends AppCompatActivity {
     private String rating;      //등급
     private String pastdisease;      //과거병력
     private String responsibility;      //직원명
-    private AsyncTask<String,String,String> rtTask;
-    private AsyncTask<String,String,String> rTask;
+    private AsyncTask<String, String, String> rtTask;
+    private AsyncTask<String, String, String> rTask;
     Button rbtn_update;
     Button rbtn_return;
 
@@ -75,42 +75,50 @@ public class EditRecipientActivity extends AppCompatActivity {
     final String TAG = getClass().getSimpleName();
     private String imageString;
     private ImageView img_camerainsert;
-    private AsyncTask<String,String,String> caTask;
+    private AsyncTask<String, String, String> caTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipient);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); 
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
-        Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-        gender = intent.getExtras().getString("gender");
-        rating = intent.getExtras().getString("rating");
-        birth = intent.getExtras().getString("birth");
-        pastdisease = intent.getExtras().getString("pastdisease");
-        responsibility = intent.getExtras().getString("responsibility");
 
-        rbtn_update = (Button)findViewById(R.id.rbtn_update);
-        rbtn_return = (Button)findViewById(R.id.rbtn_return);
+
+
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
+
+        if (name == null) {
+            Intent intent = getIntent();
+            name = intent.getExtras().getString("name");
+            rating = intent.getExtras().getString("rating");
+            responsibility = intent.getExtras().getString("responsibility");
+        }else{
+            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+            setSupportActionBar(toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayShowCustomEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        }
+
+        rbtn_update = (Button) findViewById(R.id.rbtn_update);
+        rbtn_return = (Button) findViewById(R.id.rbtn_return);
 
         r_name_insert = findViewById(R.id.r_name_insert);
-        r_phone_insert = (EditText)findViewById(R.id.r_phone_insert);
+        r_phone_insert = (EditText) findViewById(R.id.r_phone_insert);
         r_rating_insert = findViewById(R.id.r_rating_insert);
-        r_birth_insert = (EditText)findViewById(R.id.r_birth_insert);
-        r_adress_insert = (EditText)findViewById(R.id.r_adress_insert);
-        r_guardian_insert = (EditText)findViewById(R.id.r_guardian_insert);
-        r_relationship_insert = (EditText)findViewById(R.id.r_relationship_insert);
-        r_gbirth_insert = (EditText)findViewById(R.id.r_gbirth_insert);
-        r_gnumber_insert = (EditText)findViewById(R.id.r_gnumber_insert);
-        r_gadress_insert = (EditText)findViewById(R.id.r_gadress_insert);
+        r_birth_insert = (EditText) findViewById(R.id.r_birth_insert);
+        r_adress_insert = (EditText) findViewById(R.id.r_adress_insert);
+        r_guardian_insert = (EditText) findViewById(R.id.r_guardian_insert);
+        r_relationship_insert = (EditText) findViewById(R.id.r_relationship_insert);
+        r_gbirth_insert = (EditText) findViewById(R.id.r_gbirth_insert);
+        r_gnumber_insert = (EditText) findViewById(R.id.r_gnumber_insert);
+        r_gadress_insert = (EditText) findViewById(R.id.r_gadress_insert);
         img_person = findViewById(R.id.img_person);
         img_camerainsert = findViewById(R.id.img_camerainsert);
 
@@ -123,14 +131,13 @@ public class EditRecipientActivity extends AppCompatActivity {
 
         rTask = new RAsyncTask().execute();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "권한 설정 완료");
             } else {
                 Log.d(TAG, "권한 설정 요청");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
-
 
 
         findViewById(R.id.img_camera).setOnClickListener(new View.OnClickListener() {
@@ -160,8 +167,8 @@ public class EditRecipientActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 caTask = new caAsyncTask().execute();
-              //  Toast.makeText(EditRecipientActivity.this,imgb.toString(),Toast.LENGTH_SHORT).show();
-               // Toast.makeText(EditRecipientActivity.this,"수정완료",Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(EditRecipientActivity.this,imgb.toString(),Toast.LENGTH_SHORT).show();
+                // Toast.makeText(EditRecipientActivity.this,"수정완료",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -180,8 +187,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 r_gbirth = r_gbirth_insert.getText().toString();
                 r_gnumber = r_gnumber_insert.getText().toString();
                 r_gadress = r_gadress_insert.getText().toString();
-                Toast.makeText(EditRecipientActivity.this,"입력완료",Toast.LENGTH_SHORT).show();
-
+                Toast.makeText(EditRecipientActivity.this, "입력완료", Toast.LENGTH_SHORT).show();
 
 
                 rtTask = new RTAsyncTask().execute();
@@ -209,7 +215,7 @@ public class EditRecipientActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(TAG, "onRequestPermissionsResult");
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
         }
     }
@@ -244,9 +250,9 @@ public class EditRecipientActivity extends AppCompatActivity {
 */
                     //s1 = 8;
 
-     //               s2 = 32;
-       //             s4 = imageString;
-            //        s5 = imageBytes;
+                    //               s2 = 32;
+                    //             s4 = imageString;
+                    //        s5 = imageBytes;
 
                 }
                 break;
@@ -254,30 +260,28 @@ public class EditRecipientActivity extends AppCompatActivity {
     }
 
 
+    public class RTAsyncTask extends AsyncTask<String, String, String> {
 
-
-
-    public class RTAsyncTask extends AsyncTask<String,String,String> {
-
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             query();
 
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
     }
-
 
 
     public void query() {
@@ -287,10 +291,9 @@ public class EditRecipientActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("UPDATE Su_수급자기본정보 SET 수급자명='"+r_name+"',hp ='"+r_phone+"',등급='"+r_rating+"',생년월일='"+r_birth+"',주소1 = '"+r_adress+"',보호자성명 = '"+r_guardian+"',관계 = '"+r_relationship+"',생년월일1 ='"+r_gbirth+"',hp2='"+r_gnumber+"',주소11='"+r_gadress+"' WHERE 수급자명='"+name+"'");
+            ResultSet resultSet = statement.executeQuery("UPDATE Su_수급자기본정보 SET 수급자명='" + r_name + "',hp ='" + r_phone + "',등급='" + r_rating + "',생년월일='" + r_birth + "',주소1 = '" + r_adress + "',보호자성명 = '" + r_guardian + "',관계 = '" + r_relationship + "',생년월일1 ='" + r_gbirth + "',hp2='" + r_gnumber + "',주소11='" + r_gadress + "' WHERE 수급자명='" + name + "'");
 
             while (resultSet.next()) {
-
 
 
             }
@@ -298,10 +301,6 @@ public class EditRecipientActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.w("Error connection", "" + e.getMessage());
-
-
-
-
 
 
         }
@@ -332,7 +331,6 @@ public class EditRecipientActivity extends AppCompatActivity {
     }*/
 
 
-
     public void selectquery() {
 
         Connection connection = null;
@@ -342,43 +340,39 @@ public class EditRecipientActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='"+name+"'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + name + "'");
 
 
             while (resultSet.next()) {
 
                 r_name = resultSet.getString(2);
-               // r_name_insert.setText(r_name);
-                r_name_insert.setText(r_name);
-
                 r_phone = resultSet.getString(8);
-                r_phone_insert.setText(r_phone);
-
                 r_rating = resultSet.getString(4);
-                r_rating_insert.setText(r_rating);
-
                 r_birth = resultSet.getString(14);
-                r_birth_insert.setText(r_birth);
-
-                r_adress  = resultSet.getString(9);
-                r_adress_insert.setText(r_adress);
-
+                r_adress = resultSet.getString(9);
                 r_guardian = resultSet.getString(18);
-                r_guardian_insert.setText(r_guardian);
-
                 r_relationship = resultSet.getString(25);
-                r_relationship_insert.setText(r_relationship);
-
                 r_gbirth = resultSet.getString(22);
-                r_gbirth_insert.setText(r_gbirth);
-
                 r_gnumber = resultSet.getString(19);
-                r_gnumber_insert.setText(r_gnumber);
-
                 r_gadress = resultSet.getString(23);
-                r_gadress_insert.setText(r_gadress);
 
             }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    r_name_insert.setText(r_name);
+                    r_phone_insert.setText(r_phone);
+                    r_rating_insert.setText(r_rating);
+                    r_birth_insert.setText(r_birth);
+                    r_adress_insert.setText(r_adress);
+                    r_guardian_insert.setText(r_guardian);
+                    r_gbirth_insert.setText(r_gbirth);
+                    r_gnumber_insert.setText(r_gnumber);
+                    r_gadress_insert.setText(r_gadress);
+                    r_relationship_insert.setText(r_relationship);
+                }
+            });
 
             ResultSet resultSetPhoto = statement.executeQuery("select * from Su_사진 where 이름='" + name + "'");
             byte b[];
@@ -404,6 +398,7 @@ public class EditRecipientActivity extends AppCompatActivity {
         }
 
     }
+
     public void camerainsertquery() {
         Connection connection = null;
         Blob blob = null;
@@ -432,53 +427,55 @@ public class EditRecipientActivity extends AppCompatActivity {
         }
 
 
-         //  blob.setBytes(1,imgb);
-         //  resultSet.updateBlob("BLOBData",blob);
-         //  resultSet.updateBytes("BLOBData",imgb);
+        //  blob.setBytes(1,imgb);
+        //  resultSet.updateBlob("BLOBData",blob);
+        //  resultSet.updateBytes("BLOBData",imgb);
 
-          //  while (resultSet.next()) {
+        //  while (resultSet.next()) {
 
 
-          //  }
+        //  }
         //    connection.close();
 
-    //    } catch (Exception e) {
+        //    } catch (Exception e) {
         //    Log.w("Error connection", "" + e.getMessage());
-      //  }
+        //  }
 
     }
 
 
-    public class caAsyncTask extends AsyncTask<String,String,String> {
+    public class caAsyncTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             camerainsertquery();
 
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
 
         }
     }
 
 
+    public class RAsyncTask extends AsyncTask<String, String, String> {
 
-    public class RAsyncTask extends AsyncTask<String,String,String> {
-
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             selectquery();
 
@@ -486,10 +483,11 @@ public class EditRecipientActivity extends AppCompatActivity {
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
     }
@@ -497,16 +495,16 @@ public class EditRecipientActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action,menu);
+        getMenuInflater().inflate(R.menu.appbar_action, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(EditRecipientActivity.this,MenuMain.class);
-                intent.putExtra("name",name);
+                Intent intent = new Intent(EditRecipientActivity.this, MenuMain.class);
+                intent.putExtra("name", name);
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
                 intent.putExtra("birth", birth);

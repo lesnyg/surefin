@@ -46,13 +46,11 @@ public class CustomerServiceActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
-        Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-        gender = intent.getExtras().getString("gender");
-        rating = intent.getExtras().getString("rating");
-        birth = intent.getExtras().getString("birth");
-        pastdisease = intent.getExtras().getString("pastdisease");
-        responsibility = intent.getExtras().getString("responsibility");
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
+
 
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,33 +160,18 @@ public class CustomerServiceActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(CustomerServiceActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(CustomerServiceActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", name);
-                intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(CustomerServiceActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("rating", rating);
-                i5.putExtra("responsibility", responsibility);
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(CustomerServiceActivity.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("rating", rating);
-                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
         }

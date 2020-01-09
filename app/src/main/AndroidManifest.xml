@@ -24,21 +24,41 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name="com.jubumam.SureFin.MainActivity" />
-        <activity android:name="com.jubumam.SureFin.VisitingBathActivity"/>
-        <activity android:name="com.jubumam.SureFin.VistingNurse" />
-        <activity android:name="com.jubumam.SureFin.RecipientDetailActivity" />
-        <activity android:name="com.jubumam.SureFin.MenuMain"/>
+        <activity
+            android:name="com.jubumam.SureFin.MainActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.VisitingBathActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name="com.jubumam.SureFin.VistingNurse"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.RecipientDetailActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.MenuMain"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.jubumam.SureFin.signActivity" />
-        <activity android:name="com.jubumam.SureFin.login" />
-        <activity android:name="com.jubumam.SureFin.CustomerServiceActivity" />
-        <activity android:name="com.jubumam.SureFin.Client_Registration" />
+        <activity
+            android:name="com.jubumam.SureFin.login"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.CustomerServiceActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.Client_Registration"
+            android:screenOrientation="portrait"/>
         <activity android:name="com.jubumam.SureFin.Recipient" />
-        <activity android:name="com.jubumam.SureFin.EditRecipientActivity" />
-        <activity android:name="com.jubumam.SureFin.ServiceListActivity"/>
-        <activity android:name="com.jubumam.SureFin.VisitingActivity"/>
-        <activity android:name="com.jubumam.SureFin.Non_Payment_Item"/>
-        <activity android:name="com.jubumam.SureFin.SplashActivity">
+        <activity android:name="com.jubumam.SureFin.EditRecipientActivity"
+            android:windowSoftInputMode="stateHidden"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.ServiceListActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.VisitingActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.Non_Payment_Item"
+            android:screenOrientation="portrait"/>
+        <activity android:name="com.jubumam.SureFin.SplashActivity"
+            android:screenOrientation="portrait">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

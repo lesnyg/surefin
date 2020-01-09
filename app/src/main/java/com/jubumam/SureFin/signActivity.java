@@ -52,14 +52,10 @@ public class signActivity extends AppCompatActivity {
 
 
 
-        final Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-        gender = intent.getExtras().getString("gender");
-        rating = intent.getExtras().getString("rating");
-        birth = intent.getExtras().getString("birth");
-        pastdisease = intent.getExtras().getString("pastdisease");
-        responsibility = intent.getExtras().getString("responsibility");
-
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
 
         signaturePad = (SignaturePad)findViewById(R.id.signaturePad);
         btnsave = (Button)findViewById(R.id.btnsave);

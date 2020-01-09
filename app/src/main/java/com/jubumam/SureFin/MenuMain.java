@@ -204,9 +204,7 @@ public class MenuMain extends AppCompatActivity {
     private String strSumtm;
     private String strNhour;
     private String strNmin;
-    private Timer swipeTimer;
     private MyPagerAdapter adapter;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -222,13 +220,11 @@ public class MenuMain extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
 
-        final Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-//        gender = intent.getExtras().getString("gender");
-        rating = intent.getExtras().getString("rating");
-//        birth = intent.getExtras().getString("birth");
-//        pastdisease = intent.getExtras().getString("pastdisease");
-        responsibility = intent.getExtras().getString("responsibility");
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
+
 
         currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -283,14 +279,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
-                i1.putExtra("name", name);
-                i1.putExtra("gender", gender);
-                i1.putExtra("rating", rating);
-                i1.putExtra("birth", birth);
-                i1.putExtra("pastdisease", pastdisease);
-                i1.putExtra("responsibility", responsibility);
-                i1.putExtra("vistime", vistime);
-
                 startActivity(i1);
             }
         });
@@ -298,12 +286,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i10 = new Intent(MenuMain.this, VisitingBathActivity.class);
-                i10.putExtra("name", name);
-                i10.putExtra("gender", gender);
-                i10.putExtra("rating", rating);
-                i10.putExtra("birth", birth);
-                i10.putExtra("pastdisease", pastdisease);
-                i10.putExtra("responsibility", responsibility);
                 startActivity(i10);
             }
         });
@@ -311,12 +293,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i3 = new Intent(MenuMain.this, VistingNurse.class);
-                i3.putExtra("name", name);
-                i3.putExtra("gender", gender);
-                i3.putExtra("rating", rating);
-                i3.putExtra("birth", birth);
-                i3.putExtra("pastdisease", pastdisease);
-                i3.putExtra("responsibility", responsibility);
                 startActivity(i3);
             }
         });
@@ -325,12 +301,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuMain.this, ServiceListActivity.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
             }
         });
@@ -339,12 +309,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuMain.this, Non_Payment_Item.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
             }
         });
@@ -354,13 +318,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
-                i1.putExtra("name", name);
-                i1.putExtra("gender", gender);
-                i1.putExtra("rating", rating);
-                i1.putExtra("birth", birth);
-                i1.putExtra("pastdisease", pastdisease);
-                i1.putExtra("responsibility", responsibility);
-                i1.putExtra("vistime", vistime);
                 startActivity(i1);
 
             }
@@ -370,12 +327,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i2 = new Intent(MenuMain.this, ServiceListActivity.class);
-                i2.putExtra("name", name);
-                i2.putExtra("gender", gender);
-                i2.putExtra("rating", rating);
-                i2.putExtra("birth", birth);
-                i2.putExtra("pastdisease", pastdisease);
-                i2.putExtra("responsibility", responsibility);
                 startActivity(i2);
             }
         });
@@ -384,12 +335,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i3 = new Intent(MenuMain.this, VistingNurse.class);
-                i3.putExtra("name", name);
-                i3.putExtra("gender", gender);
-                i3.putExtra("rating", rating);
-                i3.putExtra("birth", birth);
-                i3.putExtra("pastdisease", pastdisease);
-                i3.putExtra("responsibility", responsibility);
                 startActivity(i3);
 
             }
@@ -399,12 +344,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i4 = new Intent(MenuMain.this, MainActivity.class);
-                i4.putExtra("name", name);
-                i4.putExtra("gender", gender);
-                i4.putExtra("rating", rating);
-                i4.putExtra("birth", birth);
-                i4.putExtra("pastdisease", pastdisease);
-                i4.putExtra("responsibility", responsibility);
                 i4.putExtra("route", "MenuMain");
                 startActivity(i4);
 
@@ -416,12 +355,6 @@ public class MenuMain extends AppCompatActivity {
             public void onClick(View v) {
 
                 Intent i6 = new Intent(MenuMain.this, Non_Payment_Item.class);
-                i6.putExtra("name", name);
-                i6.putExtra("gender", gender);
-                i6.putExtra("rating", rating);
-                i6.putExtra("birth", birth);
-                i6.putExtra("pastdisease", pastdisease);
-                i6.putExtra("responsibility", responsibility);
                 startActivity(i6);
             }
         });
@@ -430,12 +363,6 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i10 = new Intent(MenuMain.this, VisitingBathActivity.class);
-                i10.putExtra("name", name);
-                i10.putExtra("gender", gender);
-                i10.putExtra("rating", rating);
-                i10.putExtra("birth", birth);
-                i10.putExtra("pastdisease", pastdisease);
-                i10.putExtra("responsibility", responsibility);
                 startActivity(i10);
 
             }
@@ -458,12 +385,6 @@ public class MenuMain extends AppCompatActivity {
                         if (options[item].equals("사인하기")) {
 
                             Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                            i8.putExtra("name", name);
-                            i8.putExtra("gender", gender);
-                            i8.putExtra("rating", rating);
-                            i8.putExtra("birth", birth);
-                            i8.putExtra("pastdisease", pastdisease);
-                            i8.putExtra("responsibility", responsibility);
                             startActivity(i8);
 
                             
@@ -490,6 +411,9 @@ public class MenuMain extends AppCompatActivity {
             }
         }
     }
+
+
+
 
     // 권한 요청
     @Override
@@ -609,12 +533,6 @@ public class MenuMain extends AppCompatActivity {
             }
         });
 
-    }
-
-    @Override
-    protected void onPause() {
-        swipeTimer.cancel();
-        super.onPause();
     }
 
     private static class MyPagerAdapter extends PagerAdapter {
@@ -983,7 +901,7 @@ public class MenuMain extends AppCompatActivity {
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
 
-                    Toast.makeText(MenuMain.this,Integer.toString(thour)+"/"+Integer.toString(tmin)+"/"+strThour+"/"+strTmin,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MenuMain.this,Integer.toString(thour)+"/"+Integer.toString(tmin)+"/"+strThour+"/"+strTmin,Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;

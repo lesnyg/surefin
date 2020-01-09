@@ -4,6 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eeeeee"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     android:orientation="vertical">
 
     <include
@@ -301,11 +303,12 @@
 
                         <EditText
                             android:id="@+id/vtxt2"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="3"
                             android:background="@drawable/edge"
                             android:inputType="numberSigned"
+                            android:gravity="center"
                             android:textSize="16dp" />
 
                         <TextView
@@ -321,11 +324,12 @@
 
                         <EditText
                             android:id="@+id/vtxt3"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="3"
                             android:background="@drawable/edge"
                             android:inputType="numberSigned"
+                            android:gravity="center"
                             android:textSize="16dp" />
 
                         <TextView
@@ -341,11 +345,12 @@
 
                         <EditText
                             android:id="@+id/vtxt4"
-                            android:layout_width="wrap_content"
+                            android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="3"
                             android:background="@drawable/edge"
                             android:inputType="numberSigned"
+                            android:gravity="center"
                             android:textSize="16dp" />
                     </LinearLayout>
 
