@@ -37,6 +37,7 @@ import java.sql.Statement;
 public class EditRecipientActivity extends AppCompatActivity {
 
     private String name;        //이름
+    private String commute;        //출근체크
     private String gender;      //성별
     private String birth;       //생년원일
     private String rating;      //등급
@@ -83,33 +84,35 @@ public class EditRecipientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipient);
 
-
-
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
-        name = commuteRecipient.getName();
-        rating = commuteRecipient.getRating();
-        responsibility = commuteRecipient.getResponsibility();
-
-        if (name == null) {
-            Intent intent = getIntent();
+        commute = commuteRecipient.getCommute();
+        Intent intent = getIntent();
+        String route = intent.getExtras().getString("route");
+        if (commute ==null) {
             name = intent.getExtras().getString("name");
             rating = intent.getExtras().getString("rating");
             responsibility = intent.getExtras().getString("responsibility");
+        }else if(route.equals("detail")){
+            name = intent.getExtras().getString("name");
+            rating = intent.getExtras().getString("rating");
+            responsibility = intent.getExtras().getString("responsibility");
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
         }else{
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
+            name = commuteRecipient.getName();
+            rating = commuteRecipient.getRating();
+            responsibility = commuteRecipient.getResponsibility();
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
         }
 
         rbtn_update = (Button) findViewById(R.id.rbtn_update);
-        rbtn_return = (Button) findViewById(R.id.rbtn_return);
-
-
         r_name_insert = findViewById(R.id.r_name_insert);
         r_phone_insert = (EditText) findViewById(R.id.r_phone_insert);
         r_rating_insert = findViewById(R.id.r_rating_insert);
@@ -505,7 +508,10 @@ public class EditRecipientActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action, menu);
+        if(commute==null){
+            getMenuInflater().inflate(R.menu.baseappbar_action, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.appbar_action, menu);}
         return true;
     }
 
@@ -514,33 +520,19 @@ public class EditRecipientActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(EditRecipientActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(EditRecipientActivity.this, CustomerServiceActivity.class);
-                intent1.putExtra("name", name);
-                intent1.putExtra("responsibility", responsibility);
-                intent1.putExtra("rating", rating);
                 startActivity(intent1);
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(EditRecipientActivity.this, EditRecipientActivity.class);
-                i5.putExtra("name", name);
-                i5.putExtra("rating", rating);
-                i5.putExtra("responsibility", responsibility);
+                i5.putExtra("route", "edit");
                 startActivity(i5);
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(EditRecipientActivity.this, signActivity.class);
-                i8.putExtra("name", name);
-                i8.putExtra("rating", rating);
-                i8.putExtra("responsibility", responsibility);
                 startActivity(i8);
                 break;
         }

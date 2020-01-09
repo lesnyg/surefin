@@ -130,6 +130,12 @@ public class RecipientDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_detail);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowCustomEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+
         LayoutInflater inflater = LayoutInflater.from(RecipientDetailActivity.this);
         final View view = inflater.inflate(R.layout.camera_image, null);
 
@@ -161,26 +167,19 @@ public class RecipientDetailActivity extends AppCompatActivity {
         });
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
-        name = commuteRecipient.getName();
-        rating = commuteRecipient.getRating();
-        responsibility = commuteRecipient.getResponsibility();
+        commute = commuteRecipient.getCommute();
+        Intent intent = getIntent();
+        name = intent.getExtras().getString("name");
+        responsibility = intent.getExtras().getString("responsibility");
+        if(commute!=null){
 
-        final Intent intent = getIntent();
-        title = intent.getExtras().getString("title");
-        if(commute==null){
-            name = intent.getExtras().getString("name");
-            responsibility = intent.getExtras().getString("responsibility");
-            btn_camera.setVisibility(View.VISIBLE);
-        }else{
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowCustomEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
             btn_camera.setVisibility(View.INVISIBLE);
+        }else{
+            btn_camera.setVisibility(View.VISIBLE);
         }
+
 
 //        if(title.equals("title")){
 //            btn_camera.setVisibility(View.INVISIBLE);
@@ -747,7 +746,10 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action,menu);
+        if(commute==null){
+            getMenuInflater().inflate(R.menu.baseappbar_action, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.appbar_action, menu);}
         return true;
     }
 
@@ -764,6 +766,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(RecipientDetailActivity.this, EditRecipientActivity.class);
+                i5.putExtra("route", "edit");
                 startActivity(i5);
                 break;
             case R.id.action_sign:

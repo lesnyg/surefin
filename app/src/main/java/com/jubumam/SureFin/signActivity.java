@@ -24,7 +24,7 @@ import java.sql.Statement;
 
 public class signActivity extends AppCompatActivity {
 
-    private AsyncTask<String,String,String> caTask;
+    private AsyncTask<String, String, String> caTask;
 
     SignaturePad signaturePad;
     Button btnsave;
@@ -40,10 +40,7 @@ public class signActivity extends AppCompatActivity {
     private String rating;      //등급
     private String pastdisease;      //과거병력
     private String responsibility;      //직원명
-
-
-
-
+    private String route;
 
 
     @Override
@@ -51,25 +48,21 @@ public class signActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signature);
 
-
-
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
 
-        signaturePad = (SignaturePad)findViewById(R.id.signaturePad);
-        btnsave = (Button)findViewById(R.id.btnsave);
-        btnclear = (Button)findViewById(R.id.btnclear);
-        btnok = (Button)findViewById(R.id.btnok);
-      //  btnre = (Button)findViewById(R.id.btnre);
+        signaturePad = (SignaturePad) findViewById(R.id.signaturePad);
+        btnsave = (Button) findViewById(R.id.btnsave);
+        btnclear = (Button) findViewById(R.id.btnclear);
+        btnok = (Button) findViewById(R.id.btnok);
+        //  btnre = (Button)findViewById(R.id.btnre);
 
         btnsave.setEnabled(false);
         btnclear.setEnabled(false);
         btnok.setEnabled(false);
 //        btnre.setEnabled(false);
-
-
 
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
@@ -85,7 +78,7 @@ public class signActivity extends AppCompatActivity {
                 btnsave.setEnabled(true);
                 btnclear.setEnabled(true);
                 btnok.setEnabled(true);
-              //  btnre.setEnabled(true);
+                //  btnre.setEnabled(true);
             }
 
             @Override
@@ -94,7 +87,7 @@ public class signActivity extends AppCompatActivity {
                 btnsave.setEnabled(false);
                 btnclear.setEnabled(false);
                 btnok.setEnabled(false);
-              //  btnre.setEnabled(false);
+                //  btnre.setEnabled(false);
 
             }
 
@@ -128,7 +121,7 @@ public class signActivity extends AppCompatActivity {
                 im = imageBytes;
                 caTask = new caAsyncTask().execute();
 
-              //  Toast.makeText(signActivity.this,signimage,Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(signActivity.this,signimage,Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -166,7 +159,7 @@ public class signActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_수급자서명정보(수급자명,BLOBData)VALUES('슈어핀',convert(VARBINARY(max),'"+signimage+"'))");
+            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_수급자서명정보(수급자명,BLOBData)VALUES('슈어핀',convert(VARBINARY(max),'" + signimage + "'))");
 
 
             while (resultSet.next()) {
@@ -181,13 +174,14 @@ public class signActivity extends AppCompatActivity {
 
     }
 
-    public class caAsyncTask extends AsyncTask<String,String,String> {
+    public class caAsyncTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             query();
 
@@ -195,9 +189,10 @@ public class signActivity extends AppCompatActivity {
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
     }

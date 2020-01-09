@@ -168,6 +168,7 @@ public class CustomerServiceActivity extends AppCompatActivity {
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(CustomerServiceActivity.this, EditRecipientActivity.class);
+                i5.putExtra("route", "edit");
                 startActivity(i5);
                 break;
             case R.id.action_sign:

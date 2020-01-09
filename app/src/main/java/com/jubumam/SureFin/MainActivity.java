@@ -88,26 +88,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(true);
 
         final Intent intent = getIntent();
-        route = intent.getExtras().getString("route");
         if (commute == null) {
             name = intent.getExtras().getString("name");
             rating = intent.getExtras().getString("rating");
             responsibility = intent.getExtras().getString("responsibility");
         } else {
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setDisplayShowTitleEnabled(false);
-            actionBar.setDisplayShowCustomEnabled(true);
+
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
         }
+
 
         mTask = new MySyncTask().execute();
         et_search = findViewById(R.id.et_search);
@@ -375,7 +375,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action, menu);
+        if(commute==null){
+            getMenuInflater().inflate(R.menu.baseappbar_action, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.appbar_action, menu);}
         return true;
     }
 
@@ -391,6 +394,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(MainActivity.this, EditRecipientActivity.class);
+                i5.putExtra("route", "edit");
                 startActivity(i5);
                 break;
             case R.id.action_sign:

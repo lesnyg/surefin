@@ -323,6 +323,7 @@ public class Non_Payment_Item extends AppCompatActivity {
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(Non_Payment_Item.this, EditRecipientActivity.class);
+                i5.putExtra("route", "edit");
                 startActivity(i5);
                 break;
             case R.id.action_sign:

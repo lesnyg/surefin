@@ -577,6 +577,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 break;
             case R.id.action_serviceEdit:
                 Intent i5 = new Intent(ServiceListActivity.this, EditRecipientActivity.class);
+                i5.putExtra("route", "edit");
                 startActivity(i5);
                 break;
             case R.id.action_sign:
