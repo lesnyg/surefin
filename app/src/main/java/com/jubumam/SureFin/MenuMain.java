@@ -43,6 +43,7 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -175,7 +176,7 @@ public class MenuMain extends AppCompatActivity {
     String s3, s4;
     String ymd1, hms1;
     int s1, s2;
-    byte[] s5;
+
     final static int TAKE_PICTURE = 1;
     ImageView dialog_imageview;
     TextView nowTime;
@@ -205,6 +206,7 @@ public class MenuMain extends AppCompatActivity {
     private String strNmin;
 
     private MyPagerAdapter adapter;
+    private byte[] imageBytes;
 
 
     @Override
@@ -225,6 +227,7 @@ public class MenuMain extends AppCompatActivity {
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
+        stime = commuteRecipient.getStartTime();
 
 
         currentTime = new Date();
@@ -258,6 +261,7 @@ public class MenuMain extends AppCompatActivity {
 
 
         tv_rating.setText(rating);
+        tv_startWork.setText(stime);
 
 
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
@@ -419,14 +423,14 @@ public class MenuMain extends AppCompatActivity {
 
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] imageBytes = baos.toByteArray();
-                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                    imageBytes = baos.toByteArray();
+//                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
                     //s1 = 8;
 
                     s2 = 32;
                     s4 = imageString;
-                    s5 = imageBytes;
+
 
 
                     try {
@@ -457,13 +461,9 @@ public class MenuMain extends AppCompatActivity {
 
 
                     Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                    i8.putExtra("name", name);
-                    i8.putExtra("gender", gender);
-                    i8.putExtra("rating", rating);
-                    i8.putExtra("birth", birth);
-                    i8.putExtra("pastdisease", pastdisease);
-                    i8.putExtra("responsibility", responsibility);
-
+                    i8.putExtra("route","MenuMain");
+                    i8.putExtra("startWork",startWork);
+                    i8.putExtra("stime",stime);
                     startActivity(i8);
 
                 }
@@ -729,13 +729,22 @@ public class MenuMain extends AppCompatActivity {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("update Su_직원출퇴근정보 set 퇴근시간 = '" + ttime + "' where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
 
+//            Statement statement = connection.createStatement();
+//            ResultSet rs = statement.executeQuery("update Su_직원출퇴근정보 set 퇴근시간 = '" + ttime + "' where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원명 = '"+responsibility+"' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+            byte[] s5 = imageBytes;
+            ps.setBytes(1,s5);
+            ps.setString(2,ttime);
+            ps.executeUpdate();
+            ps.close();
             connection.close();
 
-        } catch (Exception e) {
-            Log.w("Error connection", "" + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
 
     }
@@ -775,18 +784,18 @@ public class MenuMain extends AppCompatActivity {
 
             }
 
-
-            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='" + responsibility + "' AND 일자='" + startWork + "' and 수급자명 ='" + name + "'");
-            while (startWorkRS.next()) {
-
-                stime = startWorkRS.getString("출근시간");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_startWork.setText(stime);
-                    }
-                });
-            }
+//
+//            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='" + responsibility + "' AND 일자='" + startWork + "' and 수급자명 ='" + name + "'");
+//            while (startWorkRS.next()) {
+//
+//                stime = startWorkRS.getString("출근시간");
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        tv_startWork.setText(stime);
+//                    }
+//                });
+//            }
 
 
             ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");

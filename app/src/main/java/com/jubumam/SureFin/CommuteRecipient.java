@@ -9,25 +9,35 @@ public class CommuteRecipient {
     private static String phoneNumber;
     private static String responsibility;
     private static String commute;
+    private static String startTime;
     private static CommuteRecipient commuteRecipient;
 
     public CommuteRecipient() {
     }
 
-    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute) {
+    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute,String startTime ) {
         this.personId = personId;
         this.name = name;
         this.rating = rating;
         this.phoneNumber = phoneNumber;
         this.responsibility = responsibility;
         this.commute = commute;
+        this.startTime = startTime;
     }
 
     static CommuteRecipient getInstance(){
         if(commuteRecipient==null) {
-            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute);
+            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime);
         }
         return commuteRecipient;
+    }
+
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        CommuteRecipient.startTime = startTime;
     }
 
     public String getCommute() {

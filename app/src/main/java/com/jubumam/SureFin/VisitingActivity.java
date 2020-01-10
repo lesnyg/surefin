@@ -524,19 +524,19 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                                 // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
 
                                 if (sr.equals("-1")) {
-                                    body = "입력안함";
+                                    body = "";
                                 } else {
                                     body = ((RadioButton) findViewById(bodyId)).getText().toString();
                                 }
 
                                 if (or.equals("-1")) {
-                                    meal = "입력안함";
+                                    meal = "";
                                 } else {
                                     meal = ((RadioButton) findViewById(mealId)).getText().toString();
                                 }
 
                                 if (co.equals("-1")) {
-                                    cognitive = "입력안함";
+                                    cognitive = "";
                                 } else {
                                     cognitive = ((RadioButton) findViewById(cognitiveId)).getText().toString();
                                 }
