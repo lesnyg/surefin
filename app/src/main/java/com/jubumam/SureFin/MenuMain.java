@@ -73,32 +73,20 @@ public class MenuMain extends AppCompatActivity {
 
 
     private float tmoney;
-    private float rmoney;
     private float batime;
     private float totalhour1;
-    private float totalmin;
     private float hourmoney;
     private int totalhour;
 
     private SimpleDateFormat utctime;
-    private String strDayCareIndivi;
 
     ImageView n1;
     ImageView n2;
     ImageView n3;
     ImageView n4;
-    Button n5;
     ImageView n6;
-    Button n7;
-    Button n8;
-    Button n9;
     ImageView n10;
     private Button btn_offwork;
-
-    private int i = 0;
-    //    private TextView myi;
-    private ImageView imageView;
-
 
     private static ViewPager mPager;
     private static int currentPage = 0;
@@ -127,43 +115,19 @@ public class MenuMain extends AppCompatActivity {
     private TextView tv_startWork;
     private TextView tv_name;
 
-    private String date;
-    private String startTime1;
-    private String endTime1;
-    private String startTime2;
-    private String endTime2;
-    private String startTime3;
-    private String endTime3;
-    private String startTime4;
-    private String endTime4;
-    private String startTime5;
-    private String endTime5;
     private String usingTime1;
-    private String usingTime2;
-    private String usingTime3;
-    private String usingTime4;
-    private String usingTime5;
     private String nursingCount;
     private String nursingTotal;
     private long sumUsingTimeDay = 0;
     private long sumUsingTimeMonth = 0;
-    private int intDayCareIndivi = 0;
-    private int intDayCarePublic = 0;
-    private int intTotalDayCareIndivi = 0;
-    private int intTotalDayCarePublic = 0;
-    private int serviceId;
     private int intNursingCount = 0;
     private int intNursingTotal = 0;
 
-    private String price;
-    private String basicTime;
-    private int sumPrice = 0;
     private String count;
     private int bathCount = 0;
 
 
     private int nosupport = 0;
-    private List<Service> serviceList;
     private SimpleDateFormat timeformatter;
     private String startMon;
     private String endMon;
@@ -571,30 +535,6 @@ public class MenuMain extends AppCompatActivity {
             return null;
         }
     }
-/*
-    public class BannerTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return (null);
-            bnquery();
-
-
-            return null;
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-    }*/
 
 
     public class RecipientTask extends AsyncTask<String, String, String> {
@@ -728,9 +668,6 @@ public class MenuMain extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
 
-//            Statement statement = connection.createStatement();
-//            ResultSet rs = statement.executeQuery("update Su_직원출퇴근정보 set 퇴근시간 = '" + ttime + "' where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
-
             PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원명 = '"+responsibility+"' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
             byte[] s5 = imageBytes;
             ps.setBytes(1,s5);
@@ -753,17 +690,14 @@ public class MenuMain extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
-            while (rs.next()) {
-                nosupport++;
-            }
+
 
             ResultSet surs = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명 = '" + name + "'");
             while (surs.next()) {
                 basetime = surs.getString("기본시간");
             }
 
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='"+thisYear+"'");
+            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='" + thisYear + "'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
             }
@@ -782,21 +716,43 @@ public class MenuMain extends AppCompatActivity {
 
             }
 
-//
-//            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='" + responsibility + "' AND 일자='" + startWork + "' and 수급자명 ='" + name + "'");
-//            while (startWorkRS.next()) {
-//
-//                stime = startWorkRS.getString("출근시간");
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        tv_startWork.setText(stime);
-//                    }
-//                });
-//            }
+            ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명,D.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자,D.서비스제공일자) AS 요양일자,(CONVERT(int,A.신체사용시간계))+(CONVERT(int,A.인지사용시간계))+(CONVERT(int,A.일상생활시간계))+(CONVERT(int,A.정서사용시간계))+(CONVERT(int,A.생활지원사용시간계)) AS 방문요양합계," +
+                    "B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간,D.서비스제공,D.서비스제공일자 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
+                    "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
+                    "FULL OUTER JOIN Su_비급여신청자 D ON (D.서비스제공일자=A.일자 AND D.수급자명=A.수급자명 AND D.번호=A.번호) or (D.서비스제공일자=B.일자 AND D.수급자명=B.수급자명 AND D.번호=B.번호) or (D.서비스제공일자=C.일자 AND D.수급자명=C.수급자명 AND D.번호=C.번호)" +
+                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
+                    "order by 요양일자,A.번호");
+            timeformatter = new SimpleDateFormat("mm");
+            while (serviceResultSetlist.next()) {
+                usingTime1 = serviceResultSetlist.getString("방문요양합계");
+                count = serviceResultSetlist.getString("목욕여부");
+                nursingCount = serviceResultSetlist.getString("방문횟수");
+                nursingTotal = serviceResultSetlist.getString("총시간");
+                if (usingTime1 == null || usingTime1.equals("") || usingTime1.equals("null")) {
+                    usingTime1 = "0";
+                    sumUsingTimeDay = 0 + sumUsingTimeDay;
+                } else {
+                    Date d1 = utctime.parse(usingTime1);
+                    sumUsingTimeDay = d1.getTime() + sumUsingTimeDay;
+                }
+                sumUsingTimeMonth = sumUsingTimeMonth + sumUsingTimeDay;
+                sumUsingTimeDay = 0;
+                if (count != null && count.equals("TRUE")) {
+                    bathCount++;
+                }
 
+                if (nursingTotal != null) {
+                    intNursingTotal = Integer.parseInt(nursingTotal) + intNursingTotal;
+                    intNursingCount++;
+                }
+            }
 
-            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
+            ResultSet nonpayRS = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            while (nonpayRS.next()) {
+                nosupport++;
+            }
+
+            ResultSet bannerResultSet = statement.executeQuery("select top 3 * from Su_배너이미지 order by id desc");
             byte b[];
             mList = new ArrayList<>();
             while (bannerResultSet.next()) {
@@ -807,77 +763,6 @@ public class MenuMain extends AppCompatActivity {
 
             }
             NUM_PAGES = imageModelArrayList.size();
-
-
-            ResultSet serviceResultSetlist = statement.executeQuery("(select 일자, 수급자명,NULL AS 신체사용시간계,NULL AS 인지사용시간계,NULL AS 일상생활시간계,NULL AS 정서사용시간계,NULL AS 생활지원사용시간계,목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문목욕정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
-                    "UNION (select 일자, 수급자명,신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계,NULL AS 목욕여부,NULL AS 방문횟수,NULL AS 총시간 from Su_방문요양급여정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "'))" +
-                    "UNION (select 일자, 수급자명,NULL AS 신체사용시간계,NULL AS 인지사용시간계,NULL AS 일상생활시간계,NULL AS 정서사용시간계,NULL AS 생활지원사용시간계,NULL AS 목욕여부, 방문횟수, 총시간 from Su_방문간호정보 where 수급자명='" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) ORDER BY 일자");
-
-
-            timeformatter = new SimpleDateFormat("mm");
-
-
-            while (serviceResultSetlist.next()) {
-                date = serviceResultSetlist.getString("일자");
-                name = serviceResultSetlist.getString("수급자명");
-                count = serviceResultSetlist.getString("목욕여부");
-                usingTime1 = serviceResultSetlist.getString("신체사용시간계");
-                usingTime2 = serviceResultSetlist.getString("인지사용시간계");
-                usingTime3 = serviceResultSetlist.getString("일상생활시간계");
-                usingTime4 = serviceResultSetlist.getString("정서사용시간계");
-                usingTime5 = serviceResultSetlist.getString("생활지원사용시간계");
-                nursingCount = serviceResultSetlist.getString("방문횟수");
-                nursingTotal = serviceResultSetlist.getString("총시간");
-
-
-                if (usingTime1 == null || usingTime1.equals("") || usingTime1.equals("null")) {
-                    usingTime1 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d1 = utctime.parse(usingTime1);
-                    sumUsingTimeDay = d1.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime2 == null || usingTime2.equals("") || usingTime2.equals("null")) {
-                    usingTime2 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d2 = utctime.parse(usingTime2);
-                    sumUsingTimeDay = d2.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime3 == null || usingTime3.equals("") || usingTime3.equals("null")) {
-                    usingTime3 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d3 = utctime.parse(usingTime3);
-                    sumUsingTimeDay = d3.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime4 == null || usingTime4.equals("") || usingTime4.equals("null")) {
-                    usingTime4 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d4 = utctime.parse(usingTime4);
-                    sumUsingTimeDay = d4.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime5 == null || usingTime5.equals("") || usingTime5.equals("null")) {
-                    usingTime5 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d5 = utctime.parse(usingTime5);
-                    sumUsingTimeDay = d5.getTime() + sumUsingTimeDay;
-                }
-                if (count != null && count.equals("TRUE")) {
-                    bathCount++;
-                }
-                if (nursingTotal != null) {
-                    intNursingTotal = Integer.parseInt(nursingTotal) + intNursingTotal;
-                    intNursingCount++;
-                }
-
-                sumUsingTimeMonth = sumUsingTimeMonth + sumUsingTimeDay;
-                sumUsingTimeDay = 0;
-
-            }
-
 
 
             runOnUiThread(new Runnable() {
@@ -894,9 +779,6 @@ public class MenuMain extends AppCompatActivity {
                     strTmin = String.format("%02d", tmin);
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
-
-
-                  //  Toast.makeText(MenuMain.this,Integer.toString(thour)+"/"+Integer.toString(tmin)+"/"+strThour+"/"+strTmin,Toast.LENGTH_SHORT).show();
 
 
                     //방문요양 사용시간
@@ -919,9 +801,6 @@ public class MenuMain extends AppCompatActivity {
                     tv_nurseSumTotal.setText(strNhour + ":" + strNmin);
                     tv_nosupport.setText(nosupport + "");
 
-                  //  TextView tv_careTotalTime = findViewById(R.id.tv_careTotalTime);
-                //    tv_careTotalTime.setText(recipientBasicTime);
-
                     mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
                     indicator.setViewPager(mPager);
 
@@ -939,74 +818,6 @@ public class MenuMain extends AppCompatActivity {
 
 
     }
-/*
-    private void bnquery() {
-
-        Connection connection = null;
-
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = connection.createStatement();
-
-
-            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
-            while (recipientRS.next()) {
-                recipientBasicTime = recipientRS.getString("기본시간");
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        TextView tv_careTotalTime = findViewById(R.id.tv_careTotalTime);
-                        tv_careTotalTime.setText(recipientBasicTime);
-                    }
-                });
-            }
-
-
-            ResultSet startWorkRS = statement.executeQuery("select 출근시간 from  Su_직원출퇴근정보 where 직원명='" + responsibility + "' AND 일자='" + startWork + "' and 수급자명 ='" + name + "'");
-            while (startWorkRS.next()) {
-
-                stime = startWorkRS.getString("출근시간");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_startWork.setText(stime);
-                    }
-                });
-            }
-
-
-            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id");
-            byte b[];
-            mList = new ArrayList<>();
-            while (bannerResultSet.next()) {
-                Blob blob = bannerResultSet.getBlob(2);
-                b = blob.getBytes(1, (int) blob.length());
-                bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-                imageModelArrayList.add(new ImageModel(bitmap));
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
-                        indicator.setViewPager(mPager);
-
-                    }
-                });
-            }
-            NUM_PAGES = imageModelArrayList.size();
-
-            connection.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-    }*/
-
 
 
     @Override
