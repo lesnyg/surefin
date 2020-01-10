@@ -328,6 +328,7 @@ public class Non_Payment_Item extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(Non_Payment_Item.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
             case R.id.action_cal:

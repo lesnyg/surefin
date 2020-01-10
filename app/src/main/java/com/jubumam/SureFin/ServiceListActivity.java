@@ -323,7 +323,8 @@ public class ServiceListActivity extends AppCompatActivity {
 
             }
 
-            ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명,D.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자,D.서비스제공일자) AS 요양일자,A.신체사용시간계,A.인지사용시간계,A.일상생활시간계,A.정서사용시간계,A.생활지원사용시간계,B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간,D.서비스제공,D.서비스제공일자 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
+            ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명,D.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자,D.서비스제공일자) AS 요양일자,B.목욕여부,(CONVERT(int,A.신체사용시간계))+(CONVERT(int,A.인지사용시간계))+(CONVERT(int,A.일상생활시간계))+(CONVERT(int,A.정서사용시간계))+(CONVERT(int,A.생활지원사용시간계)) AS 방문요양합계," +
+                    "B.차량이용 ,C.방문횟수,C.총시간,D.서비스제공,D.서비스제공일자 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
                     "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
                     "FULL OUTER JOIN Su_비급여신청자 D ON (D.서비스제공일자=A.일자 AND D.수급자명=A.수급자명 AND D.번호=A.번호) or (D.서비스제공일자=B.일자 AND D.수급자명=B.수급자명 AND D.번호=B.번호) or (D.서비스제공일자=C.일자 AND D.수급자명=C.수급자명 AND D.번호=C.번호)" +
                     "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
@@ -336,11 +337,7 @@ public class ServiceListActivity extends AppCompatActivity {
 
             while (serviceResultSetlist.next()) {
                 date = serviceResultSetlist.getString("요양일자");
-                usingTime1 = serviceResultSetlist.getString("신체사용시간계");
-                usingTime2 = serviceResultSetlist.getString("인지사용시간계");
-                usingTime3 = serviceResultSetlist.getString("일상생활시간계");
-                usingTime4 = serviceResultSetlist.getString("정서사용시간계");
-                usingTime5 = serviceResultSetlist.getString("생활지원사용시간계");
+                usingTime1 = serviceResultSetlist.getString("방문요양합계");
                 nursingCount = serviceResultSetlist.getString("방문횟수");
                 nursingTotal = serviceResultSetlist.getString("총시간");
                 carService = serviceResultSetlist.getString("차량이용");
@@ -355,35 +352,6 @@ public class ServiceListActivity extends AppCompatActivity {
                     Date d1 = utctime.parse(usingTime1);
                     sumUsingTimeDay = d1.getTime() + sumUsingTimeDay;
                 }
-                if (usingTime2 == null || usingTime2.equals("") || usingTime2.equals("null")) {
-                    usingTime2 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d2 = utctime.parse(usingTime2);
-                    sumUsingTimeDay = d2.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime3 == null || usingTime3.equals("") || usingTime3.equals("null")) {
-                    usingTime3 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d3 = utctime.parse(usingTime3);
-                    sumUsingTimeDay = d3.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime4 == null || usingTime4.equals("") || usingTime4.equals("null")) {
-                    usingTime4 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d4 = utctime.parse(usingTime4);
-                    sumUsingTimeDay = d4.getTime() + sumUsingTimeDay;
-                }
-                if (usingTime5 == null || usingTime5.equals("") || usingTime5.equals("null")) {
-                    usingTime5 = "0";
-                    sumUsingTimeDay = 0 + sumUsingTimeDay;
-                } else {
-                    Date d5 = utctime.parse(usingTime5);
-                    sumUsingTimeDay = d5.getTime() + sumUsingTimeDay;
-                }
-
 
                 if (nonPay != null && nonPay.equals("제공")) {
                     intnonPay++;
@@ -421,6 +389,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 sumUsingTimeDay = 0;
 
             }
+
             connection.close();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -582,6 +551,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(ServiceListActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
 

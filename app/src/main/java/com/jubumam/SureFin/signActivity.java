@@ -18,6 +18,7 @@ import com.github.gcacace.signaturepad.views.SignaturePad;
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -32,7 +33,7 @@ public class signActivity extends AppCompatActivity {
     Button btnok;
     Button btnre;
     String signimage;
-    byte[] im;
+
 
     private String name;        //이름
     private String gender;      //성별
@@ -41,6 +42,12 @@ public class signActivity extends AppCompatActivity {
     private String pastdisease;      //과거병력
     private String responsibility;      //직원명
     private String route;
+
+    private Bitmap bitmap;
+    private byte[] imageBytes;
+    private ByteArrayOutputStream baos;
+    private String startWork;
+    private String stime;
 
 
     @Override
@@ -52,6 +59,11 @@ public class signActivity extends AppCompatActivity {
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
+        stime = commuteRecipient.getStartTime();
+        startWork = commuteRecipient.getStartWork();
+        Intent intent = getIntent();
+        route = intent.getExtras().getString("route");
+
 
         signaturePad = (SignaturePad) findViewById(R.id.signaturePad);
         btnsave = (Button) findViewById(R.id.btnsave);
@@ -111,18 +123,20 @@ public class signActivity extends AppCompatActivity {
                 //signaturePad.setSignatureBitmap(bitmap);
 
 
-                Bitmap bitmap = signaturePad.getSignatureBitmap();
+                bitmap = signaturePad.getSignatureBitmap();
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] imageBytes = baos.toByteArray();
-                signimage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+                imageBytes = baos.toByteArray();
 
 
-                im = imageBytes;
                 caTask = new caAsyncTask().execute();
+
+
 
                 //  Toast.makeText(signActivity.this,signimage,Toast.LENGTH_SHORT).show();
             }
+
+
         });
 
         btnclear.setOnClickListener(new View.OnClickListener() {
@@ -143,13 +157,17 @@ public class signActivity extends AppCompatActivity {
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);*/
+     finish();
 
-                finishAffinity();
-                System.runFinalization();
-                System.exit(0); //앱종료
 
             }
         });
+    }
+
+    private void BitmapToString(Bitmap bitmap) {
+        baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);    //bitmap compress
+        imageBytes = baos.toByteArray();
     }
 
     public void query() {
@@ -158,14 +176,20 @@ public class signActivity extends AppCompatActivity {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_수급자서명정보(수급자명,BLOBData)VALUES('슈어핀',convert(VARBINARY(max),'" + signimage + "'))");
-
-
-            while (resultSet.next()) {
-
-
+            if (route.equals("MenuMain")) {
+                PreparedStatement ps = connection.prepareStatement("update Su_직원출퇴근정보 set 요양사서명 = ? where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+                ps.setBytes(1, imageBytes);
+                ps.executeUpdate();
+                ps.close();
+            } else {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_수급자서명정보(수급자명,일자,BLOBData)VALUES (?,?,?)");
+                ps.setString(1, name);
+                ps.setString(2, startWork);
+                ps.setBytes(3, imageBytes);
+                ps.executeUpdate();
+                ps.close();
             }
+
             connection.close();
 
         } catch (Exception e) {
@@ -190,6 +214,13 @@ public class signActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            if (route.equals("MenuMain")) {
+                finishAffinity();
+                System.runFinalization();
+                System.exit(0); //앱종료
+            } else {
+                startActivity(new Intent(signActivity.this, MenuMain.class));
+            }
         }
 
         protected void onCancelled() {

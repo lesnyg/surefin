@@ -916,6 +916,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VistingNurse.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
 

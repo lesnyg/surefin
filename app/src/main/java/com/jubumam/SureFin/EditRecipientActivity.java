@@ -1,6 +1,7 @@
 package com.jubumam.SureFin;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +35,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 
 public class EditRecipientActivity extends AppCompatActivity {
 
@@ -78,6 +81,21 @@ public class EditRecipientActivity extends AppCompatActivity {
     private String imageString;
     private ImageView img_camerainsert;
     private AsyncTask<String, String, String> caTask;
+    private Button cal_btn;
+    private String date1;
+    private String date2;
+    private String TAG1 = "PickerActivity";
+    private TextView cal_txt;
+    private TextView cal_txt1;
+    private String schedule_date;//일자
+    private String scheduletime;//근무시간
+    private String contracttime; //계약시간
+    private String schedulename;//계약수급자명
+    private String division;
+    private String divisiontotal;
+    private String divisiondate;
+    private String divisiontime;
+    private AsyncTask<String, String, String> cTask;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -197,15 +215,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 Toast.makeText(EditRecipientActivity.this,"입력완료",Toast.LENGTH_SHORT).show();
 
                 rtTask = new RTAsyncTask().execute();
-                Intent intent = new Intent(EditRecipientActivity.this, MenuMain.class);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
-                startActivity(intent);
-
+                finish();
             }
         });
 /*
@@ -504,7 +514,79 @@ public class EditRecipientActivity extends AppCompatActivity {
             super.onCancelled();
         }
     }
+    public class CalSyncTask extends AsyncTask<String, String, String> {
 
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            calQuery();
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+
+    public void calQuery() {
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
+
+            while (calres.next()) {
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division = calres.getString("구분");//구분
+
+            }
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (schedule_date != null) {
+
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(EditRecipientActivity.this);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
+                    } else if (schedule_date == null) {
+                        Toast.makeText(EditRecipientActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -533,7 +615,26 @@ public class EditRecipientActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(EditRecipientActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
+                break;
+            case R.id.action_cal:
+                final Calendar cal = Calendar.getInstance();
+                Log.e(TAG1, cal.get(Calendar.YEAR) + "");
+                Log.e(TAG1, cal.get(Calendar.MONTH) + 1 + "");
+                Log.e(TAG1, cal.get(Calendar.DATE) + "");
+                Log.e(TAG1, cal.get(Calendar.HOUR_OF_DAY) + "");
+                Log.e(TAG1, cal.get(Calendar.MINUTE) + "");
+
+                DatePickerDialog dialog = new DatePickerDialog(EditRecipientActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
+                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date2 = date1;
+                        cTask = new CalSyncTask().execute();
+                    }
+                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+                dialog.show();
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -387,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 Intent intent = new Intent(MainActivity.this, MenuMain.class);
+                startActivity(intent);
                 break;
             case R.id.action_notice:
                 Intent intent1 = new Intent(MainActivity.this, CustomerServiceActivity.class);
@@ -399,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(MainActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
 

@@ -211,6 +211,8 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 iup.putExtra("name", name);
                 iup.putExtra("rating", rating);
                 iup.putExtra("responsibility", responsibility);
+                iup.putExtra("route", "detail");
+
                 startActivity(iup);
 
 
@@ -233,7 +235,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
                // startActivityForResult(cameraIntent, TAKE_PICTURE);
 
                // caTask = new caAsyncTask().execute();
-                new CommuteRecipient(personId,name,rating,phoneNumber,responsibility,"true");
 
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
@@ -346,8 +347,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
             case TAKE_PICTURE:
                 if (resultCode == RESULT_OK && intent.hasExtra("data")) {
 
-
-
                     Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
 
                     dialog_imageview.setImageBitmap(bitmap);
@@ -417,13 +416,8 @@ public class RecipientDetailActivity extends AppCompatActivity {
   */
 
                     caTask = new caAsyncTask().execute();
+                    new CommuteRecipient(personId,name,rating,phoneNumber,responsibility,"true",hms1,ymd1);
                     Intent ica= new Intent(RecipientDetailActivity.this,MenuMain.class);
-                    ica.putExtra("name", name);
-                    ica.putExtra("gender", gender);
-                    ica.putExtra("rating", rating);
-                    ica.putExtra("birth", birth);
-                    ica.putExtra("pastdisease", pastdisease);
-                    ica.putExtra("responsibility", responsibility);
                     startActivity(ica);
 
 
@@ -460,6 +454,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 break;
         }
     }
+
 /*
     public void BitmapToString(Bitmap bitmap) {
         baos = new ByteArrayOutputStream();
@@ -623,7 +618,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
           PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_직원출퇴근정보(수급자명,일자,직원명,출근시간,BLOBData)VALUES (?,?,?,?,?)");
 
-          byte[] buf = imageBytes;
           ps.setString(1,name);
           ps.setString(2,ymd1);
           ps.setString(3,responsibility);
@@ -771,6 +765,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(RecipientDetailActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
             case R.id.action_cal:
