@@ -462,8 +462,6 @@ public class MenuMain extends AppCompatActivity {
 
                     Intent i8 = new Intent(MenuMain.this, signActivity.class);
                     i8.putExtra("route","MenuMain");
-                    i8.putExtra("startWork",startWork);
-                    i8.putExtra("stime",stime);
                     startActivity(i8);
 
                 }
@@ -1035,6 +1033,7 @@ public class MenuMain extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(MenuMain.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
 

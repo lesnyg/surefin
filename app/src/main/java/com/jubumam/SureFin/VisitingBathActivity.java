@@ -923,6 +923,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VisitingBathActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
             case R.id.action_cal:

@@ -10,7 +10,7 @@
 
     <item
         android:id="@+id/action_sign"
-        android:title="전자서명"
+        android:title="어르신 서명"
         app:showAsAction="never"/>
 
     <item

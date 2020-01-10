@@ -400,6 +400,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(MainActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
 

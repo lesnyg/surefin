@@ -59,14 +59,10 @@ public class signActivity extends AppCompatActivity {
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
-
+        stime = commuteRecipient.getStartTime();
+        startWork = commuteRecipient.getStartWork();
         Intent intent = getIntent();
-        String route = intent.getExtras().getString("route");
-        if(route.equals("MenuMain")){
-            startWork = intent.getExtras().getString("startWork");
-            stime = intent.getExtras().getString("stime");
-        }
-
+        route = intent.getExtras().getString("route");
 
 
         signaturePad = (SignaturePad) findViewById(R.id.signaturePad);
@@ -135,6 +131,8 @@ public class signActivity extends AppCompatActivity {
 
                 caTask = new caAsyncTask().execute();
 
+
+
                 //  Toast.makeText(signActivity.this,signimage,Toast.LENGTH_SHORT).show();
             }
 
@@ -159,30 +157,39 @@ public class signActivity extends AppCompatActivity {
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);*/
+     finish();
 
-                finishAffinity();
-                System.runFinalization();
-                System.exit(0); //앱종료
 
             }
         });
     }
+
     private void BitmapToString(Bitmap bitmap) {
         baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);    //bitmap compress
         imageBytes = baos.toByteArray();
     }
+
     public void query() {
         Connection connection = null;
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            PreparedStatement ps = connection.prepareStatement("update Su_직원출퇴근정보 set 요양사서명 = ? where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
-            byte[] im=imageBytes;
-            ps.setBytes(1, im);
-            ps.executeUpdate();
-            ps.close();
+            if (route.equals("MenuMain")) {
+                PreparedStatement ps = connection.prepareStatement("update Su_직원출퇴근정보 set 요양사서명 = ? where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+                ps.setBytes(1, imageBytes);
+                ps.executeUpdate();
+                ps.close();
+            } else {
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_수급자서명정보(수급자명,일자,BLOBData)VALUES (?,?,?)");
+                ps.setString(1, name);
+                ps.setString(2, startWork);
+                ps.setBytes(3, imageBytes);
+                ps.executeUpdate();
+                ps.close();
+            }
+
             connection.close();
 
         } catch (Exception e) {
@@ -207,6 +214,13 @@ public class signActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            if (route.equals("MenuMain")) {
+                finishAffinity();
+                System.runFinalization();
+                System.exit(0); //앱종료
+            } else {
+                startActivity(new Intent(signActivity.this, MenuMain.class));
+            }
         }
 
         protected void onCancelled() {

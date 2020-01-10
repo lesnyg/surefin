@@ -416,7 +416,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
   */
 
                     caTask = new caAsyncTask().execute();
-                    new CommuteRecipient(personId,name,rating,phoneNumber,responsibility,"true",hms1);
+                    new CommuteRecipient(personId,name,rating,phoneNumber,responsibility,"true",hms1,ymd1);
                     Intent ica= new Intent(RecipientDetailActivity.this,MenuMain.class);
                     startActivity(ica);
 
@@ -765,6 +765,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(RecipientDetailActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
             case R.id.action_cal:

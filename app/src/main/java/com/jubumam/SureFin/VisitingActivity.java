@@ -1066,6 +1066,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VisitingActivity.this, signActivity.class);
+                i8.putExtra("route","Recipi");
                 startActivity(i8);
                 break;
 
