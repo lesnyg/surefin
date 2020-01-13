@@ -752,7 +752,8 @@ public class MenuMain extends AppCompatActivity {
                 nosupport++;
             }
 
-            ResultSet bannerResultSet = statement.executeQuery("select top 3 * from Su_배너이미지 order by id desc");
+            //배너이미지
+            ResultSet bannerResultSet = statement.executeQuery("select * from Su_배너이미지 order by id desc");
             byte b[];
             mList = new ArrayList<>();
             while (bannerResultSet.next()) {

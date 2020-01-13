@@ -361,7 +361,10 @@ public class ServiceListActivity extends AppCompatActivity {
                 }
 
 
-                if (nursingTotal != null && !nursingTotal.equals("")) {
+                if (nursingTotal == null || nursingTotal.equals("")) {
+                    intNursingTotal = 0+intNursingTotal;
+                    nursingTotal = "0";
+                }else{
                     int nursing = Integer.parseInt(nursingTotal);
                     intNursingTotal = nursing + intNursingTotal;
                     intNursingCount++;
