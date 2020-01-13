@@ -190,7 +190,7 @@ public class Non_Payment_Item extends AppCompatActivity {
             con = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement sts = con.createStatement();
 
-            ResultSet resultSet = sts.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet resultSet = sts.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "') order by id");
 
             nonList = new ArrayList<>();
 

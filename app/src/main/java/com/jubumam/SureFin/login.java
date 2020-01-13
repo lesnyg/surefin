@@ -171,7 +171,6 @@ public class login extends Activity {
             while (resultSet.next()) {
 
                 name = resultSet.getString("직원명");
-
                 hp1 = resultSet.getString("hp");
                 pass1 = resultSet.getString("비밀번호");
 
