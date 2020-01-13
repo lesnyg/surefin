@@ -12,7 +12,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash_dav);
+        setContentView(R.layout.activity_splash);
 
         Handler hd = new Handler();
         hd.postDelayed(new SplashHandler(), 2000); // 1초 후에 hd handler 실행  1000ms = 1초
