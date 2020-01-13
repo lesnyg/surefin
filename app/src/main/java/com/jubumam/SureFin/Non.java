@@ -6,6 +6,9 @@ public class Non {
     private String htitle; //비급여타이틀
     private String memberdivision; //회원구분
     private String utilization; //이용한도
+    private String offerDate;   //서비스제공일자
+
+    private String offerTime;   //서비스제공시간
 
     public Non(String classification, String htitle, String memberdivision, String utilization) {
 
@@ -15,6 +18,31 @@ public class Non {
         this.memberdivision = memberdivision; //회원구분
         this.utilization = utilization; //이용한도
 
+    }
+
+    public Non(String classification, String htitle, String memberdivision, String utilization, String offerDate,String offerTime) {
+        this.classification = classification;
+        this.htitle = htitle;
+        this.memberdivision = memberdivision;
+        this.utilization = utilization;
+        this.offerDate = offerDate;
+        this.offerTime = offerTime;
+    }
+
+    public String getOfferTime() {
+        return offerTime;
+    }
+
+    public void setOfferTime(String offerTime) {
+        this.offerTime = offerTime;
+    }
+
+    public String getOfferDate() {
+        return offerDate;
+    }
+
+    public void setOfferDate(String offerDate) {
+        this.offerDate = offerDate;
     }
 
     public String getClassification() {

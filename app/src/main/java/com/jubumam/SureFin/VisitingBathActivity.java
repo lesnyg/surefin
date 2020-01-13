@@ -612,6 +612,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         }
 
         protected void onPostExecute(String result) {
+            finish();
         }
 
         protected void onCancelled() {
@@ -936,7 +937,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 DatePickerDialog dialog = new DatePickerDialog(VisitingBathActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
                         date2 = date1;
                         cTask = new CalSyncTask().execute();
                     }
