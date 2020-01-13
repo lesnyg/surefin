@@ -34,6 +34,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -167,6 +168,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private TextView tv_time;
 
     TextView tv_date;
+    TextView tv_price;
     private Date currentDate;
     private String strDate;
     private AsyncTask<String, String, String> mTask;
@@ -259,6 +261,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         tv_date = findViewById(R.id.tv_date);
+        tv_price = findViewById(R.id.tv_price);
         currentDate = new Date();
         formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
         formatterScreen = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
@@ -304,6 +307,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         tv_rating1 = findViewById(R.id.tv_rating1);
 
         vtxt1.setText(formatterScreen.format(currentDate));
+
         dateSyncTask = new DateSyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -375,6 +379,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                             tdiff = diff + s1.getTime();
                             clockusingTime = Long.toString(diff / (60 * 1000));
                             tv_time.setText(clockusingTime);
+
                         } catch (Exception e) {
 
                         }
@@ -578,13 +583,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 phone = rs.getString("hp");
 
 
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_phone1.setText(phone);
-                        tv_rating1.setText(rating);
-                    }
-                });
+
 
             }
 
@@ -598,13 +597,20 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 
             }
 
-            ResultSet res = sts.executeQuery("select * from Su_년도별적용급액 where 상세구분 = '30분미만'");
-            while (res.next()) {
-
-                money = res.getInt("금액");
-                smoney = res.getInt("비급여액");
-            }
-
+//            ResultSet res = sts.executeQuery("select * from Su_년도별적용급액 where 상세구분 = '"+ptime+"'");
+//            while (res.next()) {
+//
+//                money = res.getInt("금액");
+//                smoney = res.getInt("비급여액");
+//            }
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    tv_phone1.setText(phone);
+//                    tv_rating1.setText(rating);
+////                    tv_price.setText(new DecimalFormat("###,###").format(money)+"원");
+//                }
+//            });
 
             con.close();
 
@@ -720,6 +726,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         }
 
         protected void onPostExecute(String result) {
+            finish();
         }
 
         protected void onCancelled() {
@@ -801,6 +808,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         }
 
         protected void onPostExecute(String result) {
+
         }
 
         protected void onCancelled() {
@@ -875,6 +883,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         }
 
         protected void onPostExecute(String result) {
+
         }
 
 
@@ -930,7 +939,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 DatePickerDialog dialog = new DatePickerDialog(VistingNurse.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date2 = String.format("%d-%d-%d", year, month + 1, date);
+                        date2 = String.format("%d-%02d-%02d", year, month + 1, date);
                         date3 = date2;
                         cTask = new CalSyncTask().execute();
                     }

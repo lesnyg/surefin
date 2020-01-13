@@ -359,7 +359,7 @@ public class Non_Payment_Item extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(Non_Payment_Item.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
                         date2 = date1;
                         cTask = new CalSyncTask().execute();
                     }

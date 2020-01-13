@@ -37,6 +37,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -207,6 +208,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private float add_offertime; //총 급여 제공시간
 
     private AsyncTask<String, String, String> cTask;
+    private TextView tv_price;
 
 
     @Override
@@ -314,6 +316,8 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.btn_decrease5).setOnClickListener(this);
         findViewById(R.id.btn_increase5).setOnClickListener(this);
         findViewById(R.id.btn_send).setOnClickListener(this);
+        tv_price = findViewById(R.id.tv_price);
+
 
 
         btn_start = findViewById(R.id.btn_start);
@@ -685,6 +689,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         }
 
         protected void onPostExecute(String result) {
+            finish();
         }
 
         protected void onCancelled() {
@@ -891,6 +896,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     strSumth = String.format("%02d", nhour);
                     strSumtm = String.format("%02d", nmin);
                     tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
+                    tv_price.setText(new DecimalFormat("###,###").format(hourmoney)+"원");
                   //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
 
 
@@ -1081,7 +1087,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 DatePickerDialog dialog = new DatePickerDialog(VisitingActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%d-%d", year, month + 1, date);
+                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
                         date2 = date1;
                         cTask = new CalSyncTask().execute();
 
