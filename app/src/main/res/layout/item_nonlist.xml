@@ -17,7 +17,7 @@
             android:gravity="center_vertical"
             android:padding="8dp"
             android:text="날짜"
-            android:textSize="20dp" />
+            android:textSize="16dp" />
 
         <View
             android:layout_width="1dp"
@@ -39,6 +39,7 @@
                 android:src="@drawable/icon_graysqare" />
 
             <TextView
+                android:id="@+id/tv_serviceTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -47,12 +48,21 @@
                 android:textSize="16dp" />
 
             <TextView
-                android:layout_width="0dp"
+                android:id="@+id/tv_serviceTime"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:gravity="right"
                 android:padding="8dp"
                 android:text="사용시간"
+                android:textSize="16dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:paddingTop="8dp"
+                android:paddingRight="8dp"
+                android:paddingBottom="8dp"
+                android:text=" 사용"
                 android:textSize="16dp" />
         </LinearLayout>
     </LinearLayout>

@@ -78,8 +78,12 @@ public class Non_Payment_Item extends AppCompatActivity {
     private String div;
 
     private List<Non> nonList;
+    private List<Non> nonUseList;
     private NonAdapter mNonAdapter;
+    private nonOfferAdapter mNonOfferAdapter;
+
     private RecyclerView nonRecycler;
+    private RecyclerView nonOfferRecycler;
     private String dbDate;
     private TextView tv_thisMonth;
     private Date date;
@@ -99,6 +103,8 @@ public class Non_Payment_Item extends AppCompatActivity {
 
 
     private AsyncTask<String, String, String> cTask;
+    private String offer;
+    private String offerDate;
 
 
     @Override
@@ -166,12 +172,16 @@ public class Non_Payment_Item extends AppCompatActivity {
         tv_name1.setText(name + "님");
 
         nonRecycler = findViewById(R.id.recycler_reservation);
+        nonOfferRecycler = findViewById(R.id.recycler_historyofuse);
         mNonAdapter = new NonAdapter();
+        mNonOfferAdapter = new nonOfferAdapter();
 
         date = new Date();
         String currentDate = new SimpleDateFormat("yyyy.MM", Locale.KOREAN).format(date);
         TextView vtxt1 = findViewById(R.id.vtxt1);
+        TextView tv_currentDate = findViewById(R.id.tv_currentDate);
         vtxt1.setText(currentDate);
+        tv_currentDate.setText(currentDate+"월");
         tv_thisMonth = findViewById(R.id.tv_thisMonth);
         strDate = new SimpleDateFormat("yyyy-MM").format(date);
         startMon = strDate + "-" + "01";
@@ -193,6 +203,7 @@ public class Non_Payment_Item extends AppCompatActivity {
             ResultSet resultSet = sts.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "') order by id");
 
             nonList = new ArrayList<>();
+            nonUseList = new ArrayList<>();
 
             while (resultSet.next()) {
                 //일자
@@ -202,8 +213,13 @@ public class Non_Payment_Item extends AppCompatActivity {
                 htitle = resultSet.getString("Title"); //비급여타이틀
                 memberdivision = resultSet.getString("회원구분"); //회원구분
                 utilization = resultSet.getString("이용한도"); //이용한도
+                offer = resultSet.getString("서비스제공");        //서비스제공
+                offerDate = resultSet.getString("서비스제공일자");
 
                 nonList.add(new Non(classification, htitle, memberdivision, utilization));
+                if(offer.equals("제공")) {
+                    nonUseList.add(new Non(classification, htitle, memberdivision, utilization,offerDate,"1회"));
+                }
 
 //                runOnUiThread(new Runnable() {
 //                    @Override
@@ -267,7 +283,9 @@ public class Non_Payment_Item extends AppCompatActivity {
             @Override
             public void run() {
                 mNonAdapter.setItems(nonList);
+                mNonOfferAdapter.setItems(nonUseList);
                 nonRecycler.setAdapter(mNonAdapter);
+                nonOfferRecycler.setAdapter(mNonOfferAdapter);
                 if (dbDate == null) {
                     nonList.add(new Non("", "신청내역이 없습니다.", "", ""));
                     String d = new SimpleDateFormat("MM", Locale.KOREAN).format(date);
@@ -492,6 +510,73 @@ public class Non_Payment_Item extends AppCompatActivity {
                 super(itemView);
                 tv_nontitle = itemView.findViewById(R.id.tv_nontitle);
                 tv_nonutilization = itemView.findViewById(R.id.tv_nonutilization);
+            }
+        }
+    }
+
+    private static class nonOfferAdapter extends RecyclerView.Adapter<nonOfferAdapter.OfferViewHolder> {
+        interface setNonOfferClicked {
+            void nonOfferClick(Non model);
+        }
+
+        private setNonOfferClicked mListener;
+
+        private List<Non> mItems = new ArrayList<>();
+
+        public nonOfferAdapter() {
+        }
+
+        public nonOfferAdapter(setNonOfferClicked listener) {
+            mListener = listener;
+        }
+
+        public void setItems(List<Non> items) {
+            this.mItems = items;
+            notifyDataSetChanged();
+        }
+
+        @NonNull
+        @Override
+        public OfferViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.item_nonlist, parent, false);
+            final OfferViewHolder viewHolder = new OfferViewHolder(view);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        final Non item = mItems.get(viewHolder.getAdapterPosition());
+                        mListener.nonOfferClick(item);
+                    }
+                }
+            });
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull OfferViewHolder holder, int position) {
+            Non item = mItems.get(position);
+            holder.tv_servicedate.setText(item.getOfferDate().substring(8)+"일");
+            holder.tv_serviceTitle.setText(item.getHtitle());
+            holder.tv_serviceTime.setText(item.getOfferTime());
+        }
+
+        @Override
+        public int getItemCount() {
+            return mItems.size();
+        }
+
+        public static class OfferViewHolder extends RecyclerView.ViewHolder {
+            TextView tv_servicedate;
+            TextView tv_serviceTitle;
+            TextView tv_serviceTime;
+
+            public OfferViewHolder(@NonNull View itemView) {
+                super(itemView);
+                tv_servicedate = itemView.findViewById(R.id.tv_servicedate);
+                tv_serviceTitle = itemView.findViewById(R.id.tv_serviceTitle);
+                tv_serviceTime = itemView.findViewById(R.id.tv_serviceTime);
+
             }
         }
     }
