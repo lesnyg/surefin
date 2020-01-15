@@ -39,54 +39,38 @@ import java.util.Calendar;
 
 public class EditRecipientActivity extends AppCompatActivity {
 
-    private String name;        //이름
-    private String commute;        //출근체크
-    private String gender;      //성별
-    private String birth;       //생년원일
-    private String rating;      //등급
-    private String pastdisease;      //과거병력
-    private String responsibility;      //직원명
-    private AsyncTask<String, String, String> rtTask;
+//    private String gender;      //성별
+//    private String birth;       //생년원일
+//    private String pastdisease;      //과거병력
+//    private String imageString;
+//    private Button cal_btn;
+//    Button rbtn_return;
+//    private TextView cal_txt;
+//    private TextView cal_txt1;
+    private AsyncTask<String, String, String> caTask;
     private AsyncTask<String, String, String> rTask;
-    Button rbtn_update;
-    Button rbtn_return;
+    private AsyncTask<String, String, String> rtTask;
+    private AsyncTask<String, String, String> cTask;
 
-    TextView r_name_insert;
-    EditText r_phone_insert;
-    TextView r_rating_insert;
-    EditText r_birth_insert;
-    EditText r_adress_insert;
-    EditText r_guardian_insert;
-    EditText r_relationship_insert;
-    EditText r_gbirth_insert;
-    EditText r_gnumber_insert;
-    EditText r_gadress_insert;
-    private byte[] imageBytes;
-    private byte[] imgb;
-    String r_name;
-    String r_phone;
-    String r_rating;
-    String r_birth;
-    String r_adress;
-    String r_guardian;
-    String r_relationship;
-    String r_gbirth;
-    String r_gnumber;
-    String r_gadress;
-    private int Idno;
-    private ImageView img_person;
-    private Bitmap bitmap;
     final static int TAKE_PICTURE = 1;
     final String TAG = getClass().getSimpleName();
-    private String imageString;
-    private ImageView img_camerainsert;
-    private AsyncTask<String, String, String> caTask;
-    private Button cal_btn;
+    private String TAG1 = "PickerActivity";
+    private String name;        //이름
+    private String rating;      //등급
+    private String commute;        //출근체크
+    private String responsibility;      //직원명
+    private String r_name;
+    private String r_phone;
+    private String r_rating;
+    private String r_birth;
+    private String r_adress;
+    private String r_guardian;
+    private String r_relationship;
+    private String r_gbirth;
+    private String r_gnumber;
+    private String r_gadress;
     private String date1;
     private String date2;
-    private String TAG1 = "PickerActivity";
-    private TextView cal_txt;
-    private TextView cal_txt1;
     private String schedule_date;//일자
     private String scheduletime;//근무시간
     private String contracttime; //계약시간
@@ -95,7 +79,25 @@ public class EditRecipientActivity extends AppCompatActivity {
     private String divisiontotal;
     private String divisiondate;
     private String divisiontime;
-    private AsyncTask<String, String, String> cTask;
+    private int Idno;
+
+    private Bitmap bitmap;
+    private byte[] imgb;
+    private byte[] imageBytes;
+
+    private Button rbtn_update;
+    private TextView r_name_insert;
+    private TextView r_rating_insert;
+    private EditText r_phone_insert;
+    private EditText r_birth_insert;
+    private EditText r_adress_insert;
+    private EditText r_guardian_insert;
+    private EditText r_relationship_insert;
+    private EditText r_gbirth_insert;
+    private EditText r_gnumber_insert;
+    private EditText r_gadress_insert;
+    private ImageView img_person;
+    private ImageView img_camerainsert;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,17 +114,17 @@ public class EditRecipientActivity extends AppCompatActivity {
         commute = commuteRecipient.getCommute();
         Intent intent = getIntent();
         String route = intent.getExtras().getString("route");
-        if (commute ==null) {
+        if (commute == null) {
             name = intent.getExtras().getString("name");
             rating = intent.getExtras().getString("rating");
             responsibility = intent.getExtras().getString("responsibility");
-        }else if(route.equals("detail")){
+        } else if (route.equals("detail")) {
             name = intent.getExtras().getString("name");
             rating = intent.getExtras().getString("rating");
             responsibility = intent.getExtras().getString("responsibility");
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-        }else{
+        } else {
             name = commuteRecipient.getName();
             rating = commuteRecipient.getRating();
             responsibility = commuteRecipient.getResponsibility();
@@ -190,8 +192,8 @@ public class EditRecipientActivity extends AppCompatActivity {
 
                 caTask = new caAsyncTask().execute();
 
-              //  Toast.makeText(EditRecipientActivity.this,imgb.toString(),Toast.LENGTH_SHORT).show();
-               Toast.makeText(EditRecipientActivity.this,"수정완료",Toast.LENGTH_SHORT).show();
+                //  Toast.makeText(EditRecipientActivity.this,imgb.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditRecipientActivity.this, "수정완료", Toast.LENGTH_SHORT).show();
 
 
             }
@@ -212,7 +214,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 r_gnumber = r_gnumber_insert.getText().toString();
                 r_gadress = r_gadress_insert.getText().toString();
 
-                Toast.makeText(EditRecipientActivity.this,"입력완료",Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditRecipientActivity.this, "입력완료", Toast.LENGTH_SHORT).show();
 
                 rtTask = new RTAsyncTask().execute();
                 finish();
@@ -250,11 +252,11 @@ public class EditRecipientActivity extends AppCompatActivity {
 
                     Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
                     img_person.setImageBitmap(bitmap);
-                 //   img_person.setScaleType(ImageView.ScaleType.FIT_XY);
+                    //   img_person.setScaleType(ImageView.ScaleType.FIT_XY);
                     ByteArrayOutputStream baos = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                     imageBytes = baos.toByteArray();
-                  //  byte[] imageBytes = baos.toByteArray();
+                    //  byte[] imageBytes = baos.toByteArray();
 
                     imgb = imageBytes;
            /*         Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
@@ -276,7 +278,6 @@ public class EditRecipientActivity extends AppCompatActivity {
                 break;
         }
     }
-
 
 
     public class RTAsyncTask extends AsyncTask<String, String, String> {
@@ -430,12 +431,12 @@ public class EditRecipientActivity extends AppCompatActivity {
 
             // PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_배너이미지(BLOBData) VALUES (?)");
             //PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_사진(Idno,이름,BLOBData) VALUES(?,?,?)");
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET BLOBData = ? where 이름 = '"+name+"'and Idno ='"+Idno+"'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET BLOBData = ? where 이름 = '" + name + "'and Idno ='" + Idno + "'");
             //  ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData ='"+blob+"'WHERE 이름 = '"+name+"'");
 
             byte[] buf = imageBytes;
-         //   ps.setString(1,"25");
-          //  ps.setString(2,name);
+            //   ps.setString(1,"25");
+            //  ps.setString(2,name);
             ps.setBytes(1, buf);
             ps.executeUpdate();
             ps.close();
@@ -454,9 +455,7 @@ public class EditRecipientActivity extends AppCompatActivity {
         //  while (resultSet.next()) {
 
 
-
-
-          //  }
+        //  }
 
         //    connection.close();
 
@@ -514,6 +513,7 @@ public class EditRecipientActivity extends AppCompatActivity {
             super.onCancelled();
         }
     }
+
     public class CalSyncTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -535,7 +535,6 @@ public class EditRecipientActivity extends AppCompatActivity {
         }
 
     }
-
 
 
     public void calQuery() {
@@ -590,10 +589,11 @@ public class EditRecipientActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(commute==null){
+        if (commute == null) {
             getMenuInflater().inflate(R.menu.baseappbar_action, menu);
-        }else{
-            getMenuInflater().inflate(R.menu.appbar_action, menu);}
+        } else {
+            getMenuInflater().inflate(R.menu.appbar_action, menu);
+        }
         return true;
     }
 
@@ -615,7 +615,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(EditRecipientActivity.this, signActivity.class);
-                i8.putExtra("route","Recipi");
+                i8.putExtra("route", "Recipi");
                 startActivity(i8);
                 break;
             case R.id.action_cal:

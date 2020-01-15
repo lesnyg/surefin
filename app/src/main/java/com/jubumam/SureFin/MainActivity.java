@@ -38,39 +38,41 @@ import java.util.Calendar;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    EditText et_search;
-    private Button btn_check;
-    private String name;
-    private String currentname;
-    private String indiviPay;
+//    private Button btn_check;
+//    private String currentname;
+//    private String indiviPay;
+//    private String currentrating;
+//    private String caregiverPhone;  //요양사 핸드폰
+//    private String tname;
+//    private TextView cal_txt1;
+//    private String title;
+//    private Button btn_search;
+//    private TextView cal_txt;
+
+
+    private Button cal_btn;
+    private String TAG = "PickerActivity";
+    private String personId;
     private String rating;
-    private String currentrating;
-    private RecipientAdapter mAdapter;
-    private List<Recipient> list;
-    private List<Recipient> arrayList;
     private AsyncTask<String, String, String> mTask;
     private AsyncTask<String, String, String> cTask;
+    private List<Recipient> list;
+    private EditText et_search;
+    private String name;
+    private RecipientAdapter mAdapter;
+    private List<Recipient> arrayList;
     private RecyclerView recyclerView;
-    private String personId;
     private String commute;
     private Bitmap bitmap;
     private Connection connection;
     private ResultSet resultSetlist;
     private String responsibility;   //요양사 이름
-    private String caregiverPhone;  //요양사 핸드폰
     private String s1;
-    private String tname;
     private String number;
     private String adress;
-    private String title;
-    private Button btn_search;
 
-    private Button cal_btn;
     private String date1;
     private String date2;
-    private String TAG = "PickerActivity";
-    private TextView cal_txt;
-    private TextView cal_txt1;
     private String schedule_date;//일자
     private String scheduletime;//근무시간
     private String contracttime; //계약시간
@@ -184,7 +186,6 @@ public class MainActivity extends AppCompatActivity {
             ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
 
             while (calres.next()) {
-
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("근무시간");//근무시간
                 contracttime = calres.getString("계약시간"); //계약시간
@@ -254,13 +255,6 @@ public class MainActivity extends AppCompatActivity {
             byte bt[];
             list = new ArrayList<>();
             while (resultSetlist.next()) {
-
-                /* personId = resultSetlist.getString("Idno");
-                name = resultSetlist.getString(2);
-                indiviPay = resultSetlist.getString(39);
-                rating = resultSetlist.getString(4);
-                s1 = resultSetlist.getString(63);*/
-
                 personId = resultSetlist.getString("Idno");
                 name = resultSetlist.getString("수급자명");
                 adress = resultSetlist.getString("주소2");
@@ -292,14 +286,6 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-//            ResultSet resultSetsumnail = statement.executeQuery("select * from Su_사진 where Idno = '"+personId+"'");
-//            byte b[];
-//            while (resultSetsumnail.next()) {
-//                Blob blob = resultSetsumnail.getBlob(4);
-//                b = blob.getBytes(1, (int) blob.length());
-//                bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
-//                String photoId = resultSet.getString(1);
-//            }
             arrayList = new ArrayList<>();
             arrayList.addAll(list);
 
@@ -375,10 +361,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(commute==null){
+        if (commute == null) {
             getMenuInflater().inflate(R.menu.baseappbar_action, menu);
-        }else{
-            getMenuInflater().inflate(R.menu.appbar_action, menu);}
+        } else {
+            getMenuInflater().inflate(R.menu.appbar_action, menu);
+        }
         return true;
     }
 
@@ -400,7 +387,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(MainActivity.this, signActivity.class);
-                i8.putExtra("route","Recipi");
+                i8.putExtra("route", "Recipi");
                 startActivity(i8);
                 break;
 
