@@ -266,6 +266,7 @@ public class MenuMain extends AppCompatActivity {
             }
         });
 
+
         findViewById(R.id.lin_detail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
