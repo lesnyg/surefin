@@ -203,7 +203,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String divisiontotal;
     private String divisiondate;
     private String divisiontime;
-
+    private TextView tv_date;
 
     private String date2;
     private String date1;
