@@ -385,7 +385,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="16dp"
-                        android:text="건" />
+                        android:text="건 신청" />
                 </LinearLayout>
 
 

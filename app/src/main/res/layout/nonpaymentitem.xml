@@ -195,6 +195,7 @@
                     android:id="@+id/recycler_historyofuse"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="1dp"
                     android:background="@drawable/scrolledge"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_nonlist" />
