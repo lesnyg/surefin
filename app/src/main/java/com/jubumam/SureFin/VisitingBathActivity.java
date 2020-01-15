@@ -46,6 +46,26 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class VisitingBathActivity extends AppCompatActivity implements View.OnClickListener {
+
+//    private RadioButton rb_car;
+//    private RadioButton rb_nocar;
+//    private RadioButton rb_01;
+//    private RadioButton rb_02;
+//    private RadioButton rb_03;
+//    private RadioButton rb_04;
+//    private RadioButton rb_05;
+//    private Button btn_price;
+//    private LinearLayout lin_info;
+//    private String car;             //차량이용
+//    private String noCar;           //차량미이용
+//    private int intCar;
+//    private int intNoCar;
+//    private String strProviding;
+//    private long sec;
+//    private long hour;
+//    private long today;
+
+    private long tdiff;
     private Switch aSwitch1;
     private LinearLayout bath_car;
     private LinearLayout bath_nocar;
@@ -72,28 +92,16 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private CheckBox ck_after03;
     private EditText et_etc;
     private EditText et_carNumber;
-    private RadioButton rb_car;
-    private RadioButton rb_nocar;
     private RadioButton rb_providing;
-    private RadioButton rb_01;
-    private RadioButton rb_02;
-    private RadioButton rb_03;
-    private RadioButton rb_04;
-    private RadioButton rb_05;
     private Button btn_start;
     private Button btn_end;
     private Button btn_send;
-    private Button btn_price;
-    private LinearLayout lin_info;
-
 
     private long diff;
     private String usingTime;       //총시간
     private String strStartTime;    //시작시간
     private String strEndTime;      //종료시간
-    private String car;             //차량이용
     private String carNumber;       //차량번호
-    private String noCar;           //차량미이용
     private String providing;       //제공방법
     private String beforeCK01;      //목욕전배뇨배변
     private String beforeCK02;      //목욕전욕창
@@ -131,20 +139,17 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private AsyncTask<String, String, String> priceSyncTask;
     private AsyncTask<String, String, String> dateSyncTask;
     private String strDate;
-    private int intCar;
-    private int intNoCar;
+
     private int intProviding;
     private String strCar;
     private String strNoCar;
-    private String strProviding;
+
     private String title;
     private TextView tv_information;
     private String totalnumber;
-    private long tdiff;
 
-    private long sec;
-    private long hour;
-    private long today;
+
+
     private int intBathcount = 0;
     private TextView tv_sumTime;
     private TextView tv_remainingTime;
@@ -220,11 +225,11 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         ck_after03 = findViewById(R.id.checkBox6);
         et_etc = findViewById(R.id.et_etc);
         et_carNumber = findViewById(R.id.et_carNumber);
-        rb_01 = findViewById(R.id.rb_01);
-        rb_02 = findViewById(R.id.rb_02);
-        rb_03 = findViewById(R.id.rb_03);
-        rb_04 = findViewById(R.id.rb_04);
-        rb_05 = findViewById(R.id.rb_05);
+//        rb_01 = findViewById(R.id.rb_01);
+//        rb_02 = findViewById(R.id.rb_02);
+//        rb_03 = findViewById(R.id.rb_03);
+//        rb_04 = findViewById(R.id.rb_04);
+//        rb_05 = findViewById(R.id.rb_05);
         tv_price = findViewById(R.id.tv_price);
         tv_name = findViewById(R.id.tv_name);
         tv_phone = findViewById(R.id.tv_mdiv);

@@ -46,10 +46,32 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class VisitingActivity extends AppCompatActivity implements View.OnClickListener {
-    private int mNumber = 0;
-    private int mNumber1 = 0;
-    private int mNumber2 = 0;
-    private int mNumber3 = 0;
+//    private int mNumber = 0;
+//    private int mNumber1 = 0;
+//    private int mNumber2 = 0;
+//    private int mNumber3 = 0;
+//    private Button btn_end1;
+//    private Button btn_end2;
+//    private Button btn_end3;
+//    private String clockusingTime;
+//    private String maintime;
+//    private SimpleDateFormat formatterScreen;
+//    private String strDate;
+//    String pastdisease;
+//    private int rmoney;//시간별 금액
+//    private int totalmin;
+//    private int remainingTime;
+//    private float rmoney1;
+//    private float totalmin1;
+//    private Button btn_end1_1;
+//    private int minhour;
+//    private String date3;
+//    private TextView tv_date;
+
+    private float vistime;
+    private String stime1_1;
+    private int batime; //기본시간
+    private int tmoney; //등급별 총액
     private int mNumber4 = 0;
     private int mNumber5 = 0;
     private TextView tv_number;
@@ -64,13 +86,10 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private Button btn_start;
     private Button btn_end;
     private Button btn_start1;
-    private Button btn_end1;
     private Button btn_start2;
-    private Button btn_end2;
     private Button btn_start3;
-    private Button btn_end3;
     private Button btn_start1_1;
-    private Button btn_end1_1;
+
     private CheckBox ck_bodyactiv1;
     private CheckBox ck_bodyactiv2;
     private CheckBox ck_bodyactiv3;
@@ -95,27 +114,24 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String endMon;
     private String totalUsingTime;
     private String dateCheck;
-    private String clockusingTime;
 
-    String bodyactiv1;
-    String bodyactiv2;
-    String bodyactiv3;
-    String bodyactiv4;
-    String bodyactiv5;
-    String bodyactiv6;
-    String housework1;
-    String housework2;
-
+    private String bodyactiv1;
+    private String bodyactiv2;
+    private String bodyactiv3;
+    private String bodyactiv4;
+    private String bodyactiv5;
+    private String bodyactiv6;
+    private String housework1;
+    private String housework2;
     private String name;
 
     private AsyncTask<String, String, String> aTask;
     private AsyncTask<String, String, String> mTask;
     private AsyncTask<String, String, String> dbCheckSyncTask;
     private AsyncTask<String, String, String> dateSyncTask;
-    private ResultSet resultSet;
 
 
-    Date date;
+    private Date date;
     private String meal;
     private String cognitive;
     private String uniqueness;
@@ -129,28 +145,22 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String strEndTime;      //종료시간
     private String thisYear;
 
-    String gender;
-    String rating;
-    String acceptnumber; //인정번호
-    String organization;
-    String organizationId; //기관번호
-    String birth;
-    String pastdisease;
-    String responsibility;  //담당자
-    String stime;
-    String stime1;
-    String stime1_1;
-    String stime2;
-    String stime3;
-    String division;        //수급자 구분
-    String place;            //수급자 지점
-    String baseTime;        //수급자 기본시간
+    private String gender;
+    private String rating;
+    private String acceptnumber; //인정번호
+    private String organization;
+    private String organizationId; //기관번호
+    private String birth;
+    private String responsibility;  //담당자
+    private String stime;
+    private String stime1;
+    private String stime2;
+    private String stime3;
+    private String division;        //수급자 구분
+    private String place;            //수급자 지점
+    private String baseTime;        //수급자 기본시간
 
-    TextView tv_date;
-    private String maintime;
-    private SimpleDateFormat formatterScreen;
 
-    private String strDate;
     private SimpleDateFormat utctime;
     private String phone;
     private TextView tv_rating;
@@ -159,19 +169,18 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String title;
     private String totalnumber;
     private TextView var;
-    private int tmoney; //등급별 총액
-    private int rmoney;//시간별 금액
-    private int totalmin;
+
+
     private int totalhour;
-    private int batime; //기본시간
+
     private int hourmoney;//시간별 금액
     private float tmoney1;
-    private float rmoney1;
+
     private float batime1;
     private float totalhour1;
-    private float totalmin1;
+
     private float hourmoney1;
-    private int minhour;
+
     private TextView tv_sumTime;
     private String strThour;
     private String strTmin;
@@ -181,9 +190,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private TextView tv_remainingTime;
 
     private int time1Sum = 0;
-    private int remainingTime;
 
-    private float vistime;
     private int vistime1;
     private String dbCheck;
     private LottieAnimationView animationView;
@@ -199,7 +206,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
     private String divisiondate;
     private String divisiontime;
 
-    private String date3;
+
     private String date2;
     private String date1;
     private String TAG = "PickerActivity";
@@ -230,7 +237,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
 
-        tv_date = findViewById(R.id.tv_date);
+
         TextView tv_information = findViewById(R.id.tv_information);
         tv_information.setText(name + "님");
 
@@ -251,7 +258,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         aTask = new mSyncTask().execute();
 
 
-        minhour = 60;
+//        minhour = 60;
         tv_remainingTime = findViewById(R.id.tv_remainingTime);
         tv_remainingTime.setText(totalhour + "분");
 
@@ -319,7 +326,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         tv_price = findViewById(R.id.tv_price);
 
 
-
         btn_start = findViewById(R.id.btn_start);
         btn_start.setOnClickListener(this);
 
@@ -347,7 +353,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         timeformatter = new SimpleDateFormat("HH:mm", Locale.KOREA);
         date = new Date();
         currentDate = formatter.format(date);
-        formatterScreen = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
+//        formatterScreen = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
 
         utctime = new SimpleDateFormat("HH:mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -495,17 +501,15 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 }
 
 
-
-
                 add_total = 1;
                 add_time = 20;
                 add_offertime = 4;
                 String rst = "1";
 
                 int rint = Integer.parseInt(rst);
-                double torf = rint *0.2* add_time/add_offertime;
+                double torf = rint * 0.2 * add_time / add_offertime;
 
-                Toast.makeText(getApplicationContext(),Integer.toString((int)torf)+Integer.toString(rint)+"/"+Integer.toString((int)add_offertime)+"/"+Integer.toString((int)add_total)+"/"+Integer.toString((int)add_offertime),Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), Integer.toString((int) torf) + Integer.toString(rint) + "/" + Integer.toString((int) add_offertime) + "/" + Integer.toString((int) add_total) + "/" + Integer.toString((int) add_offertime), Toast.LENGTH_SHORT).show();
 
                 totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
                 int thour = totaltime / 60;
@@ -857,14 +861,14 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 responsibility = rs.getString(13);
                 phone = rs.getString("hp");
             }
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='"+thisYear+"'");
+            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='" + thisYear + "'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
                 tmoney1 = rs1.getFloat("한도액");
             }
 
 
-            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' and 년도 = '"+thisYear+"'");
+            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' and 년도 = '" + thisYear + "'");
 
             while (rs2.next()) {
                 batime = Integer.parseInt(rs2.getString("기본시간"));
@@ -889,15 +893,15 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     strThour = String.format("%02d", thour);
                     strTmin = String.format("%02d", tmin);
                     tv_sumTime.setText("총시간:" + strThour + ":" + strTmin);
-                   //tv_sumTime.setText("총시간:" + Integer.toString(thour) + ":" + Integer.toString(tmin));
+                    //tv_sumTime.setText("총시간:" + Integer.toString(thour) + ":" + Integer.toString(tmin));
                     vistime1 = totalhour - (int) vistime;
                     int nhour = vistime1 / 60;
                     int nmin = vistime1 % 60;
                     strSumth = String.format("%02d", nhour);
                     strSumtm = String.format("%02d", nmin);
                     tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
-                    tv_price.setText(new DecimalFormat("###,###").format(hourmoney)+"원");
-                  //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
+                    tv_price.setText(new DecimalFormat("###,###").format(hourmoney) + "원");
+                    //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
 
 
                 }
@@ -920,7 +924,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
             Statement statement = connection.createStatement();
 
 
-            resultSet = statement.executeQuery("insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당," +
+            ResultSet resultSet = statement.executeQuery("insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당," +
                     "기관명,기관기호,신체사용시간계,인지사용시간계,정서사용시간계,생활지원사용시간계," +
                     "신체기능,식사기능,인지기능,대변횟수,소변횟수,특이사항," +
                     "신체활동지원,인지활동지원,정서활동지원,생활활동지원," +
@@ -1003,7 +1007,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                     }
 
 
-
                 }
             });
 
@@ -1072,7 +1075,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VisitingActivity.this, signActivity.class);
-                i8.putExtra("route","Recipi");
+                i8.putExtra("route", "Recipi");
                 startActivity(i8);
                 break;
 

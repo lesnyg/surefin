@@ -60,96 +60,31 @@ import java.util.TimerTask;
 
 
 public class MenuMain extends AppCompatActivity {
+//    private String gender;      //성별
+//    private String birth;       //생년원일
+//    private String pastdisease;      //과거병력
+//    TextView nowTime;
+//    private String recipientBasicTime;
+//    private MyPagerAdapter adapter;
+
+    final String TAG = getClass().getSimpleName();
     private String name;        //이름
-    private String gender;      //성별
-    private String birth;       //생년원일
     private String rating;      //등급
-    private String pastdisease;      //과거병력
     private String responsibility;      //직원명
-
     private String basetime;
-    private float vistime;
-    private Timer swipeTimer;
-
-
-    private float tmoney;
-    private float batime;
-    private float totalhour1;
-    private float hourmoney;
-    private int totalhour;
-
-    private SimpleDateFormat utctime;
-
-    ImageView n1;
-    ImageView n2;
-    ImageView n3;
-    ImageView n4;
-    ImageView n6;
-    ImageView n10;
-    private Button btn_offwork;
-
-    private static ViewPager mPager;
-    private static int currentPage = 0;
-    private static int NUM_PAGES = 0;
-    private ArrayList<ImageModel> imageModelArrayList;
-
-    private AsyncTask<String, String, String> mTask;
-    private AsyncTask<String, String, String> mRecipientTask;
-    private AsyncTask<String, String, String> tTask;
-
-
-    private Bitmap bitmap;
-
-    private static ImageView mImageView1;
-    private List<ImageModel> mList;
-    private CirclePageIndicator indicator;
-
-    private TextView tv_careTotalTime;
-    private TextView tv_careSumTime;
-    private TextView tv_bathTotalTime;
-    private TextView tv_bathSumTime;
-    private TextView tv_nurseTotalCount;
-    private TextView tv_nurseSumCount;
-    private TextView tv_nurseSumTotal;
-    private TextView tv_nosupport;
-    private TextView tv_startWork;
-    private TextView tv_name;
-
-    private String usingTime1;
+    private String imageString;
+    private String s3, s4;
+    private String ymd1, hms1;
     private String nursingCount;
+    private String usingTime1;
     private String nursingTotal;
-    private long sumUsingTimeDay = 0;
-    private long sumUsingTimeMonth = 0;
-    private int intNursingCount = 0;
-    private int intNursingTotal = 0;
-
     private String count;
-    private int bathCount = 0;
-
-
-    private int nosupport = 0;
-    private SimpleDateFormat timeformatter;
     private String startMon;
     private String endMon;
     private String startWork;
     private String stime;
     private String ttime;
-
-
-    String imageString;
-    String s3, s4;
-    String ymd1, hms1;
-    int s1, s2;
-
-    final static int TAKE_PICTURE = 1;
-    ImageView dialog_imageview;
-    TextView nowTime;
-
-
-    final String TAG = getClass().getSimpleName();
-    private String recipientBasicTime;
     private String thisYear;
-    private Date currentTime;
     private String date1;
     private String date2;
     private String TAG1 = "PickerActivity";
@@ -161,16 +96,73 @@ public class MenuMain extends AppCompatActivity {
     private String divisiontotal;
     private String divisiondate;
     private String divisiontime;
-    private AsyncTask<String, String, String> cTask;
     private String strThour;
     private String strTmin;
     private String strSumth;
     private String strSumtm;
     private String strNhour;
     private String strNmin;
+    private long sumUsingTimeDay = 0;
+    private long sumUsingTimeMonth = 0;
+    private float tmoney;
+    private float batime;
+    private float totalhour1;
+    private float hourmoney;
+    private float vistime;
+    private int intNursingCount = 0;
+    private int intNursingTotal = 0;
+    private int bathCount = 0;
+    private int nosupport = 0;
+    private int s1, s2;
+    private int totalhour;
+    private static int currentPage = 0;
+    private static int NUM_PAGES = 0;
 
-    private MyPagerAdapter adapter;
+    private SimpleDateFormat timeformatter;
+    private SimpleDateFormat utctime;
+
+
+    private static ViewPager mPager;
+
+
+    private AsyncTask<String, String, String> mTask;
+    private AsyncTask<String, String, String> mRecipientTask;
+    private AsyncTask<String, String, String> tTask;
+    private AsyncTask<String, String, String> cTask;
+    private final static int TAKE_PICTURE = 1;
+
     private byte[] imageBytes;
+    private Bitmap bitmap;
+    private Timer swipeTimer;
+    private Date currentTime;
+
+    private ArrayList<ImageModel> imageModelArrayList;
+    private List<ImageModel> mList;
+    private CirclePageIndicator indicator;
+
+    private TextView tv_careTotalTime;
+    private TextView tv_careSumTime;
+    private TextView tv_bathSumTime;
+    private TextView tv_nurseSumCount;
+    private TextView tv_nurseSumTotal;
+    private TextView tv_nosupport;
+    private TextView tv_startWork;
+    private TextView tv_name;
+    private TextView tv_bathTotalTime;
+    private TextView tv_nurseTotalCount;
+    private static ImageView mImageView1;
+    private ImageView dialog_imageview;
+    private ImageView n1;
+    private ImageView n2;
+    private ImageView n3;
+    private ImageView n4;
+    private ImageView n6;
+    private ImageView n10;
+    private Button btn_offwork;
+
+
+
+
 
 
     @Override

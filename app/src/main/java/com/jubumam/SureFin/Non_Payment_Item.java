@@ -36,33 +36,40 @@ import java.util.Locale;
 
 public class Non_Payment_Item extends AppCompatActivity {
 
-    private LinearLayout linblocho;
-    private LinearLayout lincloud;
-    private LinearLayout lincrane;
-    private LinearLayout lindeer;
-    private LinearLayout linmountain;
-    private LinearLayout linpinetree;
-    private LinearLayout linstone;
-    private LinearLayout linturtle;
-    private LinearLayout linwater;
-    private LinearLayout linsun;
+//    private LinearLayout linblocho;
+//    private LinearLayout lincloud;
+//    private LinearLayout lincrane;
+//    private LinearLayout lindeer;
+//    private LinearLayout linmountain;
+//    private LinearLayout linpinetree;
+//    private LinearLayout linstone;
+//    private LinearLayout linturtle;
+//    private LinearLayout linwater;
+//    private LinearLayout linsun;
+//
+//    private TextView suntext;
+//    private TextView watertext;
+//    private TextView turtletext;
+//    private TextView stonetext;
+//    private TextView pinetreetext;
+//    private TextView mountaintext;
+//    private TextView deertext;
+//    private TextView cranetext;
+//    private TextView cloudtext;
+//    private TextView blochotext;
+//    private String gender;      //성별
+//    private String birth;       //생년원일
+//    private String pastdisease;      //과거병력
+//    private String div;
+//    private TextView tv_mdiv;
 
-    private TextView suntext;
-    private TextView watertext;
-    private TextView turtletext;
-    private TextView stonetext;
-    private TextView pinetreetext;
-    private TextView mountaintext;
-    private TextView deertext;
-    private TextView cranetext;
-    private TextView cloudtext;
-    private TextView blochotext;
+    private String TAG = "PickerActivity";
+
+    private AsyncTask<String, String, String> cTask;
+    private AsyncTask<String, String, String> mTask;
 
     private String name;        //이름
-    private String gender;      //성별
-    private String birth;       //생년원일
     private String rating;      //등급
-    private String pastdisease;      //과거병력
     private String responsibility;      //직원명
     private String classification; //대분류
     private String htitle; //비급여타이틀
@@ -71,23 +78,7 @@ public class Non_Payment_Item extends AppCompatActivity {
     private String startMon;
     private String endMon;
     private String strDate;
-    private AsyncTask<String, String, String> mTask;
-    private TextView tv_name;
-    private TextView tv_name1;
-    private TextView tv_mdiv;
-    private String div;
-
-    private List<Non> nonList;
-    private List<Non> nonUseList;
-    private NonAdapter mNonAdapter;
-    private nonOfferAdapter mNonOfferAdapter;
-
-    private RecyclerView nonRecycler;
-    private RecyclerView nonOfferRecycler;
     private String dbDate;
-    private TextView tv_thisMonth;
-    private Date date;
-
     private String schedule_date;//일자
     private String scheduletime;//근무시간
     private String contracttime; //계약시간
@@ -96,15 +87,25 @@ public class Non_Payment_Item extends AppCompatActivity {
     private String division;
     private String divisiondate;
     private String divisiontime;
-
     private String date2;
     private String date1;
-    private String TAG = "PickerActivity";
-
-
-    private AsyncTask<String, String, String> cTask;
     private String offer;
     private String offerDate;
+
+    private Date date;
+
+    private List<Non> nonList;
+    private List<Non> nonUseList;
+    private NonAdapter mNonAdapter;
+    private nonOfferAdapter mNonOfferAdapter;
+    private RecyclerView nonRecycler;
+    private RecyclerView nonOfferRecycler;
+
+    private TextView tv_name;
+    private TextView tv_name1;
+    private TextView tv_thisMonth;
+
+
 
 
     @Override

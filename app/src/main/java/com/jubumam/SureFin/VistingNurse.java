@@ -44,78 +44,99 @@ import java.util.TimeZone;
 
 public class VistingNurse extends AppCompatActivity implements View.OnClickListener {
 
-    TextView vtxt1;
-    TextView vtxt2;
-    EditText vtxt3;
-    EditText vtxt4;
+//    Button vbtn1;
+//    Button vbtn_start1;
+//    Button vbtn_end1;
+//    Button vbtn_start2;
+//    Button vbtn_end2;
+//    Button vbtn_end3;
+//    Button vbtn_start4;
+//    Button vbtn_end4;
+//    Button vbtn_start5;
+//    Button vbtn_end5;
+//    Button vbtn_end6;
+//    private long ciff3;
+//    private long ciff4;
+//    private long ciff5;
+//    private long ciff6;
+//
+//    private long diff1;
+//    private long tdiff1;
+//    private long diff2;
+//    private long tdiff2;
+//    private long diff3;
+//    private long tdiff3;
+//    private long diff4;
+//    private long tdiff4;
+//    private long diff5;
+//    private long tdiff5;
+//    private long diff6;
+//    private long tdiff6;
+//
+//    private String startTime;
+//    private String endTime;
+//    private String startTime1;
+//    private String endTime1;
+//    private String startTime2;
+//    private String endTime2;
+//    private String usingTime2;
+//    private String startTime3;
+//    private String endTime3;
+//    private String usingTime3;
+//    private String startTime4;
+//    private String endTime4;
+//    private String startTime5;
+//    private String endTime5;
+//    private String usingTime5;
+//    private String startTime6;
+//    private String endTime6;
+//    private String usingTime6;
+//    private String ntime;
+//    private String ntime1;
+//    private String ntime2;
+//    private String ntime3;
+//    private String ntime4;
+//    private String ntime5;
+//    private String ntime6;
+//
+//    private String totaltime;
+//    private int hour;
+//    private int min;
+//    private int totalmin;
+//    private int usingtimeint;
+//    private String maintime;
+//    private String totalt;
+//    private TextView stimet;
+//    private TextView etimet;
+//    private TextView tv_sumTime;
+//    private long ndiff;
+
+    private TextView tv_phone1;
+    private TextView tv_rating1;
+    private SimpleDateFormat formatter;
+    private int money;
+    private int smoney;
+    private String phone;
+    private TextView tv_price;
+    private TextView tv_date;
+    private String TAG = "PickerActivity";
+    private TextView vtxt1;
+    private TextView vtxt2;
+    private EditText vtxt3;
+    private EditText vtxt4;
     private String date1;
 
-    Button vbtn1;
-    Button vbtn2;
+    private Button vbtn2;
+    private Button vbtn_start3;
+    private Button vbtn_start6;
 
-    Button vbtn_start1;
-    Button vbtn_end1;
-    Button vbtn_start2;
-    Button vbtn_end2;
-    Button vbtn_start3;
-    Button vbtn_end3;
-    Button vbtn_start4;
-    Button vbtn_end4;
-    Button vbtn_start5;
-    Button vbtn_end5;
-    Button vbtn_start6;
-    Button vbtn_end6;
     private long diff;
     private long tdiff;
-    private long ciff3;
-    private long ciff4;
-    private long ciff5;
-    private long ciff6;
-
-    private long diff1;
-    private long tdiff1;
-    private long diff2;
-    private long tdiff2;
-    private long diff3;
-    private long tdiff3;
-    private long diff4;
-    private long tdiff4;
-    private long diff5;
-    private long tdiff5;
-    private long diff6;
-    private long tdiff6;
-    private String TAG = "PickerActivity";
-
     private SimpleDateFormat timeformatter;
-    private String startTime;
-    private String endTime;
     private String clockusingTime;
     private String usingTime;
-    private String startTime1;
-    private String endTime1;
     private String usingTime1;
-    private String startTime2;
-    private String endTime2;
-    private String usingTime2;
-    private String startTime3;
-    private String endTime3;
-    private String usingTime3;
-    private String startTime4;
-    private String endTime4;
     private String usingTime4;
-    private String startTime5;
-    private String endTime5;
-    private String usingTime5;
-    private String startTime6;
-    private String endTime6;
-    private String usingTime6;
-    private String ntime;
-    private String ntime1;
-    private String ntime2;
-    private String ntime3;
-    private String ntime4;
-    private String ntime5;
-    private String ntime6;
     private String bpressure;//혈압
     private String pressure; //맥박
     private String btemperature;//체온
@@ -131,15 +152,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private String edate; //= "유효기간";
     private String mlicense; //= "의사면허번호";
     private String vnumber;// = "방문횟수";
-    private String totaltime;
-    private int hour;
-    private int min;
-    private int totalmin;
-    private int usingtimeint;
     private String ptime;
     private int totime;
-    private int money;
-    private int smoney;
     private int tmoney;
     private String responsibility;     //담당
     private String place;            //수급자 지점
@@ -147,8 +161,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private String gender;//성별
     private String division;//구분
     private String mhistory;//과거병력
-    private String maintime;
-    private String totalt;
     private String dateCheck;
 
     private TextView tv_startTime;
@@ -156,10 +168,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private EditText v_time3;
     private EditText v_time6;
     private TextView et_etc;
-    private TextView stimet;
-    private TextView etimet;
-    private TextView tv_sumTime;
-    private SimpleDateFormat formatter;
     private SimpleDateFormat formatterScreen;
     private SimpleDateFormat utctime;
     private TextView tv_information;
@@ -167,8 +175,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private Button btn_end;
     private TextView tv_time;
 
-    TextView tv_date;
-    TextView tv_price;
+
     private Date currentDate;
     private String strDate;
     private AsyncTask<String, String, String> mTask;
@@ -176,12 +183,8 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
     private AsyncTask<String, String, String> dbCheckSyncTask;
     private AsyncTask<String, String, String> dateSyncTask;
     private TextView tv_name;
-    private TextView tv_phone1;
-    private TextView tv_rating1;
-    private String phone;
     private String title;
     private String totalnumber;
-    private long ndiff;
     private String strStartTime;    //시작시간
     private String strEndTime;      //종료시간
 
@@ -260,7 +263,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         utctime = new SimpleDateFormat("HH:mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        tv_date = findViewById(R.id.tv_date);
+
         tv_price = findViewById(R.id.tv_price);
         currentDate = new Date();
         formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
@@ -276,7 +279,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
         v_time3 = findViewById(R.id.v_time3);
         v_time6 = findViewById(R.id.v_time6);
         et_etc = findViewById(R.id.et_etc);
-        tv_sumTime = findViewById(R.id.tv_sumTime);
         tv_information = findViewById(R.id.tv_information);
         tv_information.setText(name + "님의 정보");
 
@@ -583,8 +585,6 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 phone = rs.getString("hp");
 
 
-
-
             }
 
             ResultSet rst = sts.executeQuery("select * from Su_방문간호지시서 where 수급자명 = '" + name + "'");
@@ -611,6 +611,14 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
 ////                    tv_price.setText(new DecimalFormat("###,###").format(money)+"원");
 //                }
 //            });
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    tv_phone1.setText(phone);
+                    tv_rating1.setText(rating);
+                }
+            });
 
             con.close();
 
@@ -925,7 +933,7 @@ public class VistingNurse extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(VistingNurse.this, signActivity.class);
-                i8.putExtra("route","Recipi");
+                i8.putExtra("route", "Recipi");
                 startActivity(i8);
                 break;
 

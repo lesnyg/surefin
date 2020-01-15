@@ -38,9 +38,26 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 public class ServiceListActivity extends AppCompatActivity {
+//    private NumberPicker picker1;
+//    private NumberPicker picker2;
+//    private String newString;
+//    private String ratingPrice;
+//    private String noCarService;
+//    private String strNursingTime;
+//    private String commute;
+//    private String usingTime2;
+//    private String usingTime3;
+//    private String usingTime4;
+//    private String usingTime5;
+//    private String price;
+//    private int sumPrice = 0;
+//    private int serviceId;
+//    private TextView tv_month2;
+//    private Recipient recipient;
+
+
     private TextView tv_sumTime;
     private TextView tv_month;
-    private TextView tv_month2;
     private TextView tv_bathCount;
     private TextView tv_nursingCountTT;
     private TextView tv_nursingTotalTT;
@@ -52,73 +69,41 @@ public class ServiceListActivity extends AppCompatActivity {
     private TextView tv_rating1;
     private TextView tv_name;
     private TextView tv_noList;
-
     private ImageView img_left;
     private ImageView img_right;
 
-    private String name;
-    private String commute;
-    private String date;
-    private String responsibility;
-    private String usingTime1;
-    private String usingTime2;
-    private String usingTime3;
-    private String usingTime4;
-    private String usingTime5;
-    private String nursingCount;
-    private String nursingTotal;
-    private String rating;
-    private long sumUsingTimeDay = 0;
-    private long sumUsingTimeMonth = 0;
+    private AsyncTask<String, String, String> mTask;
+    private AsyncTask<String, String, String> cTask;
 
-    private String price;
-    private int sumPrice = 0;
-    private String count;
-    private int bathCount = 0;
-    private String strDayCareIndivi;
-    private String strDayCarePublic;
-    private int intTotalDayCareIndivi = 0;
-    private int intTotalDayCarePublic = 0;
-    private int serviceId;
-    private int intNursingCount = 0;
-    private int intNursingTotal = 0;
-
+    private SimpleDateFormat utctime;
+    private SimpleDateFormat timeformatter;
+    private Calendar cal;
     private List<Service> serviceList;
     private ServiceAdapter mServiceAdapter;
     private RecyclerView recyclerView;
-    private Recipient recipient;
-    private AsyncTask<String, String, String> mTask;
-    private NumberPicker picker1;
-    private NumberPicker picker2;
-    private String startMon;
-    private String endMon;
-    private SimpleDateFormat timeformatter;
-    private String newString;
-    private int bathcount = 0;
-    private String strDate;
-    private String ratingPrice;
-    private int nonPayServiceCount = 0;
-    private String thisMonth;
-    private String sdf;
-    private int intNursingPrice = 0;
-    private int intyearsupport;
-    private String thisYear;
+
+    private String name;
+    private String date;
+    private String responsibility;
+    private String usingTime1;
+    private String nursingCount;
+    private String nursingTotal;
+    private String rating;
+    private String count;
+    private String strDayCareIndivi;
+    private String strDayCarePublic;
     private String recipientBasicTime;
     private String carService;
-    private String noCarService;
-    private String strNursingTime;
-    private int intDayCareIndivi;
-    private int intDayCarePublic;
-
-    private SimpleDateFormat utctime;
-    private Calendar cal;
-    private int thour = 0;
+    private String startMon;
+    private String endMon;
+    private String strDate;
+    private String thisMonth;
+    private String sdf;
+    private String thisYear;
     private String bath;
     private String strcount;
     private String nonPay;
-    private int intnonPay = 0;
     private String dateDay;
-
     private String schedule_date;//일자
     private String scheduletime;//근무시간
     private String contracttime; //계약시간
@@ -130,14 +115,26 @@ public class ServiceListActivity extends AppCompatActivity {
     private String TAG = "PickerActivity";
     private String divisiondate;
     private String divisiontime;
-
-
-    private AsyncTask<String, String, String> cTask;
-    private int tmin;
     private String strThour;
     private String strTmin;
     private String strNhour;
     private String strNmin;
+    private int intDayCareIndivi;
+    private int intDayCarePublic;
+    private int intnonPay = 0;
+    private int bathcount = 0;
+    private int thour = 0;
+    private int tmin;
+    private int nonPayServiceCount = 0;
+    private int intNursingPrice = 0;
+    private int intyearsupport;
+    private int bathCount = 0;
+    private int intNursingCount = 0;
+    private int intTotalDayCareIndivi = 0;
+    private int intTotalDayCarePublic = 0;
+    private int intNursingTotal = 0;
+    private long sumUsingTimeDay = 0;
+    private long sumUsingTimeMonth = 0;
 
 
     @Override
@@ -362,9 +359,9 @@ public class ServiceListActivity extends AppCompatActivity {
 
 
                 if (nursingTotal == null || nursingTotal.equals("")) {
-                    intNursingTotal = 0+intNursingTotal;
+                    intNursingTotal = 0 + intNursingTotal;
                     nursingTotal = "0";
-                }else{
+                } else {
                     int nursing = Integer.parseInt(nursingTotal);
                     intNursingTotal = nursing + intNursingTotal;
                     intNursingCount++;
@@ -554,7 +551,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 break;
             case R.id.action_sign:
                 Intent i8 = new Intent(ServiceListActivity.this, signActivity.class);
-                i8.putExtra("route","Recipi");
+                i8.putExtra("route", "Recipi");
                 startActivity(i8);
                 break;
 
