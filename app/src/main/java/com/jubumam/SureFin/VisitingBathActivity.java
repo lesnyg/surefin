@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -45,7 +46,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class VisitingBathActivity extends AppCompatActivity implements View.OnClickListener {
+public class VisitingBathActivity extends BaseActivity implements View.OnClickListener {
 
 //    private RadioButton rb_car;
 //    private RadioButton rb_nocar;
@@ -69,6 +70,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private Switch aSwitch1;
     private LinearLayout bath_car;
     private LinearLayout bath_nocar;
+    private LinearLayout lin_bathBefore;
+    private LinearLayout lin_bathAfter;
     private SimpleDateFormat formatter;
     private SimpleDateFormat formatterScreen;
     private SimpleDateFormat timeformatter;
@@ -149,7 +152,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     private String totalnumber;
 
 
-
     private int intBathcount = 0;
     private TextView tv_sumTime;
     private TextView tv_remainingTime;
@@ -180,14 +182,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visiting_bath);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-
+        activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
@@ -239,6 +234,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         tv_sumTime = findViewById(R.id.tv_sumTime);
         tv_remainingTime = findViewById(R.id.tv_remainingTime);
         lin_bathAll = findViewById(R.id.lin_bathAll);
+        lin_bathBefore = findViewById(R.id.lin_bathBefore);
+        lin_bathAfter = findViewById(R.id.lin_bathAfter);
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -321,6 +318,8 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
                 if (btn_start.getText().equals("시작")) {
                     Toast.makeText(VisitingBathActivity.this, "시작시간을 눌러주세요", Toast.LENGTH_SHORT).show();
                 } else {
+                    lin_bathBefore.setVisibility(View.GONE);
+                    lin_bathAfter.setVisibility(View.VISIBLE);
                     Date endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
                     btn_end.setText(strEndTime);
@@ -525,83 +524,6 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
     }
 
 
-    public class CalSyncTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-            calQuery();
-            return null;
-
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
-
-
-    public void calQuery() {
-
-        Connection conn = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
-
-            while (calres.next()) {
-
-                schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
-                schedulename = calres.getString("수급자명");//계약수급자명
-                division = calres.getString("구분");//구분
-
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    if (schedule_date != null) {
-
-                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
-                        divisiondate = schedule_date + "일";
-                        divisiontime = scheduletime + "(" + contracttime + ")";
-
-                        Schedule_dialog schedule_dialog = new Schedule_dialog(VisitingBathActivity.this);
-
-                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
-
-                    } else if (schedule_date == null) {
-                        Toast.makeText(VisitingBathActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-                }
-            });
-
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
     public class DbCheckSyncTask extends AsyncTask<String, String, String> {
         protected void onPreExecute() {
         }
@@ -617,7 +539,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
         }
 
         protected void onPostExecute(String result) {
-            finish();
+
         }
 
         protected void onCancelled() {
@@ -695,10 +617,16 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
 
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    animationView.setVisibility(View.GONE);
-                                    intBathcount = 0;
-                                    recipientSyncTask = new RecipientSyncTask().execute();
-                                    lin_bathAll.setVisibility(View.VISIBLE);
+//                                    animationView.setVisibility(View.GONE);
+//                                    intBathcount = 0;
+//                                    recipientSyncTask = new RecipientSyncTask().execute();
+//                                    lin_bathAll.setVisibility(View.VISIBLE);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finish();
+                                        }
+                                    },1000);
 
                                 }
 
@@ -879,7 +807,7 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet priceResultSet = statement.executeQuery("select * from Su_년도별적용급액 where 상세구분='" + carPrice + "' and 년도 = '"+thisYear+"'");
+            ResultSet priceResultSet = statement.executeQuery("select * from Su_년도별적용급액 where 상세구분='" + carPrice + "' and 년도 = '" + thisYear + "'");
             while (priceResultSet.next()) {
                 price = Integer.parseInt(priceResultSet.getString("금액"));
                 nonPayment = Integer.parseInt(priceResultSet.getString("비급여액"));
@@ -904,53 +832,4 @@ public class VisitingBathActivity extends AppCompatActivity implements View.OnCl
             e.printStackTrace();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(VisitingBathActivity.this, MenuMain.class);
-                startActivity(intent);
-                break;
-            case R.id.action_notice:
-                Intent intent1 = new Intent(VisitingBathActivity.this, CustomerServiceActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_serviceEdit:
-                Intent i5 = new Intent(VisitingBathActivity.this, EditRecipientActivity.class);
-                i5.putExtra("route", "edit");
-                startActivity(i5);
-                break;
-            case R.id.action_sign:
-                Intent i8 = new Intent(VisitingBathActivity.this, signActivity.class);
-                i8.putExtra("route","Recipi");
-                startActivity(i8);
-                break;
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG, cal.get(Calendar.DATE) + "");
-                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-                DatePickerDialog dialog = new DatePickerDialog(VisitingBathActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
-                        date2 = date1;
-                        cTask = new CalSyncTask().execute();
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-                dialog.show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 }

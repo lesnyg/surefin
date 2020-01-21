@@ -91,6 +91,7 @@
     android:orientation="horizontal">
 
     <Button
+        android:id="@+id/btn_question"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="4dp"
@@ -101,15 +102,15 @@
         android:textSize="20dp" />
 
     <Button
+        android:id="@+id/btn_answer"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="wrap_content"
-        android:background="@drawable/servicebtnedge2"
-        android:textColor="#fe3294"
-        android:textSize="20dp"
         android:layout_marginLeft="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/servicebtnedge2"
         android:text="문의내역 확인"
-        />
+        android:textColor="#fe3294"
+        android:textSize="20dp" />
 </LinearLayout>
 
     <FrameLayout
@@ -144,11 +145,6 @@
             android:textSize="24dp"
             android:textStyle="bold"
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="더보기 >"
-            android:layout_gravity="bottom|right"/>
 
     </LinearLayout>
     <View
@@ -169,8 +165,5 @@
         tools:listitem="@layout/item_notice"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         ></androidx.recyclerview.widget.RecyclerView>
-
-
-
 
 </LinearLayout>

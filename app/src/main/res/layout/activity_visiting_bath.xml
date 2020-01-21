@@ -411,7 +411,7 @@
                                     android:layout_weight="1"
 
                                     android:hint="차량번호 입력"
-                                    android:textSize="16dp"/>
+                                    android:textSize="16dp" />
                             </LinearLayout>
 
                             <RadioGroup
@@ -500,75 +500,83 @@
                             android:layout_height="120dp"
                             android:src="@drawable/icon_face" />
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
-                            <ImageView
-                                android:layout_width="67dp"
-                                android:layout_height="21dp"
-                                android:src="@drawable/icon_before" />
-
-                            <CheckBox
-                                android:id="@+id/checkBox1"
+                            <LinearLayout
+                                android:id="@+id/lin_bathBefore"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="배뇨,배변"
-                                android:textColor="#717171"
-                                android:textSize="16dp" />
+                                android:orientation="vertical">
 
-                            <CheckBox
-                                android:id="@+id/checkBox2"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="욕창"
-                                android:textColor="#717171" />
+                                <ImageView
+                                    android:layout_width="67dp"
+                                    android:layout_height="21dp"
+                                    android:src="@drawable/icon_before" />
 
-                            <CheckBox
-                                android:id="@+id/checkBox3"
+                                <CheckBox
+                                    android:id="@+id/checkBox1"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="배뇨,배변"
+                                    android:textColor="#717171"
+                                    android:textSize="16dp" />
+
+                                <CheckBox
+                                    android:id="@+id/checkBox2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="욕창"
+                                    android:textColor="#717171" />
+
+                                <CheckBox
+                                    android:id="@+id/checkBox3"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="얼굴색,피부색"
+                                    android:textColor="#717171" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_bathAfter"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="얼굴색,피부색"
-                                android:textColor="#717171" />
-                        </LinearLayout>
+                                android:layout_marginLeft="8dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:orientation="vertical">
+                                <ImageView
+                                    android:layout_width="67dp"
+                                    android:layout_height="21dp"
+                                    android:src="@drawable/icon_after" />
 
-                            <ImageView
-                                android:layout_width="67dp"
-                                android:layout_height="21dp"
-                                android:src="@drawable/icon_after" />
+                                <CheckBox
+                                    android:id="@+id/checkBox4"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="얼굴색,피부색"
+                                    android:textColor="#717171" />
 
-                            <CheckBox
-                                android:id="@+id/checkBox4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="얼굴색,피부색"
-                                android:textColor="#717171" />
+                                <CheckBox
+                                    android:id="@+id/checkBox5"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="몸단장"
+                                    android:textColor="#717171" />
 
-                            <CheckBox
-                                android:id="@+id/checkBox5"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="몸단장"
-                                android:textColor="#717171" />
-
-                            <CheckBox
-                                android:id="@+id/checkBox6"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="주변정리"
-                                android:textColor="#717171" />
-                        </LinearLayout>
+                                <CheckBox
+                                    android:id="@+id/checkBox6"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:text="주변정리"
+                                    android:textColor="#717171" />
+                            </LinearLayout>
+                        </FrameLayout>
                     </LinearLayout>
 
                     <View

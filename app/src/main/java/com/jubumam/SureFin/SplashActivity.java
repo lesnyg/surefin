@@ -21,7 +21,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private class SplashHandler implements Runnable {
         public void run() {
-            startActivity(new Intent(getApplication(),login.class)); //로딩이 끝난 후 MainActivity 로 이동
+            startActivity(new Intent(getApplication(), LoginActivity.class)); //로딩이 끝난 후 MainActivity 로 이동
             finish(); // 로딩페이지 Activity stack 에서 제거
         }
     }
