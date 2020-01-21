@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
@@ -36,6 +37,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.WeakHashMap;
 
 public class ServiceListActivity extends AppCompatActivity {
 //    private NumberPicker picker1;
@@ -207,6 +209,8 @@ public class ServiceListActivity extends AppCompatActivity {
         cal.setTime(date);
         mTask = new ServiceSyncTask().execute();
 
+
+
         img_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,6 +235,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 startMon = strDate + "-" + "01";
                 endMon = strDate + "-" + "32";
                 mTask = new ServiceSyncTask().execute();
+
 
             }
         });
@@ -259,6 +264,7 @@ public class ServiceListActivity extends AppCompatActivity {
                 startMon = strDate + "-" + "01";
                 endMon = strDate + "-" + "32";
                 mTask = new ServiceSyncTask().execute();
+
             }
         });
 
@@ -357,7 +363,6 @@ public class ServiceListActivity extends AppCompatActivity {
                     bathCount++;
                 }
 
-
                 if (nursingTotal == null || nursingTotal.equals("")) {
                     intNursingTotal = 0 + intNursingTotal;
                     nursingTotal = "0";
@@ -378,6 +383,7 @@ public class ServiceListActivity extends AppCompatActivity {
                     intTotalDayCareIndivi = intTotalDayCareIndivi + intDayCareIndivi;
                     intTotalDayCarePublic = intTotalDayCarePublic + intDayCarePublic;
                 }
+
                 intDayCareIndivi = 0;
                 intDayCarePublic = 0;
 
@@ -432,6 +438,8 @@ public class ServiceListActivity extends AppCompatActivity {
                 strNmin = String.format("%02d", nmin);
                 tv_nursingTotalTT.setText(strNhour + "시간" + strNmin + "분");
 
+
+
                 //개인부담 비용 및 공단부담 비용
                 tv_nonPayServiceCount.setText(intnonPay + "");
                 DecimalFormat myFormatter = new DecimalFormat("###,###");
@@ -442,6 +450,7 @@ public class ServiceListActivity extends AppCompatActivity {
                     tv_noList.setVisibility(View.VISIBLE);
                 } else {
                     tv_noList.setVisibility(View.GONE);
+
                 }
 
 
@@ -449,6 +458,7 @@ public class ServiceListActivity extends AppCompatActivity {
         });
 
     }
+
 ////////////////////////////////서비스 사용내역  리스트 끝
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
@@ -473,7 +483,6 @@ public class ServiceListActivity extends AppCompatActivity {
         }
 
     }
-
 
     public void calQuery() {
 
@@ -517,6 +526,8 @@ public class ServiceListActivity extends AppCompatActivity {
 
                 }
             });
+
+
 
             conn.close();
         } catch (ClassNotFoundException e) {

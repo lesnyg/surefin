@@ -27,6 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.IntentCompat;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
@@ -416,7 +417,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
                     Intent ica = new Intent(RecipientDetailActivity.this, MenuMain.class);
                     startActivity(ica);
 
-
 /*
                     if (bitmap != null) {
 
@@ -444,7 +444,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
 
 
                     }*/
-
                 }
 
                 break;
@@ -456,11 +455,10 @@ public class RecipientDetailActivity extends AppCompatActivity {
         baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);    //bitmap compress
         imageBytes = baos.toByteArray();
-
-
     }*/
 
     public class CalSyncTask extends AsyncTask<String, String, String> {
+
 
         protected void onPreExecute() {
         }
@@ -469,6 +467,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
         protected String doInBackground(String... strings) {
             if (isCancelled())
                 return null;
+
             calQuery();
             return null;
 
@@ -539,6 +538,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
                     } else if (schedule_date == null) {
                         Toast.makeText(RecipientDetailActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
                     }
+
 
                 }
             });

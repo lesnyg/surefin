@@ -1,13 +1,10 @@
 package com.jubumam.SureFin;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.DefaultDatabaseErrorHandler;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -15,8 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Base64;
 import android.util.Log;
+import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +22,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -57,6 +56,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
+
 
 
 public class MenuMain extends AppCompatActivity {
@@ -186,6 +186,8 @@ public class MenuMain extends AppCompatActivity {
         stime = commuteRecipient.getStartTime();
 
 
+
+
         currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String month = sdf.format(currentTime);
@@ -193,6 +195,8 @@ public class MenuMain extends AppCompatActivity {
         thisYear = new SimpleDateFormat("yyyy").format(currentTime);
         startMon = month + "-" + "01";
         endMon = month + "-" + "32";
+
+    //   Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
 
         n1 = findViewById(R.id.n1);
@@ -220,6 +224,8 @@ public class MenuMain extends AppCompatActivity {
         tv_startWork.setText(stime);
 
 
+
+
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -230,7 +236,9 @@ public class MenuMain extends AppCompatActivity {
 
         dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
-       // mTask = new BannerTask().execute();
+
+        //mTask = new BannerTask().execute();
+
 
         init();
 
@@ -240,6 +248,7 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
+             //   i1.putExtra("vistime",vistime);
                 startActivity(i1);
             }
         });
@@ -255,6 +264,7 @@ public class MenuMain extends AppCompatActivity {
             public void onClick(View v) {
                 Intent i3 = new Intent(MenuMain.this, VistingNurse.class);
                 startActivity(i3);
+
             }
         });
 
@@ -276,10 +286,12 @@ public class MenuMain extends AppCompatActivity {
         });
 
 
+
         n1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
+            //
                 startActivity(i1);
 
             }
@@ -316,6 +328,7 @@ public class MenuMain extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
                 Intent i6 = new Intent(MenuMain.this, Non_Payment_Item.class);
                 startActivity(i6);
             }
@@ -330,14 +343,12 @@ public class MenuMain extends AppCompatActivity {
             }
         });
 
-
         btn_offwork = (Button) findViewById(R.id.btn_offwork);
         btn_offwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
-
 
             }
         });
@@ -348,6 +359,7 @@ public class MenuMain extends AppCompatActivity {
             } else {
                 Log.d(TAG, "권한 설정 요청");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
             }
         }
     }
@@ -388,8 +400,6 @@ public class MenuMain extends AppCompatActivity {
                     s2 = 32;
                     s4 = imageString;
 
-
-
                     try {
 
                         long now = System.currentTimeMillis();
@@ -404,8 +414,8 @@ public class MenuMain extends AppCompatActivity {
                         s3 = nowDate;
                         ymd1 = ymd.format(date);
                         hms1 = hms.format(date);
-
                         ttime = hm.format(date);
+
 
                     } catch (Exception e) {
 
@@ -512,6 +522,7 @@ public class MenuMain extends AppCompatActivity {
             mImageView1.setImageBitmap(imageModelArrayList.get(position).getImageBitmap());
             view.addView(imageLayout, 0);
             return imageLayout;
+
         }
 
         @Override
@@ -541,11 +552,16 @@ public class MenuMain extends AppCompatActivity {
                 return (null);
             recipiquery();
 
-
             return null;
         }
 
         protected void onPostExecute(String result) {
+
+            Intent intent = new Intent(MenuMain.this,VisitingActivity.class);
+            intent.putExtra("vistime",vistime);
+
+
+            Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
         }
 
 
@@ -589,6 +605,7 @@ public class MenuMain extends AppCompatActivity {
             if (isCancelled())
                 return null;
             calQuery();
+
             return null;
         }
 
@@ -737,11 +754,13 @@ public class MenuMain extends AppCompatActivity {
                     intNursingTotal = Integer.parseInt(nursingTotal) + intNursingTotal;
                     intNursingCount++;
                 }
+
             }
 
             ResultSet nonpayRS = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (nonpayRS.next()) {
                 nosupport++;
+
             }
 
             //배너이미지
@@ -772,7 +791,7 @@ public class MenuMain extends AppCompatActivity {
                     strTmin = String.format("%02d", tmin);
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
-
+               //     Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;
@@ -796,7 +815,6 @@ public class MenuMain extends AppCompatActivity {
 
                     mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
                     indicator.setViewPager(mPager);
-
 
                 }
             });
@@ -867,6 +885,8 @@ public class MenuMain extends AppCompatActivity {
     protected void onPause() {
         swipeTimer.cancel();
         super.onPause();
+
     }
+
 
 }
