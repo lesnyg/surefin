@@ -69,7 +69,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceH
         }else {
             holder.tv_bathDayCount.setText("0");
         }
-        if(service.getNursingTotal()!=null){
+        if(service.getNursingCount()!=null){
             holder.tv_nursingDayCount.setText("1회");
         }else{
             holder.tv_nursingDayCount.setText("0회");

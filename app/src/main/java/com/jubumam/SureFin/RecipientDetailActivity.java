@@ -42,7 +42,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-public class RecipientDetailActivity extends AppCompatActivity {
+public class RecipientDetailActivity extends BaseActivity {
 //    private EditText et_name;
 //    private byte[] imageBytes;
 //    private Bitmap mBitmap;
@@ -122,17 +122,12 @@ public class RecipientDetailActivity extends AppCompatActivity {
     private byte[] s5;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipient_detail);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
+        activateToolbar();
 
         LayoutInflater inflater = LayoutInflater.from(RecipientDetailActivity.this);
         final View view = inflater.inflate(R.layout.camera_image, null);
@@ -169,13 +164,10 @@ public class RecipientDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         name = intent.getExtras().getString("name");
         responsibility = intent.getExtras().getString("responsibility");
-        if (commute != null) {
-
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-            btn_camera.setVisibility(View.INVISIBLE);
-        } else {
+        if (commute == null) {
             btn_camera.setVisibility(View.VISIBLE);
+        } else {
+            btn_camera.setVisibility(View.INVISIBLE);
         }
 
 
@@ -553,6 +545,7 @@ public class RecipientDetailActivity extends AppCompatActivity {
     }
 
 
+
     public class MySyncTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -726,75 +719,6 @@ public class RecipientDetailActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (commute == null) {
-            getMenuInflater().inflate(R.menu.baseappbar_action, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.appbar_action, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(RecipientDetailActivity.this, MenuMain.class);
-                startActivity(intent);
-                break;
-            case R.id.action_notice:
-                Intent intent1 = new Intent(RecipientDetailActivity.this, CustomerServiceActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_serviceEdit:
-                Intent i5 = new Intent(RecipientDetailActivity.this, EditRecipientActivity.class);
-                i5.putExtra("route", "edit");
-                startActivity(i5);
-                break;
-            case R.id.action_sign:
-                Intent i8 = new Intent(RecipientDetailActivity.this, signActivity.class);
-                i8.putExtra("route", "Recipi");
-                startActivity(i8);
-                break;
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG1, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG1, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG1, cal.get(Calendar.DATE) + "");
-                Log.e(TAG1, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG1, cal.get(Calendar.MINUTE) + "");
-                DatePickerDialog dialog = new DatePickerDialog(RecipientDetailActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-
-
-                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
-                        date2 = date1;
-
-                        cTask = new CalSyncTask().execute();
-                        //       cal_btn.setText(date1);
-                        //vtxt1.setText(date1);
-
-
-                        //  Toast.makeText(MainActivity.this, date2, Toast.LENGTH_SHORT).show();
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-
-                //dialog.getDatePicker().setMaxDate(new Date().getTime());
-
-                dialog.show();
-
-                break;
-
-        }
-        return super.onOptionsItemSelected(item);
-
 
     }
 }

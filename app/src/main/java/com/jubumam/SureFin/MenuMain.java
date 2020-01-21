@@ -59,7 +59,8 @@ import java.util.TimerTask;
 
 
 
-public class MenuMain extends AppCompatActivity {
+public class MenuMain extends BaseActivity {
+
 //    private String gender;      //성별
 //    private String birth;       //생년원일
 //    private String pastdisease;      //과거병력
@@ -160,9 +161,10 @@ public class MenuMain extends AppCompatActivity {
     private ImageView n10;
     private Button btn_offwork;
 
-
-
-
+//    //noti count
+//    private TextView smsCountTxt;
+//    private int pendingSMSCount = 12;
+//    private MenuItem menuItem;
 
 
     @Override
@@ -170,14 +172,7 @@ public class MenuMain extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_m);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-
+        activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
@@ -236,8 +231,6 @@ public class MenuMain extends AppCompatActivity {
 
         dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
-
-        //mTask = new BannerTask().execute();
 
 
         init();
@@ -365,8 +358,6 @@ public class MenuMain extends AppCompatActivity {
     }
 
 
-
-
     // 권한 요청
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -400,6 +391,7 @@ public class MenuMain extends AppCompatActivity {
                     s2 = 32;
                     s4 = imageString;
 
+
                     try {
 
                         long now = System.currentTimeMillis();
@@ -421,14 +413,13 @@ public class MenuMain extends AppCompatActivity {
 
                     }
 
-                  //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
-                  //  startActivity(i8);
+                    //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
+                    //  startActivity(i8);
                     tTask = new TSyncTask().execute();
 
 
-
                     Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                    i8.putExtra("route","MenuMain");
+                    i8.putExtra("route", "MenuMain");
                     startActivity(i8);
 
                 }
@@ -595,6 +586,7 @@ public class MenuMain extends AppCompatActivity {
     }
 
 
+
     public class CalSyncTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -671,6 +663,7 @@ public class MenuMain extends AppCompatActivity {
     }
 
 
+
     public void query1() {
         Connection connection = null;
 
@@ -678,10 +671,10 @@ public class MenuMain extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
 
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원명 = '"+responsibility+"' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
             byte[] s5 = imageBytes;
-            ps.setBytes(1,s5);
-            ps.setString(2,ttime);
+            ps.setBytes(1, s5);
+            ps.setString(2, ttime);
             ps.executeUpdate();
             ps.close();
             connection.close();
@@ -718,13 +711,6 @@ public class MenuMain extends AppCompatActivity {
                 batime = rs2.getFloat("기본시간");
 
             }
-
-//            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
-//            while (recipientRS.next()) {
-//                recipientBasicTime = recipientRS.getString("기본시간");
-//
-//
-//            }
 
             ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자) AS 요양일자,(CONVERT(int,A.신체사용시간계))+(CONVERT(int,A.인지사용시간계))+(CONVERT(int,A.일상생활시간계))+(CONVERT(int,A.정서사용시간계))+(CONVERT(int,A.생활지원사용시간계)) AS 방문요양합계," +
                     "B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
@@ -830,57 +816,6 @@ public class MenuMain extends AppCompatActivity {
 
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(MenuMain.this, MenuMain.class);
-                startActivity(intent);
-                break;
-            case R.id.action_notice:
-                Intent intent1 = new Intent(MenuMain.this, CustomerServiceActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_serviceEdit:
-                Intent i5 = new Intent(MenuMain.this, EditRecipientActivity.class);
-                i5.putExtra("route", "edit");
-                startActivity(i5);
-                break;
-            case R.id.action_sign:
-                Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                i8.putExtra("route","Recipi");
-                startActivity(i8);
-                break;
-
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG1, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG1, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG1, cal.get(Calendar.DATE) + "");
-                Log.e(TAG1, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG1, cal.get(Calendar.MINUTE) + "");
-
-
-                DatePickerDialog dialog = new DatePickerDialog(MenuMain.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
-                        date2 = date1;
-                        cTask = new CalSyncTask().execute();
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-                dialog.show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
     @Override
     protected void onPause() {
         swipeTimer.cancel();

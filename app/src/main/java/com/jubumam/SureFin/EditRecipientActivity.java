@@ -37,7 +37,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Calendar;
 
-public class EditRecipientActivity extends AppCompatActivity {
+public class EditRecipientActivity extends BaseActivity {
 
 //    private String gender;      //성별
 //    private String birth;       //생년원일
@@ -104,11 +104,7 @@ public class EditRecipientActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_recipient);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayShowCustomEnabled(true);
+        activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         commute = commuteRecipient.getCommute();
@@ -118,18 +114,6 @@ public class EditRecipientActivity extends AppCompatActivity {
             name = intent.getExtras().getString("name");
             rating = intent.getExtras().getString("rating");
             responsibility = intent.getExtras().getString("responsibility");
-        } else if (route.equals("detail")) {
-            name = intent.getExtras().getString("name");
-            rating = intent.getExtras().getString("rating");
-            responsibility = intent.getExtras().getString("responsibility");
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-        } else {
-            name = commuteRecipient.getName();
-            rating = commuteRecipient.getRating();
-            responsibility = commuteRecipient.getResponsibility();
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
         }
 
         rbtn_update = (Button) findViewById(R.id.rbtn_update);
@@ -171,18 +155,6 @@ public class EditRecipientActivity extends AppCompatActivity {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
 
-             /*   Intent intent = new Intent(EditRecipientActivity.this,cameraActivity.class);
-                // intent.putExtra("time",s3);
-                intent.putExtra("name", name);
-                intent.putExtra("gender", gender);
-                intent.putExtra("rating", rating);
-                intent.putExtra("birth", birth);
-                intent.putExtra("pastdisease", pastdisease);
-                intent.putExtra("responsibility", responsibility);
-                // intent.putExtra("ymd",ymd1);
-                // intent.putExtra("hms",hms1);
-                // Toast.makeText(cameraActivity.this,s3,Toast.LENGTH_SHORT).show();
-                startActivity(intent);*/
             }
         });
 
@@ -192,7 +164,6 @@ public class EditRecipientActivity extends AppCompatActivity {
 
                 caTask = new caAsyncTask().execute();
 
-                //  Toast.makeText(EditRecipientActivity.this,imgb.toString(),Toast.LENGTH_SHORT).show();
                 Toast.makeText(EditRecipientActivity.this, "수정완료", Toast.LENGTH_SHORT).show();
 
 
@@ -220,15 +191,7 @@ public class EditRecipientActivity extends AppCompatActivity {
                 finish();
             }
         });
-/*
-        rbtn_return.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
-
-*/
     }
 
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -513,132 +476,4 @@ public class EditRecipientActivity extends AppCompatActivity {
             super.onCancelled();
         }
     }
-
-    public class CalSyncTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-            calQuery();
-            return null;
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
-
-
-    public void calQuery() {
-
-        Connection conn = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
-
-            while (calres.next()) {
-
-                schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
-                schedulename = calres.getString("수급자명");//계약수급자명
-                division = calres.getString("구분");//구분
-
-            }
-
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-                    if (schedule_date != null) {
-
-                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
-                        divisiondate = schedule_date + "일";
-                        divisiontime = scheduletime + "(" + contracttime + ")";
-
-                        Schedule_dialog schedule_dialog = new Schedule_dialog(EditRecipientActivity.this);
-                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
-                    } else if (schedule_date == null) {
-                        Toast.makeText(EditRecipientActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-                }
-            });
-
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (commute == null) {
-            getMenuInflater().inflate(R.menu.baseappbar_action, menu);
-        } else {
-            getMenuInflater().inflate(R.menu.appbar_action, menu);
-        }
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(EditRecipientActivity.this, MenuMain.class);
-                startActivity(intent);
-                break;
-            case R.id.action_notice:
-                Intent intent1 = new Intent(EditRecipientActivity.this, CustomerServiceActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_serviceEdit:
-                Intent i5 = new Intent(EditRecipientActivity.this, EditRecipientActivity.class);
-                i5.putExtra("route", "edit");
-                startActivity(i5);
-                break;
-            case R.id.action_sign:
-                Intent i8 = new Intent(EditRecipientActivity.this, signActivity.class);
-                i8.putExtra("route", "Recipi");
-                startActivity(i8);
-                break;
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG1, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG1, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG1, cal.get(Calendar.DATE) + "");
-                Log.e(TAG1, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG1, cal.get(Calendar.MINUTE) + "");
-
-                DatePickerDialog dialog = new DatePickerDialog(EditRecipientActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
-                        date2 = date1;
-                        cTask = new CalSyncTask().execute();
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-                dialog.show();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
 }

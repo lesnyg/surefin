@@ -39,7 +39,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.WeakHashMap;
 
-public class ServiceListActivity extends AppCompatActivity {
+public class ServiceListActivity extends BaseActivity {
 //    private NumberPicker picker1;
 //    private NumberPicker picker2;
 //    private String newString;
@@ -144,14 +144,7 @@ public class ServiceListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-
+        activateToolbar();
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
@@ -461,6 +454,7 @@ public class ServiceListActivity extends AppCompatActivity {
 
 ////////////////////////////////서비스 사용내역  리스트 끝
 
+
     public class CalSyncTask extends AsyncTask<String, String, String> {
 
         protected void onPreExecute() {
@@ -586,6 +580,7 @@ public class ServiceListActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 }
 

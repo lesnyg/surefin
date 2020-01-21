@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,7 +44,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class VisitingActivity extends AppCompatActivity implements View.OnClickListener {
+public class VisitingActivity extends BaseActivity implements View.OnClickListener {
 //    private int mNumber = 0;
 //    private int mNumber1 = 0;
 //    private int mNumber2 = 0;
@@ -221,13 +222,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visiting);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
@@ -694,7 +689,7 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         }
 
         protected void onPostExecute(String result) {
-            finish();
+
         }
 
         protected void onCancelled() {
@@ -731,8 +726,14 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
 
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-                                    animationView.setVisibility(View.GONE);
-                                    lin_careAll.setVisibility(View.VISIBLE);
+//                                    animationView.setVisibility(View.GONE);
+//                                    lin_careAll.setVisibility(View.VISIBLE);
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            finish();
+                                        }
+                                    },1000);
 
                                 }
 
@@ -949,80 +950,6 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
-    public class CalSyncTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-            calQuery();
-            return null;
-
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
-
-
-    public void calQuery() {
-
-        Connection conn = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
-
-            while (calres.next()) {
-
-                schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
-                schedulename = calres.getString("수급자명");//계약수급자명
-                division = calres.getString("구분");//구분
-            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (schedule_date != null) {
-
-                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
-                        divisiondate = schedule_date + "일";
-                        divisiontime = scheduletime + "(" + contracttime + ")";
-
-                        Schedule_dialog schedule_dialog = new Schedule_dialog(VisitingActivity.this);
-
-                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
-
-                    } else if (schedule_date == null) {
-                        Toast.makeText(VisitingActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-                }
-            });
-
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -1053,59 +980,4 @@ public class VisitingActivity extends AppCompatActivity implements View.OnClickL
 
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(VisitingActivity.this, MenuMain.class);
-                startActivity(intent);
-                break;
-            case R.id.action_notice:
-                Intent intent1 = new Intent(VisitingActivity.this, CustomerServiceActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_serviceEdit:
-                Intent i5 = new Intent(VisitingActivity.this, EditRecipientActivity.class);
-                i5.putExtra("route", "edit");
-                startActivity(i5);
-                break;
-            case R.id.action_sign:
-                Intent i8 = new Intent(VisitingActivity.this, signActivity.class);
-                i8.putExtra("route", "Recipi");
-                startActivity(i8);
-                break;
-
-
-            case R.id.action_cal:
-                final Calendar cal = Calendar.getInstance();
-                Log.e(TAG, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG, cal.get(Calendar.DATE) + "");
-                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-                DatePickerDialog dialog = new DatePickerDialog(VisitingActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        date1 = String.format("%d-%02d-%02d", year, month + 1, date);
-                        date2 = date1;
-                        cTask = new CalSyncTask().execute();
-
-                    }
-                }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-                dialog.show();
-
-                break;
-
-
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 }

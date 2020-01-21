@@ -1,27 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-
-
-    <item
-        android:id="@+id/action_serviceEdit"
-        android:title="어르신 정보수정"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_sign"
-        android:title="어르신 서명"
-        app:showAsAction="never"/>
-
-    <item
-        android:id="@+id/action_notice"
-        android:title="고객센터"
-        app:showAsAction="never"/>
-
     <item
         android:id="@+id/action_cal"
         android:icon="@drawable/cal"
         android:title="일정관리"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/action_notice"
+        android:title="고객센터"
+        android:icon="@drawable/ic_notifications_white_24dp"
+        android:actionLayout="@layout/noti_layout"
         app:showAsAction="always"/>
 
 </menu>
