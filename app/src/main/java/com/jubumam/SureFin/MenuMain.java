@@ -1,13 +1,10 @@
 package com.jubumam.SureFin;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.DefaultDatabaseErrorHandler;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -15,8 +12,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Base64;
 import android.util.Log;
+import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,8 +22,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewAnimator;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,7 +58,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 
+
 public class MenuMain extends BaseActivity {
+
 //    private String gender;      //성별
 //    private String birth;       //생년원일
 //    private String pastdisease;      //과거병력
@@ -180,6 +181,8 @@ public class MenuMain extends BaseActivity {
         stime = commuteRecipient.getStartTime();
 
 
+
+
         currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String month = sdf.format(currentTime);
@@ -187,6 +190,8 @@ public class MenuMain extends BaseActivity {
         thisYear = new SimpleDateFormat("yyyy").format(currentTime);
         startMon = month + "-" + "01";
         endMon = month + "-" + "32";
+
+    //   Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
 
         n1 = findViewById(R.id.n1);
@@ -214,6 +219,8 @@ public class MenuMain extends BaseActivity {
         tv_startWork.setText(stime);
 
 
+
+
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -224,7 +231,7 @@ public class MenuMain extends BaseActivity {
 
         dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
-        // mTask = new BannerTask().execute();
+
 
         init();
 
@@ -234,6 +241,7 @@ public class MenuMain extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
+             //   i1.putExtra("vistime",vistime);
                 startActivity(i1);
             }
         });
@@ -249,6 +257,7 @@ public class MenuMain extends BaseActivity {
             public void onClick(View v) {
                 Intent i3 = new Intent(MenuMain.this, VistingNurse.class);
                 startActivity(i3);
+
             }
         });
 
@@ -270,10 +279,12 @@ public class MenuMain extends BaseActivity {
         });
 
 
+
         n1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
+            //
                 startActivity(i1);
 
             }
@@ -310,6 +321,7 @@ public class MenuMain extends BaseActivity {
             @Override
             public void onClick(View v) {
 
+
                 Intent i6 = new Intent(MenuMain.this, Non_Payment_Item.class);
                 startActivity(i6);
             }
@@ -324,14 +336,12 @@ public class MenuMain extends BaseActivity {
             }
         });
 
-
         btn_offwork = (Button) findViewById(R.id.btn_offwork);
         btn_offwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
-
 
             }
         });
@@ -342,6 +352,7 @@ public class MenuMain extends BaseActivity {
             } else {
                 Log.d(TAG, "권한 설정 요청");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+
             }
         }
     }
@@ -395,8 +406,8 @@ public class MenuMain extends BaseActivity {
                         s3 = nowDate;
                         ymd1 = ymd.format(date);
                         hms1 = hms.format(date);
-
                         ttime = hm.format(date);
+
 
                     } catch (Exception e) {
 
@@ -502,6 +513,7 @@ public class MenuMain extends BaseActivity {
             mImageView1.setImageBitmap(imageModelArrayList.get(position).getImageBitmap());
             view.addView(imageLayout, 0);
             return imageLayout;
+
         }
 
         @Override
@@ -531,11 +543,16 @@ public class MenuMain extends BaseActivity {
                 return (null);
             recipiquery();
 
-
             return null;
         }
 
         protected void onPostExecute(String result) {
+
+            Intent intent = new Intent(MenuMain.this,VisitingActivity.class);
+            intent.putExtra("vistime",vistime);
+
+
+            Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
         }
 
 
@@ -568,6 +585,82 @@ public class MenuMain extends BaseActivity {
         }
     }
 
+
+
+    public class CalSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            calQuery();
+
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+
+    public void calQuery() {
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
+
+            while (calres.next()) {
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division = calres.getString("구분");//구분
+
+            }
+
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+                    if (schedule_date != null) {
+
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(MenuMain.this);
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
+                    } else if (schedule_date == null) {
+                        Toast.makeText(MenuMain.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 
 
 
@@ -647,11 +740,13 @@ public class MenuMain extends BaseActivity {
                     intNursingTotal = Integer.parseInt(nursingTotal) + intNursingTotal;
                     intNursingCount++;
                 }
+
             }
 
             ResultSet nonpayRS = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (nonpayRS.next()) {
                 nosupport++;
+
             }
 
             //배너이미지
@@ -682,7 +777,7 @@ public class MenuMain extends BaseActivity {
                     strTmin = String.format("%02d", tmin);
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
-
+               //     Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;
@@ -707,7 +802,6 @@ public class MenuMain extends BaseActivity {
                     mPager.setAdapter(new MyPagerAdapter(MenuMain.this, imageModelArrayList));
                     indicator.setViewPager(mPager);
 
-
                 }
             });
             connection.close();
@@ -726,6 +820,8 @@ public class MenuMain extends BaseActivity {
     protected void onPause() {
         swipeTimer.cancel();
         super.onPause();
+
     }
+
 
 }

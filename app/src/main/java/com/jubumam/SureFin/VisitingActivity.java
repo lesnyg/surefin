@@ -224,18 +224,21 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
         activateToolbar();
 
-
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
 
+     //   Intent intent = getIntent();
+      //  vistime = intent.getExtras().getFloat("vistime");
+        Toast.makeText(VisitingActivity.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
         tv_date = findViewById(R.id.tv_date);
 
         TextView tv_information = findViewById(R.id.tv_information);
         Date currentTime = new Date();
         tv_information.setText(name + "님");
+
 
         String today = new SimpleDateFormat("yyyy.MM.dd").format(currentTime);
         thisYear = new SimpleDateFormat("yyyy").format(currentTime);
@@ -388,8 +391,6 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
                         //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
                         diff = endtimes.getTime() - starttimes.getTime();
-
-
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }

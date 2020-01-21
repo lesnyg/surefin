@@ -27,6 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.IntentCompat;
 
 import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
@@ -408,7 +409,6 @@ public class RecipientDetailActivity extends BaseActivity {
                     Intent ica = new Intent(RecipientDetailActivity.this, MenuMain.class);
                     startActivity(ica);
 
-
 /*
                     if (bitmap != null) {
 
@@ -436,7 +436,6 @@ public class RecipientDetailActivity extends BaseActivity {
 
 
                     }*/
-
                 }
 
                 break;
@@ -448,9 +447,103 @@ public class RecipientDetailActivity extends BaseActivity {
         baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);    //bitmap compress
         imageBytes = baos.toByteArray();
-
-
     }*/
+
+    public class CalSyncTask extends AsyncTask<String, String, String> {
+
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+
+            calQuery();
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+
+    public void calQuery() {
+
+        Connection conn = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = conn.createStatement();
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
+
+            while (calres.next()) {
+
+
+                schedule_date = calres.getString("일자");//일자
+                scheduletime = calres.getString("근무시간");//근무시간
+                contracttime = calres.getString("계약시간"); //계약시간
+                schedulename = calres.getString("수급자명");//계약수급자명
+                division = calres.getString("구분");//구분
+
+            }
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+
+
+                    if (schedule_date != null) {
+                        //              divisiontotal = "어르신 : " + schedulename+"  "
+                        //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
+//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
+                        //                      cal_txt1.setText("어르신:" + schedulename);
+
+
+                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
+                        divisiondate = schedule_date + "일";
+                        divisiontime = scheduletime + "(" + contracttime + ")";
+
+
+                        Schedule_dialog schedule_dialog = new Schedule_dialog(RecipientDetailActivity.this);
+
+                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
+
+         /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setTitle("일정관리");
+                        builder.setPositiveButton(divisiontotal,
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
+                                    }
+
+                                });
+                        builder.show();*/
+                    } else if (schedule_date == null) {
+                        Toast.makeText(RecipientDetailActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+            });
+
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
 
     public class MySyncTask extends AsyncTask<String, String, String> {
