@@ -1,14 +1,20 @@
 package com.jubumam.SureFin;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
@@ -16,11 +22,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-public class CustomerServiceActivity extends AppCompatActivity {
+public class CustomerServiceActivity extends BaseActivity {
 
+    //수급자 요양사 정보
     private String name;        //이름
     private String gender;      //성별
     private String birth;       //생년원일
@@ -28,30 +41,33 @@ public class CustomerServiceActivity extends AppCompatActivity {
     private String pastdisease;      //과거병력
     private String responsibility;      //직원명
 
+
+    //리사이클러뷰
     private RecyclerView recyclerView;
     private List<Notice> list;
+
+    //공지사항
+    private AsyncTask<String, String, String> mTask;
+    private String date;
+    private String writer;
+    private String title;
+    private String contents;
+    private NoticeAdapter adapter;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_service);
 
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        // Get the ActionBar here to configure the way it behaves.
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
-        actionBar.setDisplayShowTitleEnabled(false);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+        activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
 
-
+        mTask = new MySyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,22 +84,91 @@ public class CustomerServiceActivity extends AppCompatActivity {
                 }
             }
         });
+        findViewById(R.id.btn_question).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CustomerServiceActivity.this,QuestionActivity.class));
+            }
+        });
+        findViewById(R.id.btn_answer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CustomerServiceActivity.this,AnswerActivity.class));
+            }
+        });
 
-        list = new ArrayList<>();
-
-        list.add(new Notice("암브로시아 요양서비스 오픈 축하1","2019.12.02","내용내용내용"));
-        list.add(new Notice("암브로시아 요양서비스 오픈 축하2","2019.12.02","내용내용내용"));
-        list.add(new Notice("암브로시아 요양서비스 오픈 축하3","2019.12.02","내용내용내용"));
-        list.add(new Notice("암브로시아 요양서비스 오픈 축하4","2019.12.02","내용내용내용"));
-        list.add(new Notice("암브로시아 요양서비스 오픈 축하5","2019.12.02","내용내용내용"));
 
         recyclerView = findViewById(R.id.recyclerview_notice);
-        NoticeAdapter adapter = new NoticeAdapter();
-        adapter.setItems(list);
-        recyclerView.setAdapter(adapter);
+
+
 
 
     }
+
+    public class MySyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+
+            listQuery();
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+    private void listQuery() {
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Statement statement = connection.createStatement();
+            ResultSet resultSetlist = statement.executeQuery("select * from Su_공지사항 order by id desc");
+            final List<Notice> list = new ArrayList<>();
+            while (resultSetlist.next()) {
+                id = resultSetlist.getInt("id");
+                date = resultSetlist.getString("일자");
+                writer = resultSetlist.getString("작성자");
+                title = resultSetlist.getString("제목");
+                contents = resultSetlist.getString("내용");
+
+                list.add(new Notice(id,date,writer,title,contents));
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    adapter = new NoticeAdapter(new NoticeAdapter.NoticeListener() {
+                        @Override
+                        public void setNoticeListener(Notice model) {
+                            Intent intent = new Intent(CustomerServiceActivity.this,NoticeActivity.class);
+                            intent.putExtra("id",model.getId());
+                            startActivity(intent);
+                        }
+                    });
+                    adapter.setItems(list);
+                    recyclerView.setAdapter(adapter);
+                }
+            });
+            connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+
 
     private static class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeHolder> {
         interface NoticeListener {
@@ -91,6 +176,9 @@ public class CustomerServiceActivity extends AppCompatActivity {
         }
 
         private NoticeListener mListener;
+        private void setOnRecipientClickListener(NoticeListener listener) {
+            mListener = listener;
+        }
 
         private List<Notice> mItems = new ArrayList<>();
 
@@ -112,23 +200,25 @@ public class CustomerServiceActivity extends AppCompatActivity {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_notice, parent, false);
             final NoticeHolder viewHolder = new NoticeHolder(view);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        final Notice item = mItems.get(viewHolder.getAdapterPosition());
-                        mListener.setNoticeListener(item);
-                    }
-                }
-            });
+
+
             return viewHolder;
         }
 
         @Override
-        public void onBindViewHolder(@NonNull NoticeHolder holder, int position) {
+        public void onBindViewHolder(@NonNull final NoticeHolder holder, int position) {
             Notice item = mItems.get(position);
             holder.tv_title.setText(item.getTitle());
             holder.tv_date.setText(item.getDate());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        final Notice item = mItems.get(holder.getAdapterPosition());
+                        mListener.setNoticeListener(item);
+                    }
+                }
+            });
         }
 
         @Override
@@ -149,37 +239,5 @@ public class CustomerServiceActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                Intent intent = new Intent(CustomerServiceActivity.this, MenuMain.class);
-                startActivity(intent);
-                break;
-            case R.id.action_notice:
-                Intent intent1 = new Intent(CustomerServiceActivity.this, CustomerServiceActivity.class);
-                startActivity(intent1);
-                break;
-            case R.id.action_serviceEdit:
-                Intent i5 = new Intent(CustomerServiceActivity.this, EditRecipientActivity.class);
-                i5.putExtra("route", "edit");
-                startActivity(i5);
-                break;
-            case R.id.action_sign:
-                Intent i8 = new Intent(CustomerServiceActivity.this, signActivity.class);
-                i8.putExtra("route","Recipi");
-                startActivity(i8);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-
-
-    }
 }
 

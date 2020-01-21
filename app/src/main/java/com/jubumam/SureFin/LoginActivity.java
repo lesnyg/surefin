@@ -19,11 +19,11 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 
-public class login extends Activity {
+public class LoginActivity extends Activity {
 
     Button btn1;
     EditText txthp;
-    private String hp,name,hp1,pass1;
+    String hp,name,hp1,pass1;
     String PhoneNum;
     private AsyncTask<String,String,String> mTask;
     String lastChar = "";
@@ -37,7 +37,7 @@ public class login extends Activity {
         StrictMode.setThreadPolicy(policy);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.activity_login);
 /*
         try{
             TelephonyManager telManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -94,7 +94,7 @@ public class login extends Activity {
                pass = txt_pass.getText().toString();
 
 
-                //Toast.makeText(login.this,PhoneNum,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(LoginActivity.this,PhoneNum,Toast.LENGTH_SHORT).show();
 
 
 
@@ -125,10 +125,11 @@ public class login extends Activity {
 
                 try {
                     if (hp.equals(hp1)) {
+                        new Login(hp,name);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("caregiverPhone",hp);
                         intent.putExtra("responsibility",name);
-                        intent.putExtra("route","login");
+                        intent.putExtra("route","LoginActivity");
                         startActivity(intent);
                         finish();
 

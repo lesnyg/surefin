@@ -1,14 +1,34 @@
 package com.jubumam.SureFin;
 
 public class Notice {
-    private String title;
+    private int id;
     private String date;
+    private String writer;
+    private String title;
     private String contents;
 
-    public Notice(String title, String date, String contents) {
-        this.title = title;
+    public Notice(int id,String date, String writer, String title, String contents) {
+        this.id = id;
         this.date = date;
+        this.writer = writer;
+        this.title = title;
         this.contents = contents;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
     }
 
     public String getTitle() {
