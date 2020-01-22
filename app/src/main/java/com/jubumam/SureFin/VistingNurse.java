@@ -370,10 +370,12 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date startTime = new Date();
-                strStartTime = timeformatter.format(startTime);
-                btn_start.setText(strStartTime);
-                tv_startTime.setText(strStartTime);
+                if(btn_start.getText().equals("시작")) {
+                    Date startTime = new Date();
+                    strStartTime = timeformatter.format(startTime);
+                    btn_start.setText(strStartTime);
+                    tv_startTime.setText(strStartTime);
+                }
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {

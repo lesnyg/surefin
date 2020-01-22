@@ -305,11 +305,12 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date startTime = new Date();
-                strStartTime = timeformatter.format(startTime);
-                btn_start.setText(strStartTime);
-                tv_startTime.setText(strStartTime);
-
+                if(btn_start.getText().equals("시작")) {
+                    Date startTime = new Date();
+                    strStartTime = timeformatter.format(startTime);
+                    btn_start.setText(strStartTime);
+                    tv_startTime.setText(strStartTime);
+                }
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {
@@ -322,8 +323,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                     lin_bathAfter.setVisibility(View.VISIBLE);
                     Date endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
-                    btn_end.setText(strEndTime);
-                    tv_endTime.setText(strEndTime);
+
                     try {
                         Date endtimes = timeformatter.parse(strEndTime);
                         Date starttimes = timeformatter.parse(strStartTime);
@@ -334,27 +334,40 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                         e.printStackTrace();
                     }
 
-                    if (tv_time.getText().equals("")) {
+                    if((diff / (60 * 1000)) < 60) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                        builder.setTitle("시간확인").setMessage("계약한 60분이 지나지 않았습니다.");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+
+                    }else{
+                        btn_end.setText(strEndTime);
+                        tv_endTime.setText(strEndTime);
                         usingTime = Long.toString(diff / (60 * 1000));
-//                        usingTime = utctime.format(diff);
-
                         tv_time.setText(usingTime);
-                    } else {
-                        try {
-                            totalnumber = tv_time.getText().toString();
-                            Date s1 = timeformatter.parse(totalnumber);
-                            tdiff = diff + s1.getTime();
-                            usingTime = Long.toString(diff / (60 * 1000));
-                            tv_time.setText(usingTime);
-//                            usingTime = utctime.format(diff);
-
-
-                        } catch (Exception e) {
-
-
-                        }
-
                     }
+
+//                    if (tv_time.getText().equals("")) {
+//                        usingTime = Long.toString(diff / (60 * 1000));
+////                        usingTime = utctime.format(diff);
+//
+//                        tv_time.setText(usingTime);
+//                    } else {
+//                        try {
+//                            totalnumber = tv_time.getText().toString();
+//                            Date s1 = timeformatter.parse(totalnumber);
+//                            tdiff = diff + s1.getTime();
+//                            usingTime = Long.toString(diff / (60 * 1000));
+//                            tv_time.setText(usingTime);
+////                            usingTime = utctime.format(diff);
+//
+//
+//                        } catch (Exception e) {
+//
+//
+//                        }
+//
+//                    }
 
                 }
             }
@@ -792,11 +805,11 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             ResultSet bathResultSet = statement.executeQuery("insert into Su_방문목욕정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호," +
                     "시작시간,종료시간,총시간,차량이용,차량번호,차량미이용,제공방법,목욕전배뇨배변,목욕전욕창,목욕전얼굴색피부색," +
                     "목욕후얼굴색피부색,목욕후몸단장,목욕후주변정리,특이사항,금액," +
-                    "지점,담당,기본시간,급여,주요질환,구분,성별,목욕여부,디비체크,번호)" +
+                    "지점,담당,기본시간,급여,주요질환,구분,성별,목욕여부,디비체크,번호,이용금액)" +
                     "VALUES('" + strDate + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "','" + birth + "','" + acceptnumber + "'," +
                     "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + strCar + "','" + carNumber + "','" + strNoCar + "','" + providing + "','" + beforeCK01 + "','" + beforeCK02 + "','" + beforeCK03 + "'," +
                     "'" + afterCK01 + "','" + afterCK02 + "','" + afterCK03 + "','" + etc + "','" + nonPayment + "'," +
-                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "')");
+                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "','"+price+"')");
 //                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
 //                    "시작시간,종료시간,총시간,방문종류구분,디비체크)" +
 //                    "values('" + strDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "','" + organization + "','" + organizationId + "'," +

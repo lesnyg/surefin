@@ -221,7 +221,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private Date startTime;
     private Date endTime;
     private int extraTime;
-    private float todayMoney;
+    private int todayMoney;
 
 
     @Override
@@ -372,21 +372,22 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTime = new Date();
-                strStartTime = timeformatter.format(startTime);
-                long lgStartTime = startTime.getTime();
-                btn_start.setText(strStartTime);
-                tv_startTime.setText(strStartTime);
-                extraTime = Integer.parseInt(extratimeformatter.format(startTime));
-                if( extraTime>= 1800 && extraTime <2200){
-                    todayMoney = (float) (hourmoney*1.2);
-                }else if( extraTime>= 2200 || extraTime < 600){
-                    todayMoney = (float) (hourmoney*1.3);
-                }else{
-                    todayMoney = (float)hourmoney;
+                if(btn_start.getText().equals("시작")) {
+                    startTime = new Date();
+                    strStartTime = timeformatter.format(startTime);
+                    long lgStartTime = startTime.getTime();
+                    btn_start.setText(strStartTime);
+                    tv_startTime.setText(strStartTime);
+                    extraTime = Integer.parseInt(extratimeformatter.format(startTime));
+                    if (extraTime >= 1800 && extraTime < 2200) {
+                        todayMoney = (int) (hourmoney * 1.2);
+                    } else if (extraTime >= 2200 || extraTime < 600) {
+                        todayMoney = (int) (hourmoney * 1.3);
+                    } else {
+                        todayMoney =  hourmoney;
+                    }
+                    tv_price.setText(new DecimalFormat("###,###").format(todayMoney) + "원");
                 }
-                tv_price.setText(new DecimalFormat("###,###").format(todayMoney) + "원");
-
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {
@@ -398,10 +399,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else {
+
                     endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
-                    btn_end.setText(strEndTime);
-                    tv_endTime.setText(strEndTime);
+
                     try {
                         Date endtimes = timeformatter.parse(strEndTime);
                         Date starttimes = timeformatter.parse(strStartTime);
@@ -413,24 +414,35 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
+                    if((diff / (60 * 1000)) < batime) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+                        builder.setTitle("시간확인").setMessage("계약한 "+batime+"분이 지나지 않았습니다.");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
 
-                    if (tv_time.getText().equals("")) {
+                    }else{
+                        btn_end.setText(strEndTime);
+                        tv_endTime.setText(strEndTime);
                         totalUsingTime = Long.toString(diff / (60 * 1000));
                         tv_time.setText(totalUsingTime);
-                    } else {
-                        try {
-                            totalnumber = tv_time.getText().toString();
-                            Date s1 = timeformatter.parse(totalnumber);
-                            tdiff = diff + s1.getTime();
-                            totalUsingTime = Long.toString(diff / (60 * 1000));
-                            tv_time.setText(totalUsingTime);
-
-
-                        } catch (Exception e) {
-
-                        }
-
                     }
+//                    if (tv_time.getText().equals("")) {
+//                        totalUsingTime = Long.toString(diff / (60 * 1000));
+//                        tv_time.setText(totalUsingTime);
+//                    } else {
+//                        try {
+//                            totalnumber = tv_time.getText().toString();
+//                            Date s1 = timeformatter.parse(totalnumber);
+//                            tdiff = diff + s1.getTime();
+//                            totalUsingTime = Long.toString(diff / (60 * 1000));
+//                            tv_time.setText(totalUsingTime);
+//
+//
+//                        } catch (Exception e) {
+//
+//                        }
+//
+//                    }
                 }
             }
         });
