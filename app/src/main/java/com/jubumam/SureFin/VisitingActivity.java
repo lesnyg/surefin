@@ -137,6 +137,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private String cognitive;
     private String uniqueness;
     private SimpleDateFormat timeformatter;
+    private SimpleDateFormat extratimeformatter;
     private SimpleDateFormat formatter;
     private long diff;
     private long tdiff;
@@ -217,6 +218,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
     private AsyncTask<String, String, String> cTask;
     private TextView tv_price;
+    private Date startTime;
+    private Date endTime;
+    private int extraTime;
+    private float todayMoney;
 
 
     @Override
@@ -346,6 +351,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
         formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
         timeformatter = new SimpleDateFormat("HH:mm", Locale.KOREA);
+        extratimeformatter = new SimpleDateFormat("HHmm", Locale.KOREA);
         date = new Date();
         currentDate = formatter.format(date);
 //        formatterScreen = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
@@ -366,10 +372,21 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Date startTime = new Date();
+                startTime = new Date();
                 strStartTime = timeformatter.format(startTime);
+                long lgStartTime = startTime.getTime();
                 btn_start.setText(strStartTime);
                 tv_startTime.setText(strStartTime);
+                extraTime = Integer.parseInt(extratimeformatter.format(startTime));
+                if( extraTime>= 1800 && extraTime <2200){
+                    todayMoney = (float) (hourmoney*1.2);
+                }else if( extraTime>= 2200 || extraTime < 600){
+                    todayMoney = (float) (hourmoney*1.3);
+                }else{
+                    todayMoney = (float)hourmoney;
+                }
+                tv_price.setText(new DecimalFormat("###,###").format(todayMoney) + "원");
+
             }
         });
         btn_end.setOnClickListener(new View.OnClickListener() {
@@ -381,7 +398,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else {
-                    Date endTime = new Date();
+                    endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
                     btn_end.setText(strEndTime);
                     tv_endTime.setText(strEndTime);
@@ -428,74 +445,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     alertDialog.show();
                 } else {
 
-                    if (ck_bodyactiv1.isChecked()) {
-                        bodyactiv1 = "True";
-                    } else {
-                        bodyactiv1 = "False";
-                    }
-                    if (ck_bodyactiv2.isChecked()) {
-                        bodyactiv2 = "True";
-                    } else {
-                        bodyactiv2 = "False";
-                    }
-                    if (ck_bodyactiv3.isChecked()) {
-                        bodyactiv3 = "True";
-                    } else {
-                        bodyactiv3 = "False";
-                    }
-                    if (ck_bodyactiv4.isChecked()) {
-                        bodyactiv4 = "True";
-                    } else {
-                        bodyactiv4 = "False";
-                    }
-                    if (ck_bodyactiv5.isChecked()) {
-                        bodyactiv5 = "True";
-                    } else {
-                        bodyactiv5 = "False";
-                    }
-                    if (ck_bodyactiv6.isChecked()) {
-                        bodyactiv6 = "True";
-                    } else {
-                        bodyactiv6 = "False";
-                    }
-                    if (ck_housework1.isChecked()) {
-                        housework1 = "True";
-                    } else {
-                        housework1 = "False";
-                    }
-                    if (ck_housework2.isChecked()) {
-                        housework2 = "True";
-                    } else {
-                        housework2 = "False";
-                    }
-
-
-                    usingTime = tv_number.getText().toString();
-                    usingTime1_1 = tv_number1_1.getText().toString();
-                    usingTime1 = tv_number1.getText().toString();
-                    usingTime2 = tv_number2.getText().toString();
-                    usingTime3 = tv_number3.getText().toString();
-
-                    if (usingTime.equals("")) {
-                        usingTime = "0";
-                    }
-
-                    if (usingTime1.equals("")) {
-                        usingTime1 = "0";
-                    }
-
-                    if (usingTime1_1.equals("")) {
-                        usingTime1_1 = "0";
-                    }
-
-                    if (usingTime2.equals("")) {
-                        usingTime2 = "0";
-                    }
-
-                    if (usingTime3.equals("")) {
-                        usingTime3 = "0";
-                    }
-
+                    checkQuery();
 
                     add_total = 1;
                     add_time = 20;
@@ -588,6 +538,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                                     dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
 
 
+
                                     if (dateCheck != null && dateCheck.equals(currentDate)) {
                                         AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
                                         builder2.setTitle("방문요양");
@@ -598,7 +549,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                                                     public void onClick(DialogInterface dialog, int which) {
                                                         number++;
                                                         mTask = new MySyncTask().execute();
-                                                        dbCheckSyncTask = new DbCheckSyncTask().execute();
+
                                                     }
                                                 });
                                         builder2.setNegativeButton("아니오",
@@ -632,6 +583,76 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         });
 
     }
+
+    private void checkQuery() {
+        if (ck_bodyactiv1.isChecked()) {
+            bodyactiv1 = "True";
+        } else {
+            bodyactiv1 = "False";
+        }
+        if (ck_bodyactiv2.isChecked()) {
+            bodyactiv2 = "True";
+        } else {
+            bodyactiv2 = "False";
+        }
+        if (ck_bodyactiv3.isChecked()) {
+            bodyactiv3 = "True";
+        } else {
+            bodyactiv3 = "False";
+        }
+        if (ck_bodyactiv4.isChecked()) {
+            bodyactiv4 = "True";
+        } else {
+            bodyactiv4 = "False";
+        }
+        if (ck_bodyactiv5.isChecked()) {
+            bodyactiv5 = "True";
+        } else {
+            bodyactiv5 = "False";
+        }
+        if (ck_bodyactiv6.isChecked()) {
+            bodyactiv6 = "True";
+        } else {
+            bodyactiv6 = "False";
+        }
+        if (ck_housework1.isChecked()) {
+            housework1 = "True";
+        } else {
+            housework1 = "False";
+        }
+        if (ck_housework2.isChecked()) {
+            housework2 = "True";
+        } else {
+            housework2 = "False";
+        }
+
+        usingTime = tv_number.getText().toString();
+        usingTime1_1 = tv_number1_1.getText().toString();
+        usingTime1 = tv_number1.getText().toString();
+        usingTime2 = tv_number2.getText().toString();
+        usingTime3 = tv_number3.getText().toString();
+
+        if (usingTime.equals("")) {
+            usingTime = "0";
+        }
+
+        if (usingTime1.equals("")) {
+            usingTime1 = "0";
+        }
+
+        if (usingTime1_1.equals("")) {
+            usingTime1_1 = "0";
+        }
+
+        if (usingTime2.equals("")) {
+            usingTime2 = "0";
+        }
+
+        if (usingTime3.equals("")) {
+            usingTime3 = "0";
+        }
+    }
+
 
     public class DateSyncTask extends AsyncTask<String, String, String> {
         protected void onPreExecute() {
@@ -774,6 +795,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         }
 
         protected void onPostExecute(String result) {
+            dbCheckSyncTask = new DbCheckSyncTask().execute();
         }
 
 
@@ -904,7 +926,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     strSumtm = String.format("%02d", nmin);
                     tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
                     tv_price.setText(new DecimalFormat("###,###").format(hourmoney) + "원");
-                    //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
+                        //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
 
 
                 }
@@ -932,13 +954,13 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     "신체기능,식사기능,인지기능,대변횟수,소변횟수,특이사항," +
                     "신체활동지원,인지활동지원,정서활동지원,생활활동지원," +
                     "일상생활시간계,개인위생,몸씻기도움,식사도움,체위변경,이동도움,화장실이용,식사청소정리세탁,개인활동지원," +
-                    "디비체크,시작시간,종료시간,총시간,방문종류구분,번호) " +
+                    "디비체크,시작시간,종료시간,총시간,방문종류구분,번호,이용금액) " +
                     "values('" + currentDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "'," +
                     "'" + organization + "','" + organizationId + "','" + usingTime + "','" + usingTime1 + "','" + usingTime2 + "','" + usingTime3 + "'," +
                     "'" + body + "','" + meal + "','" + cognitive + "','" + mNumber4 + "','" + mNumber5 + "','" + uniqueness + "'," +
                     "'" + stime + "','" + stime1 + "','" + stime2 + "','" + stime3 + "'," +
                     "'" + usingTime1_1 + "','" + bodyactiv1 + "','" + bodyactiv2 + "','" + bodyactiv3 + "','" + bodyactiv4 + "','" + bodyactiv5 + "','" + bodyactiv6 + "','" + housework1 + "','" + housework2 + "'," +
-                    "'" + dbCheck + "','" + strStartTime + "','" + strEndTime + "','" + totaltime + "','요양','" + number + "')");
+                    "'" + dbCheck + "','" + strStartTime + "','" + strEndTime + "','" + totaltime + "','요양','" + number + "','"+todayMoney+"')");
 
 
             connection.close();
