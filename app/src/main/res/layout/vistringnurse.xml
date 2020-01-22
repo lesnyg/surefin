@@ -310,6 +310,24 @@
                             android:inputType="numberSigned"
                             android:gravity="center"
                             android:textSize="16dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginRight="2dp"
+                            android:layout_marginLeft="2dp"
+                            android:gravity="right"
+                            android:text="/"
+                            android:textSize="20dp" />
+                        <EditText
+                            android:id="@+id/vtxt2_1"
+                            android:layout_width="0dp"
+                            android:layout_height="32dp"
+                            android:layout_weight="3"
+                            android:background="@drawable/edge"
+                            android:inputType="numberSigned"
+                            android:gravity="center"
+                            android:textSize="16dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -349,9 +367,10 @@
                             android:layout_height="32dp"
                             android:layout_weight="3"
                             android:background="@drawable/edge"
-                            android:inputType="numberSigned"
+                            android:inputType="phone"
                             android:gravity="center"
-                            android:textSize="16dp" />
+                            android:textSize="16dp"
+                            />
                     </LinearLayout>
 
                     <LinearLayout
@@ -657,7 +676,11 @@
                         android:layout_marginLeft="16dp"
                         android:layout_marginRight="16dp"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/edge" />
+                        android:background="@drawable/edge"
+                        android:gravity="top"
+                        android:inputType="text|textMultiLine"
+                        android:padding="4dp"
+                        android:minLines="2"/>
                 </LinearLayout>
 
                 <Button

@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -123,6 +125,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
     private String TAG = "PickerActivity";
     private TextView vtxt1;
     private TextView vtxt2;
+    private TextView vtxt2_1;
     private EditText vtxt3;
     private EditText vtxt4;
     private String date1;
@@ -138,7 +141,8 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
     private String usingTime;
     private String usingTime1;
     private String usingTime4;
-    private String bpressure;//혈압
+    private String bpressure;//최저혈압
+    private String bpressure1;//최고혈압
     private String pressure; //맥박
     private String btemperature;//체온
     private String uniqueness;//특이사항
@@ -163,6 +167,8 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
     private String division;//구분
     private String mhistory;//과거병력
     private String dateCheck;
+
+    private String lastChar = "";
 
     private TextView tv_startTime;
     private TextView tv_endTime;
@@ -264,6 +270,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
 
         vtxt1 = findViewById(R.id.vtxt1);
         vtxt2 = findViewById(R.id.vtxt2);
+        vtxt2_1 = findViewById(R.id.vtxt2_1);
         vtxt3 = findViewById(R.id.vtxt3);
         vtxt4 = findViewById(R.id.vtxt4);
 
@@ -300,6 +307,31 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         tv_rating1 = findViewById(R.id.tv_rating1);
 
         vtxt1.setText(formatterScreen.format(currentDate));
+
+        vtxt4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = vtxt4.getText().toString().length();
+                if (digits > 1)
+                    lastChar = vtxt4.getText().toString().substring(digits - 1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = vtxt4.getText().toString().length();
+                Log.d("LENGTH", "" + digits);
+                if (!lastChar.equals("-")) {
+                    if (digits == 2) {
+                        vtxt4.append(".");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         dateSyncTask = new DateSyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -348,7 +380,10 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 if (btn_start.getText().equals("시작")) {
-                    Toast.makeText(VistingNurse.this, "시작시간을 눌러주세요", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
+                    builder.setTitle("시작확인").setMessage("시작시간을 눌러주세요.");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 } else {
                     Date endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
@@ -377,158 +412,162 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
 
                         }
                     }
-                    btn_start.setText("시작");
-                    btn_end.setText("종료");
-
                 }
             }
         });
         vbtn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (btn_end.getText().equals("종료")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
+                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                } else {
+
+                    usingTime1 = v_time3.getText().toString();
+                    usingTime4 = v_time6.getText().toString();
+                    bpressure = vtxt2.getText().toString();
+                    bpressure1 = vtxt2_1.getText().toString();
+                    pressure = vtxt3.getText().toString();
+                    btemperature = vtxt4.getText().toString();
+                    uniqueness = et_etc.getText().toString();
+
+                    if (usingTime1.equals("")) {
+                        usingTime1 = "0";
+                    }
+
+                    if (usingTime4.equals("")) {
+                        usingTime4 = "0";
+                    }
+                    if (ck_nurse1.isChecked()) {
+                        ck_string1 = "True";
+                    } else {
+                        ck_string1 = "False";
+                    }
+                    if (ck_nurse2.isChecked()) {
+                        ck_string2 = "True";
+                    } else {
+                        ck_string2 = "False";
+                    }
+                    if (ck_nurse3.isChecked()) {
+                        ck_string3 = "True";
+                    } else {
+                        ck_string3 = "False";
+                    }
+                    if (ck_nurse4.isChecked()) {
+                        ck_string4 = "True";
+                    } else {
+                        ck_string4 = "False";
+                    }
+                    if (ck_nurse5.isChecked()) {
+                        ck_string5 = "True";
+                    } else {
+                        ck_string5 = "False";
+                    }
+                    if (ck_nurse6.isChecked()) {
+                        ck_string6 = "True";
+                    } else {
+                        ck_string6 = "False";
+                    }
+                    if (ck_nurse7.isChecked()) {
+                        ck_string7 = "True";
+                    } else {
+                        ck_string7 = "False";
+                    }
+                    if (ck_nurse8.isChecked()) {
+                        ck_string8 = "True";
+                    } else {
+                        ck_string8 = "False";
+                    }
+                    if (ck_nurse9.isChecked()) {
+                        ck_string9 = "True";
+                    } else {
+                        ck_string9 = "False";
+                    }
+                    if (ck_nurse10.isChecked()) {
+                        ck_string10 = "True";
+                    } else {
+                        ck_string10 = "False";
+                    }
+                    if (ck_nurse11.isChecked()) {
+                        ck_string11 = "True";
+                    } else {
+                        ck_string11 = "False";
+                    }
+                    if (ck_nurse12.isChecked()) {
+                        ck_string12 = "True";
+                    } else {
+                        ck_string12 = "False";
+                    }
+
+                    int totaltime;
+                    totaltime = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
+                    totime = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
+
+                    if (totime < 30) {
+                        ptime = "30분미만";
+                    } else if (totime >= 60) {
+                        ptime = "60분이상";
+                    } else if ((totime >= 30) && (totime < 60)) {
+                        ptime = "30분~60분미만";
+                    }
+
+                    int thour = totaltime / 60;
+                    int tmin = totaltime % 60;
+                    Date dbDate = new Date();
+                    dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
+
+                    tmoney = money - smoney;
+
+                    totaltime1 = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
+
+                    usingTime = Integer.toString(totaltime1);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
+                    builder.setTitle("내용전송");
+                    builder.setMessage("총시간" + usingTime + "분을 전송하시겠습니까?");
+                    builder.setPositiveButton("예",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
 
-                usingTime1 = v_time3.getText().toString();
-                usingTime4 = v_time6.getText().toString();
-                bpressure = vtxt2.getText().toString();
-                pressure = vtxt3.getText().toString();
-                btemperature = vtxt4.getText().toString();
-                uniqueness = et_etc.getText().toString();
+                                    if (dateCheck != null && dateCheck.equals(date1)) {
+                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(VistingNurse.this);
+                                        builder2.setTitle("방문간호");
+                                        builder2.setMessage("오늘 방문간호는 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                        builder2.setPositiveButton("예",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        number++;
+                                                        mTask = new MySyncTask().execute();
+                                                        dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                    }
+                                                });
+                                        builder2.setNegativeButton("아니오",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                        builder2.show();
+                                    } else {
+                                        number = 1;
+                                        mTask = new MySyncTask().execute();
+                                        dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                    }
 
-                if (usingTime1.equals("")) {
-                    usingTime1 = "0";
-                }
-
-                if (usingTime4.equals("")) {
-                    usingTime4 = "0";
-                }
-                if (ck_nurse1.isChecked()) {
-                    ck_string1 = "True";
-                } else {
-                    ck_string1 = "False";
-                }
-                if (ck_nurse2.isChecked()) {
-                    ck_string2 = "True";
-                } else {
-                    ck_string2 = "False";
-                }
-                if (ck_nurse3.isChecked()) {
-                    ck_string3 = "True";
-                } else {
-                    ck_string3 = "False";
-                }
-                if (ck_nurse4.isChecked()) {
-                    ck_string4 = "True";
-                } else {
-                    ck_string4 = "False";
-                }
-                if (ck_nurse5.isChecked()) {
-                    ck_string5 = "True";
-                } else {
-                    ck_string5 = "False";
-                }
-                if (ck_nurse6.isChecked()) {
-                    ck_string6 = "True";
-                } else {
-                    ck_string6 = "False";
-                }
-                if (ck_nurse7.isChecked()) {
-                    ck_string7 = "True";
-                } else {
-                    ck_string7 = "False";
-                }
-                if (ck_nurse8.isChecked()) {
-                    ck_string8 = "True";
-                } else {
-                    ck_string8 = "False";
-                }
-                if (ck_nurse9.isChecked()) {
-                    ck_string9 = "True";
-                } else {
-                    ck_string9 = "False";
-                }
-                if (ck_nurse10.isChecked()) {
-                    ck_string10 = "True";
-                } else {
-                    ck_string10 = "False";
-                }
-                if (ck_nurse11.isChecked()) {
-                    ck_string11 = "True";
-                } else {
-                    ck_string11 = "False";
-                }
-                if (ck_nurse12.isChecked()) {
-                    ck_string12 = "True";
-                } else {
-                    ck_string12 = "False";
-                }
-
-                int totaltime;
-                totaltime = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
-                totime = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
-
-                if (totime < 30) {
-                    ptime = "30분미만";
-                } else if (totime >= 60) {
-                    ptime = "60분이상";
-                } else if ((totime >= 30) && (totime < 60)) {
-                    ptime = "30분~60분미만";
-                }
-
-                int thour = totaltime / 60;
-                int tmin = totaltime % 60;
-                Date dbDate = new Date();
-                dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
-
-                tmoney = money - smoney;
-
-                totaltime1 = Integer.parseInt(usingTime1) + Integer.parseInt(usingTime4);
-
-                usingTime = Integer.toString(totaltime1);
-                AlertDialog.Builder builder = new AlertDialog.Builder(VistingNurse.this);
-                builder.setTitle("내용전송");
-                builder.setMessage("총시간" + usingTime + "분을 전송하시겠습니까?");
-                builder.setPositiveButton("예",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-
-                                if (dateCheck != null && dateCheck.equals(date1)) {
-                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(VistingNurse.this);
-                                    builder2.setTitle("방문간호");
-                                    builder2.setMessage("오늘 방문간호는 이미 진행되었습니다. 그래도 전송하시겠습니까?");
-                                    builder2.setPositiveButton("예",
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    number++;
-                                                    mTask = new MySyncTask().execute();
-                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
-                                                }
-                                            });
-                                    builder2.setNegativeButton("아니오",
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-                                    builder2.show();
-                                } else {
-                                    number = 1;
-                                    mTask = new MySyncTask().execute();
-                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
                                 }
 
-                            }
-
-                        });
-                builder.setNegativeButton("아니오",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                builder.show();
-                Toast.makeText(VistingNurse.this, ptime, Toast.LENGTH_LONG).show();
+                            });
+                    builder.setNegativeButton("아니오",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                }
+                            });
+                    builder.show();
+                    Toast.makeText(VistingNurse.this, ptime, Toast.LENGTH_LONG).show();
+                }
             }
         });
 
@@ -627,12 +666,12 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             Statement statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery("insert into Su_방문간호정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호,의료기관명칭,발급일자,유효기간," +
-                    "의사면허번호,방문횟수,시작시간,종료시간,총시간,혈압,맥박,체온," +
+                    "의사면허번호,방문횟수,시작시간,종료시간,총시간,혈압,혈압2,맥박,체온," +
                     "간호시간계,건강시간계,특이사항,금액,지점,담당,기본시간,급여" +
                     ",성별,구분,주요질환,욕창관리,영양관리,통증관리,배설관리,당뇨발관리,호흡기간호,투석간호,구강간호,관절오그라듦예방,투약관리,기초건강관리,인지훈련,총시간이름,디비체크,번호) " +
                     "values('" + date1 + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "'," +
                     "'" + birth + "','" + acceptnumber + "','" + agency + "','" + issuedate + "','" + edate + "','" + mlicense + "'," +
-                    "'" + vnumber + "','" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + bpressure + "','" + pressure + "'," + "'" + btemperature + "'," +
+                    "'" + vnumber + "','" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + bpressure + "','" + bpressure1 + "','" + pressure + "'," + "'" + btemperature + "'," +
                     "'" + usingTime1 + "','" + usingTime4 + "','" + uniqueness + "','" + smoney + "','" + place + "','" + responsibility + "','" + baseTime + "','" + tmoney + "','" + gender + "','" + division + "','" + mhistory + "'," +
                     "'" + ck_string1 + "','" + ck_string2 + "','" + ck_string3 + "','" + ck_string4 + "','" + ck_string5 + "','" + ck_string6 + "','" + ck_string7 + "','" + ck_string8 + "','" + ck_string9 + "','" + ck_string10 + "','" + ck_string11 + "','" + ck_string12 + "','" + ptime + "','" + dbCheck + "','" + number + "')");
 //                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
@@ -769,7 +808,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
                                         public void run() {
                                             finish();
                                         }
-                                    },1000);
+                                    }, 1000);
 
 
                                 }

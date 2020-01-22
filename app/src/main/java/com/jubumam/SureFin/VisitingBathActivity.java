@@ -356,8 +356,6 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
 
                     }
 
-                    btn_start.setText("시작");
-                    btn_end.setText("종료");
                 }
             }
         });
@@ -419,11 +417,12 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
 
             case R.id.btn_send:
-                if (strEndTime == null) {
-                    Toast.makeText(this, "종료시간을 눌러주세요", Toast.LENGTH_LONG).show();
+                if (btn_end.getText().equals("종료")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 } else {
-
-
                     if (ck_before01.isChecked()) {
                         beforeCK01 = "True";
                     } else {
@@ -459,12 +458,21 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                     rb_providing = findViewById(intProviding);
                     carNumber = et_carNumber.getText().toString();
                     if (strCar == null) {
-                        Toast.makeText(this, "차량이용방법을 입력해 주세요", Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                        builder.setTitle("차량이용방법").setMessage("차량이용방법을 선택해 주세요.");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
                     } else if (rb_providing == null) {
-                        Toast.makeText(this, "제공방법을 입력해 주세요", Toast.LENGTH_LONG).show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                        builder.setTitle("목욕제공방법").setMessage("제공방법을 선택해 주세요.");
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
                     } else {
                         if (aSwitch1.isChecked() && carNumber.equals("")) {
-                            Toast.makeText(this, "차번호를 입력해 주세요", Toast.LENGTH_LONG).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                            builder.setTitle("차량번호").setMessage("차량번호를 입력해 주세요.");
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
                         } else {
 
                             carNumber = et_carNumber.getText().toString();
@@ -626,7 +634,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                                         public void run() {
                                             finish();
                                         }
-                                    },1000);
+                                    }, 1000);
 
                                 }
 

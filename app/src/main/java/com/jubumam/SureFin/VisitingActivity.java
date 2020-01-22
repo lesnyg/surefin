@@ -376,7 +376,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 if (btn_start.getText().equals("시작")) {
-                    Toast.makeText(VisitingActivity.this, "시작시간을 눌러주세요", Toast.LENGTH_SHORT).show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+                    builder.setTitle("시작확인").setMessage("시작시간을 눌러주세요.");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 } else {
                     Date endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
@@ -411,14 +414,6 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                         }
 
                     }
-
-
-                    btn_start.setText("시작");
-                    btn_end.setText("종료");
-                    // usingTime = utctime.format(diff);
-
-                    // tv_time.setText(usingTime);
-
                 }
             }
         });
@@ -426,206 +421,213 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (ck_bodyactiv1.isChecked()) {
-                    bodyactiv1 = "True";
+                if (btn_end.getText().equals("종료")) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                 } else {
-                    bodyactiv1 = "False";
-                }
-                if (ck_bodyactiv2.isChecked()) {
-                    bodyactiv2 = "True";
-                } else {
-                    bodyactiv2 = "False";
-                }
-                if (ck_bodyactiv3.isChecked()) {
-                    bodyactiv3 = "True";
-                } else {
-                    bodyactiv3 = "False";
-                }
-                if (ck_bodyactiv4.isChecked()) {
-                    bodyactiv4 = "True";
-                } else {
-                    bodyactiv4 = "False";
-                }
-                if (ck_bodyactiv5.isChecked()) {
-                    bodyactiv5 = "True";
-                } else {
-                    bodyactiv5 = "False";
-                }
-                if (ck_bodyactiv6.isChecked()) {
-                    bodyactiv6 = "True";
-                } else {
-                    bodyactiv6 = "False";
-                }
-                if (ck_housework1.isChecked()) {
-                    housework1 = "True";
-                } else {
-                    housework1 = "False";
-                }
-                if (ck_housework2.isChecked()) {
-                    housework2 = "True";
-                } else {
-                    housework2 = "False";
-                }
+
+                    if (ck_bodyactiv1.isChecked()) {
+                        bodyactiv1 = "True";
+                    } else {
+                        bodyactiv1 = "False";
+                    }
+                    if (ck_bodyactiv2.isChecked()) {
+                        bodyactiv2 = "True";
+                    } else {
+                        bodyactiv2 = "False";
+                    }
+                    if (ck_bodyactiv3.isChecked()) {
+                        bodyactiv3 = "True";
+                    } else {
+                        bodyactiv3 = "False";
+                    }
+                    if (ck_bodyactiv4.isChecked()) {
+                        bodyactiv4 = "True";
+                    } else {
+                        bodyactiv4 = "False";
+                    }
+                    if (ck_bodyactiv5.isChecked()) {
+                        bodyactiv5 = "True";
+                    } else {
+                        bodyactiv5 = "False";
+                    }
+                    if (ck_bodyactiv6.isChecked()) {
+                        bodyactiv6 = "True";
+                    } else {
+                        bodyactiv6 = "False";
+                    }
+                    if (ck_housework1.isChecked()) {
+                        housework1 = "True";
+                    } else {
+                        housework1 = "False";
+                    }
+                    if (ck_housework2.isChecked()) {
+                        housework2 = "True";
+                    } else {
+                        housework2 = "False";
+                    }
 
 
-                usingTime = tv_number.getText().toString();
-                usingTime1_1 = tv_number1_1.getText().toString();
-                usingTime1 = tv_number1.getText().toString();
-                usingTime2 = tv_number2.getText().toString();
-                usingTime3 = tv_number3.getText().toString();
+                    usingTime = tv_number.getText().toString();
+                    usingTime1_1 = tv_number1_1.getText().toString();
+                    usingTime1 = tv_number1.getText().toString();
+                    usingTime2 = tv_number2.getText().toString();
+                    usingTime3 = tv_number3.getText().toString();
 
-                if (usingTime.equals("")) {
-                    usingTime = "0";
-                }
+                    if (usingTime.equals("")) {
+                        usingTime = "0";
+                    }
 
-                if (usingTime1.equals("")) {
-                    usingTime1 = "0";
-                }
+                    if (usingTime1.equals("")) {
+                        usingTime1 = "0";
+                    }
 
-                if (usingTime1_1.equals("")) {
-                    usingTime1_1 = "0";
-                }
+                    if (usingTime1_1.equals("")) {
+                        usingTime1_1 = "0";
+                    }
 
-                if (usingTime2.equals("")) {
-                    usingTime2 = "0";
-                }
+                    if (usingTime2.equals("")) {
+                        usingTime2 = "0";
+                    }
 
-                if (usingTime3.equals("")) {
-                    usingTime3 = "0";
-                }
+                    if (usingTime3.equals("")) {
+                        usingTime3 = "0";
+                    }
 
 
-                add_total = 1;
-                add_time = 20;
-                add_offertime = 4;
-                String rst = "1";
+                    add_total = 1;
+                    add_time = 20;
+                    add_offertime = 4;
+                    String rst = "1";
 
-                int rint = Integer.parseInt(rst);
-                double torf = rint * 0.2 * add_time / add_offertime;
+                    int rint = Integer.parseInt(rst);
+                    double torf = rint * 0.2 * add_time / add_offertime;
 
-                Toast.makeText(getApplicationContext(), Integer.toString((int) torf) + Integer.toString(rint) + "/" + Integer.toString((int) add_offertime) + "/" + Integer.toString((int) add_total) + "/" + Integer.toString((int) add_offertime), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), Integer.toString((int) torf) + Integer.toString(rint) + "/" + Integer.toString((int) add_offertime) + "/" + Integer.toString((int) add_total) + "/" + Integer.toString((int) add_offertime), Toast.LENGTH_SHORT).show();
 
-                totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
-                int thour = totaltime / 60;
-                int tmin = totaltime % 60;
-                AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                builder.setTitle("내용전송");
-                builder.setMessage("총시간" + totaltime + "분을 전송하시겠습니까?");
-                // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                builder.setPositiveButton("예",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                    totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
+                    int thour = totaltime / 60;
+                    int tmin = totaltime % 60;
+                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+                    builder.setTitle("내용전송");
+                    builder.setMessage("총시간" + totaltime + "분을 전송하시겠습니까?");
+                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                    builder.setPositiveButton("예",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
 
-                                int bodyId = rg_body.getCheckedRadioButtonId();
-                                int mealId = rg_meal.getCheckedRadioButtonId();
-                                int cognitiveId = rg_cognitive.getCheckedRadioButtonId();
-                                String sr = Integer.toString(bodyId);
-                                String or = Integer.toString(mealId);
-                                String co = Integer.toString(cognitiveId);
+                                    int bodyId = rg_body.getCheckedRadioButtonId();
+                                    int mealId = rg_meal.getCheckedRadioButtonId();
+                                    int cognitiveId = rg_cognitive.getCheckedRadioButtonId();
+                                    String sr = Integer.toString(bodyId);
+                                    String or = Integer.toString(mealId);
+                                    String co = Integer.toString(cognitiveId);
 
-                                // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
+                                    // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
 
-                                if (sr.equals("-1")) {
-                                    body = "";
-                                } else {
-                                    body = ((RadioButton) findViewById(bodyId)).getText().toString();
+                                    if (sr.equals("-1")) {
+                                        body = "";
+                                    } else {
+                                        body = ((RadioButton) findViewById(bodyId)).getText().toString();
+                                    }
+
+                                    if (or.equals("-1")) {
+                                        meal = "";
+                                    } else {
+                                        meal = ((RadioButton) findViewById(mealId)).getText().toString();
+                                    }
+
+                                    if (co.equals("-1")) {
+                                        cognitive = "";
+                                    } else {
+                                        cognitive = ((RadioButton) findViewById(cognitiveId)).getText().toString();
+                                    }
+
+                                    uniqueness = ((EditText) findViewById(R.id.et_uniqueness)).getText().toString();
+
+                                    if (usingTime != null) {
+                                        stime = "신체활동";
+                                    } else if (usingTime.equals("0")) {
+
+                                        stime = "";
+                                        usingTime = "";
+                                    }
+                                    if (usingTime1 != null) {
+                                        stime1 = "인지활동";
+
+                                    } else if (usingTime1.equals("0")) {
+                                        stime1 = "";
+                                        usingTime1 = "";
+                                    }
+
+                                    if (usingTime1_1 != null) {
+                                        stime1_1 = "일상생활";
+
+                                    } else if (usingTime1.equals("0")) {
+                                        stime1_1 = "";
+                                        usingTime1_1 = "";
+                                    }
+
+                                    if (usingTime2 != null) {
+                                        stime2 = "정서지원";
+
+                                    } else if (usingTime2.equals("0")) {
+                                        stime2 = "";
+                                        usingTime2 = "";
+                                    }
+                                    if (usingTime3 != null) {
+                                        stime3 = "생활지원";
+
+                                    } else if (usingTime3.equals("0")) {
+                                        stime3 = "";
+                                        usingTime3 = "";
+                                    }
+                                    Date dbDate = new Date();
+                                    dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
+
+
+                                    if (dateCheck != null && dateCheck.equals(currentDate)) {
+                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
+                                        builder2.setTitle("방문요양");
+                                        builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                        // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                        builder2.setPositiveButton("예",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        number++;
+                                                        mTask = new MySyncTask().execute();
+                                                        dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                    }
+                                                });
+                                        builder2.setNegativeButton("아니오",
+                                                new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+
+                                        builder2.show();
+                                    } else {
+                                        number = 1;
+                                        mTask = new MySyncTask().execute();
+                                        dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                    }
                                 }
+                            });
 
-                                if (or.equals("-1")) {
-                                    meal = "";
-                                } else {
-                                    meal = ((RadioButton) findViewById(mealId)).getText().toString();
+                    builder.setNegativeButton("아니오",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
+
+
                                 }
-
-                                if (co.equals("-1")) {
-                                    cognitive = "";
-                                } else {
-                                    cognitive = ((RadioButton) findViewById(cognitiveId)).getText().toString();
-                                }
-
-                                uniqueness = ((EditText) findViewById(R.id.et_uniqueness)).getText().toString();
-
-                                if (usingTime != null) {
-                                    stime = "신체활동";
-                                } else if (usingTime.equals("0")) {
-
-                                    stime = "";
-                                    usingTime = "";
-                                }
-                                if (usingTime1 != null) {
-                                    stime1 = "인지활동";
-
-                                } else if (usingTime1.equals("0")) {
-                                    stime1 = "";
-                                    usingTime1 = "";
-                                }
-
-                                if (usingTime1_1 != null) {
-                                    stime1_1 = "일상생활";
-
-                                } else if (usingTime1.equals("0")) {
-                                    stime1_1 = "";
-                                    usingTime1_1 = "";
-                                }
-
-                                if (usingTime2 != null) {
-                                    stime2 = "정서지원";
-
-                                } else if (usingTime2.equals("0")) {
-                                    stime2 = "";
-                                    usingTime2 = "";
-                                }
-                                if (usingTime3 != null) {
-                                    stime3 = "생활지원";
-
-                                } else if (usingTime3.equals("0")) {
-                                    stime3 = "";
-                                    usingTime3 = "";
-                                }
-                                Date dbDate = new Date();
-                                dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
-
-
-                                if (dateCheck != null && dateCheck.equals(currentDate)) {
-                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
-                                    builder2.setTitle("방문요양");
-                                    builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
-                                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                                    builder2.setPositiveButton("예",
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    number++;
-                                                    mTask = new MySyncTask().execute();
-                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
-                                                }
-                                            });
-                                    builder2.setNegativeButton("아니오",
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
-
-                                    builder2.show();
-                                } else {
-                                    number = 1;
-                                    mTask = new MySyncTask().execute();
-                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
-                                }
-                            }
-                        });
-
-                builder.setNegativeButton("아니오",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
-
-
-                            }
-                        });
-                builder.show();
+                            });
+                    builder.show();
+                }
             }
         });
 
@@ -732,7 +734,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                                         public void run() {
                                             finish();
                                         }
-                                    },1000);
+                                    }, 1000);
 
                                 }
 
