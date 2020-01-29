@@ -175,6 +175,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
 
 
     private AsyncTask<String, String, String> cTask;
+    private String bathTotalCount;
 
 
     @Override
@@ -748,7 +749,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select A.수급자명, A.성별, A.등급, A.인정번호1, A.생년월일, A.지점, A.담당, A.기본시간, A.hp, A.구분, A.과거병력, B.기관명, B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점 = B.지점 and A.수급자명 = '" + name + "'");
+            ResultSet rs = statement.executeQuery("select A.수급자명, A.성별, A.등급, A.인정번호1, A.생년월일, A.지점, A.담당, A.기본시간,A.목욕횟수, A.hp, A.구분, A.과거병력, B.기관명, B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점 = B.지점 and A.수급자명 = '" + name + "'");
             while (rs.next()) {
                 rating = rs.getString("등급");
                 gender = rs.getString("성별");
@@ -762,6 +763,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                 baseTime = rs.getString("기본시간");
                 division = rs.getString("구분");
                 pastdisease = rs.getString("과거병력");
+                bathTotalCount = rs.getString("목욕횟수");
             }
 
             ResultSet bathRS = statement.executeQuery("select 목욕여부 from Su_방문목욕정보 where 수급자명='" + name + "' and (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
@@ -779,7 +781,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                     tv_phone.setText(phone);
                     tv_rating.setText(rating);
                     tv_sumTime.setText(intBathcount + "회 사용");
-                    tv_remainingTime.setText(4 - intBathcount + "회 남음");
+                    tv_remainingTime.setText(Integer.parseInt(bathTotalCount) - intBathcount + "회 남음");
                 }
             });
 

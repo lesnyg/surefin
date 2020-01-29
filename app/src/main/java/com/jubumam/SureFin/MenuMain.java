@@ -159,6 +159,7 @@ public class MenuMain extends BaseActivity {
     private ImageView n6;
     private ImageView n10;
     private Button btn_offwork;
+    private String bathTotalCount;
 
 //    //noti count
 //    private TextView smsCountTxt;
@@ -568,8 +569,6 @@ public class MenuMain extends BaseActivity {
     }
 
 
-
-
     public void query1() {
         Connection connection = null;
 
@@ -601,17 +600,18 @@ public class MenuMain extends BaseActivity {
             Statement statement = connection.createStatement();
 
 
-            ResultSet surs = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명 = '" + name + "'");
+            ResultSet surs = statement.executeQuery("select 기본시간,목욕횟수 from Su_수급자기본정보 where 수급자명 = '" + name + "'");
             while (surs.next()) {
                 basetime = surs.getString("기본시간");
+                bathTotalCount = surs.getString("목욕횟수");
             }
 
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='" + thisYear + "'");
+            ResultSet rs1 = statement.executeQuery("select 한도액 from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='" + thisYear + "'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
             }
 
-            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '" + basetime + "'");
+            ResultSet rs2 = statement.executeQuery("select 금액,기본시간 from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '" + basetime + "'");
             while (rs2.next()) {
                 hourmoney = Integer.parseInt(rs2.getString("금액"));
                 batime = rs2.getFloat("기본시간");
@@ -648,7 +648,7 @@ public class MenuMain extends BaseActivity {
                 }
             }
 
-            ResultSet nonpayRS = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet nonpayRS = statement.executeQuery("select 일자 from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (nonpayRS.next()) {
                 nosupport++;
             }
@@ -692,6 +692,7 @@ public class MenuMain extends BaseActivity {
                     tv_careSumTime.setText(strSumth + ":" + strSumtm);
 
                     //방문목욕 사용 횟수
+                    tv_bathTotalTime.setText(bathTotalCount);
                     tv_bathSumTime.setText(bathCount + "");
 
                     //방문 간호 사용시간 및 횟수
