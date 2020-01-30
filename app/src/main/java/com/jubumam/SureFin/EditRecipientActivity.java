@@ -9,6 +9,9 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +42,7 @@ import java.util.Calendar;
 
 public class EditRecipientActivity extends BaseActivity {
 
-//    private String gender;      //성별
+    //    private String gender;      //성별
 //    private String birth;       //생년원일
 //    private String pastdisease;      //과거병력
 //    private String imageString;
@@ -81,6 +84,8 @@ public class EditRecipientActivity extends BaseActivity {
     private String divisiontime;
     private int Idno;
 
+    private String lastChar = "";
+
     private Bitmap bitmap;
     private byte[] imgb;
     private byte[] imageBytes;
@@ -108,6 +113,9 @@ public class EditRecipientActivity extends BaseActivity {
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         commute = commuteRecipient.getCommute();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        responsibility = commuteRecipient.getResponsibility();
         Intent intent = getIntent();
         String route = intent.getExtras().getString("route");
         if (commute == null) {
@@ -130,13 +138,108 @@ public class EditRecipientActivity extends BaseActivity {
         img_person = findViewById(R.id.img_person);
         img_camerainsert = findViewById(R.id.img_camerainsert);
 
+        r_phone_insert.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = r_phone_insert.getText().toString().length();
+                if (digits > 1)
+                    lastChar = r_phone_insert.getText().toString().substring(digits - 1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = r_phone_insert.getText().toString().length();
+                Log.d("LENGTH", "" + digits);
+                if (!lastChar.equals("-")) {
+                    if (digits == 3 || digits == 8) {
+                        r_phone_insert.append("-");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        r_gnumber_insert.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = r_gnumber_insert.getText().toString().length();
+                if (digits > 1)
+                    lastChar = r_gnumber_insert.getText().toString().substring(digits - 1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = r_gnumber_insert.getText().toString().length();
+                Log.d("LENGTH", "" + digits);
+                if (!lastChar.equals("-")) {
+                    if (digits == 3 || digits == 8) {
+                        r_gnumber_insert.append("-");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        r_birth_insert.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = r_birth_insert.getText().toString().length();
+                if (digits > 1)
+                    lastChar = r_birth_insert.getText().toString().substring(digits - 1);
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = r_birth_insert.getText().toString().length();
+                Log.d("LENGTH", "" + digits);
+                if (!lastChar.equals("-")) {
+                    if (digits == 4 || digits == 7) {
+                        r_birth_insert.append("-");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        r_gbirth_insert.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = r_gbirth_insert.getText().toString().length();
+                if (digits > 1)
+                    lastChar = r_gbirth_insert.getText().toString().substring(digits - 1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = r_gbirth_insert.getText().toString().length();
+                Log.d("LENGTH", "" + digits);
+                if (!lastChar.equals("-")) {
+                    if (digits == 4 || digits == 7) {
+                        r_gbirth_insert.append("-");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         rTask = new RAsyncTask().execute();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -174,6 +277,7 @@ public class EditRecipientActivity extends BaseActivity {
         rbtn_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 r_name = r_name_insert.getText().toString();
                 r_phone = r_phone_insert.getText().toString();
                 r_rating = r_rating_insert.getText().toString();

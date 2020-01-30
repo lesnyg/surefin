@@ -83,13 +83,15 @@
                         android:layout_marginBottom="8dp"
                         android:src="@drawable/icon_picture" />
 
-                </LinearLayout>
+                </LinearLayout>db
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="8dp"
                     android:layout_marginBottom="24dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -161,7 +163,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:inputType="phone"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -184,7 +187,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:inputType="phone"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -284,7 +288,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:inputType="phone"/>
                     </LinearLayout>
 
 
@@ -308,7 +313,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_weight="1"
                             android:gravity="center_vertical"
-                            android:textSize="15dp" />
+                            android:textSize="15dp"
+                            android:inputType="phone"/>
                     </LinearLayout>
 
                     <LinearLayout
