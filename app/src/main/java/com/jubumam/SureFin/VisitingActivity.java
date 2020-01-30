@@ -27,8 +27,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.view.menu.SubMenuBuilder;
-import androidx.appcompat.widget.AlertDialogLayout;
 import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -207,7 +205,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private String divisiontotal;
     private String divisiondate;
     private String divisiontime;
-
+    private TextView tv_date;
 
     private String date2;
     private String date1;
@@ -231,17 +229,22 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
         activateToolbar();
 
-
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
 
+     //   Intent intent = getIntent();
+      //  vistime = intent.getExtras().getFloat("vistime");
+        Toast.makeText(VisitingActivity.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
+
+        tv_date = findViewById(R.id.tv_date);
 
         TextView tv_information = findViewById(R.id.tv_information);
+        Date currentTime = new Date();
         tv_information.setText(name + "님");
 
-        Date currentTime = new Date();
+
         String today = new SimpleDateFormat("yyyy.MM.dd").format(currentTime);
         thisYear = new SimpleDateFormat("yyyy").format(currentTime);
 
@@ -253,7 +256,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
         TextView tv_date = findViewById(R.id.tv_date);
         tv_date.setText(today);
-
+        
 
         aTask = new mSyncTask().execute();
 
@@ -409,8 +412,6 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
                         //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
                         diff = endtimes.getTime() - starttimes.getTime();
-
-
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
@@ -937,8 +938,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     strSumth = String.format("%02d", nhour);
                     strSumtm = String.format("%02d", nmin);
                     tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
+
                     tv_price.setText(new DecimalFormat("###,###").format(hourmoney) + "원");
                         //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
+
 
 
                 }
