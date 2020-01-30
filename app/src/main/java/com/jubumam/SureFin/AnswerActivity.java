@@ -1,39 +1,18 @@
 package com.jubumam.SureFin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.animation.ValueAnimator;
-import android.app.DatePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class AnswerActivity extends BaseActivity {
@@ -45,6 +24,7 @@ public class AnswerActivity extends BaseActivity {
 
     private String date3;
     private String date2;
+    private String commute;
     private String TAG = "PickerActivity";
     private AsyncTask<String, String, String> cTask;
     private String schedule_date;//일자
@@ -63,9 +43,21 @@ public class AnswerActivity extends BaseActivity {
         activateToolbar();
 
         recyclerview_answer = findViewById(R.id.recyclerview_answer);
+        findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        commute = commuteRecipient.getCommute();
         responsibility = commuteRecipient.getResponsibility();
+        Intent intent = getIntent();
+        if (commute == null) {
+            responsibility = intent.getExtras().getString("responsibility");
+        }
+
         mTask = new MySyncTask().execute();
 
 

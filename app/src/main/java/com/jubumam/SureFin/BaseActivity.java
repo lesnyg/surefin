@@ -10,7 +10,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -254,6 +253,7 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.action_notice:
                 Intent intent1 = new Intent(this, CustomerServiceActivity.class);
+                intent1.putExtra("responsibility",responsibility);
                 startActivity(intent1);
                 return true;
             case R.id.action_cal:

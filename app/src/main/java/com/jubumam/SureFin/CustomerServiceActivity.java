@@ -1,25 +1,11 @@
 package com.jubumam.SureFin;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Connection;
@@ -28,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class CustomerServiceActivity extends BaseActivity {
@@ -52,6 +37,7 @@ public class CustomerServiceActivity extends BaseActivity {
     private String writer;
     private String title;
     private String contents;
+    private String commute;
     private NoticeAdapter adapter;
     private int id;
 
@@ -63,9 +49,17 @@ public class CustomerServiceActivity extends BaseActivity {
         activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        commute = commuteRecipient.getCommute();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
+        Intent intent = getIntent();
+        String route = intent.getExtras().getString("route");
+        if (commute == null) {
+            name = intent.getExtras().getString("name");
+            rating = intent.getExtras().getString("rating");
+            responsibility = intent.getExtras().getString("responsibility");
+        }
 
         mTask = new MySyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -87,13 +81,17 @@ public class CustomerServiceActivity extends BaseActivity {
         findViewById(R.id.btn_question).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CustomerServiceActivity.this,QuestionActivity.class));
+                Intent intent = new Intent(CustomerServiceActivity.this,QuestionActivity.class);
+                intent.putExtra("responsibility",responsibility);
+                startActivity(intent);
             }
         });
         findViewById(R.id.btn_answer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CustomerServiceActivity.this,AnswerActivity.class));
+                Intent intent = new Intent(CustomerServiceActivity.this,AnswerActivity.class);
+                intent.putExtra("responsibility",responsibility);
+                startActivity(intent);
             }
         });
 
@@ -170,74 +168,7 @@ public class CustomerServiceActivity extends BaseActivity {
     }
 
 
-    private static class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeHolder> {
-        interface NoticeListener {
-            void setNoticeListener(Notice model);
-        }
 
-        private NoticeListener mListener;
-        private void setOnRecipientClickListener(NoticeListener listener) {
-            mListener = listener;
-        }
-
-        private List<Notice> mItems = new ArrayList<>();
-
-        public NoticeAdapter() {
-        }
-
-        public NoticeAdapter(NoticeListener listener) {
-            mListener = listener;
-        }
-
-        public void setItems(List<Notice> items) {
-            this.mItems = items;
-            notifyDataSetChanged();
-        }
-
-        @NonNull
-        @Override
-        public NoticeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_notice, parent, false);
-            final NoticeHolder viewHolder = new NoticeHolder(view);
-
-
-            return viewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull final NoticeHolder holder, int position) {
-            Notice item = mItems.get(position);
-            holder.tv_title.setText(item.getTitle());
-            holder.tv_date.setText(item.getDate());
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-                        final Notice item = mItems.get(holder.getAdapterPosition());
-                        mListener.setNoticeListener(item);
-                    }
-                }
-            });
-        }
-
-        @Override
-        public int getItemCount() {
-            return mItems.size();
-        }
-
-        public static class NoticeHolder extends RecyclerView.ViewHolder {
-            TextView tv_title;
-            TextView tv_date;
-
-            public NoticeHolder(@NonNull View itemView) {
-                super(itemView);
-
-                tv_title = itemView.findViewById(R.id.tv_title);
-                tv_date = itemView.findViewById(R.id.tv_date);
-            }
-        }
-    }
 
 }
 

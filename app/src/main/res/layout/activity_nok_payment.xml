@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    tools:context=".NokPackage.NokPaymentActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="표준 개인 부담금 세부내역"
+        android:textSize="20dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_recipiname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="수급자이름"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_nokname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="보호자이름"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/tv_pastdisease"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="병력"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_payway"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="납부방법"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/tv_payday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="매월납부일"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/tv_joinday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="최초입소일"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/tv_joinpayday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="입소당월납부일"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_contractstart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="계약시작"
+            android:textSize="16dp" />
+        <TextView
+            android:id="@+id/tv_contractend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="계약끝"
+            android:textSize="16dp" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_gongdanper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="공단부담비율"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_gongdanprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="공단부담비용"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_individualper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="개인부담비율"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_individualprice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="개인부담비용"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_meal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="식비"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_liquidmeal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="식비"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_snack"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="간식비"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_onebedroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="침실(1인)"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_twobedroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="침실(2인)"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_beauty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="이/미용"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_sum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="소계"
+        android:textSize="16dp" />
+
+    <TextView
+        android:id="@+id/tv_totalsum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="계약총금액"
+        android:textSize="16dp" />
+    <TextView
+        android:id="@+id/tv_limitfood"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="식재비월한도액"
+        android:textSize="16dp" />
+    <TextView
+        android:id="@+id/tv_limitbed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="상급침실비한도액"
+        android:textSize="16dp" />
+
+</LinearLayout>

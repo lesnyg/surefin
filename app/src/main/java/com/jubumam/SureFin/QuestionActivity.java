@@ -9,6 +9,8 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +33,7 @@ import java.util.Date;
 public class QuestionActivity extends BaseActivity {
     private EditText et_title;
     private EditText et_contents;
+    private TextView tv_textnumber;
     private AsyncTask<String, String, String> mTask;
 
     private String date;        //작성날짜
@@ -63,6 +66,31 @@ public class QuestionActivity extends BaseActivity {
 
         et_title = findViewById(R.id.et_title);
         et_contents = findViewById(R.id.et_contents);
+        tv_textnumber = findViewById(R.id.tv_textnumber);
+        et_contents.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                String input = et_contents.getText().toString();
+                tv_textnumber.setText(input.length()+" / 한글 400자");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         Date currentDate = new Date();
         date = new SimpleDateFormat("yyyy-MM-dd").format(currentDate);
