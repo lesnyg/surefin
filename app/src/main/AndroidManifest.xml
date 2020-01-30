@@ -22,11 +22,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".NokPackage.MealmenuActivity"></activity>
+        <activity android:name=".NokPackage.NokMainActivity" />
+        <activity android:name=".NokPackage.SelectActivity" />
+        <activity
+            android:name=".NokPackage.NokLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".NokPackage.NokPaymentActivity"></activity>
         <activity android:name=".NoticeActivity" />
         <activity android:name=".AnswerActivity" />
         <activity
             android:name=".QuestionActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait"

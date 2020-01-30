@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,63 +15,61 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.AnswerHolder> {
+public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeHolder> {
     // Item의 클릭 상태를 저장할 array 객체
     private SparseBooleanArray selectedItems = new SparseBooleanArray();
     // 직전에 클릭됐던 Item의 position
     private int prePosition = -1;
     private Context context;
 
-    interface setAnswerClicked {
-        void AnswerClick(Answer model);
+    interface NoticeListener {
+        void setNoticeListener(Notice model);
     }
 
-    private AnswerAdapter.setAnswerClicked mListener;
+    private NoticeListener mListener;
 
-    private List<Answer> mItems = new ArrayList<>();
-
-    public AnswerAdapter() {
-    }
-
-    public AnswerAdapter(AnswerAdapter.setAnswerClicked listener) {
+    private void setOnRecipientClickListener(NoticeListener listener) {
         mListener = listener;
     }
 
-    public void setItems(List<Answer> items) {
+    private List<Notice> mItems = new ArrayList<>();
+
+    public NoticeAdapter() {
+    }
+
+    public NoticeAdapter(NoticeListener listener) {
+        mListener = listener;
+    }
+
+    public void setItems(List<Notice> items) {
         this.mItems = items;
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public AnswerAdapter.AnswerHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public NoticeHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_answer, parent, false);
-        final AnswerAdapter.AnswerHolder viewHolder = new AnswerAdapter.AnswerHolder(view);
+                .inflate(R.layout.item_notice, parent, false);
+        final NoticeHolder viewHolder = new NoticeHolder(view);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 if (mListener != null) {
-                    final Answer item = mItems.get(viewHolder.getAdapterPosition());
-                    mListener.AnswerClick(item);
+                    final Notice item = mItems.get(viewHolder.getAdapterPosition());
+                    mListener.setNoticeListener(item);
                 }
             }
         });
+
         return viewHolder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull AnswerAdapter.AnswerHolder holder, int position) {
-//        Answer item = mItems.get(position);
-//        holder.tv_date.setText(item.getDate());
-//        holder.tv_title.setText(item.getTitle());
-//        holder.tv_contents.setText(item.getContents());
-//        holder.tv_answerDate.setText(item.getAnswerDate());
-//        holder.tv_answerContents.setText(item.getAnswer());
-//        holder.position = position;
-        holder.onBind(mItems.get(position), position);
+    public void onBindViewHolder(@NonNull final NoticeHolder holder, int position) {
+        holder.onBind(mItems.get(position),position);
     }
 
     @Override
@@ -80,40 +77,28 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.AnswerHold
         return mItems.size();
     }
 
-    class AnswerHolder extends RecyclerView.ViewHolder {
-        private TextView tv_date;
+    class NoticeHolder extends RecyclerView.ViewHolder {
         private TextView tv_title;
-        private TextView tv_contents;
-        private TextView tv_answerDate;
+        private TextView tv_date;
         private TextView tv_answerContents;
         private ImageView img_down;
-        private LinearLayout lin_answer;
         private int position;
-        private Answer data;
+        private Notice data;
 
-        public AnswerHolder(@NonNull View itemView) {
+        public NoticeHolder(@NonNull View itemView) {
             super(itemView);
-            tv_date = itemView.findViewById(R.id.tv_date);
             tv_title = itemView.findViewById(R.id.tv_title);
-            tv_contents = itemView.findViewById(R.id.tv_contents);
-            tv_answerDate = itemView.findViewById(R.id.tv_answerDate);
+            tv_date = itemView.findViewById(R.id.tv_date);
             tv_answerContents = itemView.findViewById(R.id.tv_answerContents);
-            lin_answer = itemView.findViewById(R.id.lin_answer);
             img_down = itemView.findViewById(R.id.img_down);
-
         }
 
-
-        void onBind(Answer data, final int position) {
+        void onBind(Notice data, final int position) {
             this.data = data;
             this.position = position;
-
-            tv_date.setText(data.getDate());
             tv_title.setText(data.getTitle());
-            tv_contents.setText(data.getContents());
-            tv_answerDate.setText(data.getAnswerDate());
-            tv_answerContents.setText(data.getAnswer());
-
+            tv_date.setText(data.getDate());
+            tv_answerContents.setText(data.getContents());
 
             changeVisibility(selectedItems.get(position));
 
@@ -161,7 +146,7 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.AnswerHold
                     // value는 height 값
                     int value = (int) animation.getAnimatedValue();
                     // imageView가 실제로 사라지게하는 부분
-                    lin_answer.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
+                    tv_answerContents.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
                     img_down.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
                 }
             });
@@ -169,4 +154,5 @@ public class AnswerAdapter extends RecyclerView.Adapter<AnswerAdapter.AnswerHold
             va.start();
         }
     }
+
 }

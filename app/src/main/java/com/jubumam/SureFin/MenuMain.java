@@ -1,7 +1,9 @@
 package com.jubumam.SureFin;
 
 import android.Manifest;
+
 import android.app.DatePickerDialog;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,23 +17,19 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
 import android.widget.Toast;
 import android.widget.ViewAnimator;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -49,7 +47,6 @@ import java.sql.Statement;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -160,6 +157,7 @@ public class MenuMain extends BaseActivity {
     private ImageView n6;
     private ImageView n10;
     private Button btn_offwork;
+    private String bathTotalCount;
 
 //    //noti count
 //    private TextView smsCountTxt;
@@ -695,17 +693,18 @@ public class MenuMain extends BaseActivity {
             Statement statement = connection.createStatement();
 
 
-            ResultSet surs = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명 = '" + name + "'");
+            ResultSet surs = statement.executeQuery("select 기본시간,목욕횟수 from Su_수급자기본정보 where 수급자명 = '" + name + "'");
             while (surs.next()) {
                 basetime = surs.getString("기본시간");
+                bathTotalCount = surs.getString("목욕횟수");
             }
 
-            ResultSet rs1 = statement.executeQuery("select * from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='" + thisYear + "'");
+            ResultSet rs1 = statement.executeQuery("select 한도액 from Su_등급별재가월한도액 where 등급='" + rating + "' and 년도 ='" + thisYear + "'");
             while (rs1.next()) {
                 tmoney = rs1.getInt("한도액");
             }
 
-            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '" + basetime + "'");
+            ResultSet rs2 = statement.executeQuery("select 금액,기본시간 from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '" + basetime + "'");
             while (rs2.next()) {
                 hourmoney = Integer.parseInt(rs2.getString("금액"));
                 batime = rs2.getFloat("기본시간");
@@ -743,7 +742,7 @@ public class MenuMain extends BaseActivity {
 
             }
 
-            ResultSet nonpayRS = statement.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet nonpayRS = statement.executeQuery("select 일자 from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (nonpayRS.next()) {
                 nosupport++;
 
@@ -788,6 +787,7 @@ public class MenuMain extends BaseActivity {
                     tv_careSumTime.setText(strSumth + ":" + strSumtm);
 
                     //방문목욕 사용 횟수
+                    tv_bathTotalTime.setText(bathTotalCount);
                     tv_bathSumTime.setText(bathCount + "");
 
                     //방문 간호 사용시간 및 횟수

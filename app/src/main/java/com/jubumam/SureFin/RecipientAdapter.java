@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-class RecipientAdapter extends RecyclerView.Adapter<RecipientAdapter.RecipientHolder> {
+public class RecipientAdapter extends RecyclerView.Adapter<RecipientAdapter.RecipientHolder> {
     private List<Recipient> mList = new ArrayList<>();
     private List<Recipient> mListFull;
 
