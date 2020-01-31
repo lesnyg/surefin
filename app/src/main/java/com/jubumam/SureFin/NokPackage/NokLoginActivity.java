@@ -89,7 +89,7 @@ public class NokLoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if(centerName.equals(dbCenterName)){
-                new Nok(recipiName,recipiPhone);
+                new Nok(recipiName,recipiPhone,centerName);
                 Intent intent = new Intent(NokLoginActivity.this, NokMainActivity.class);
                 startActivity(intent);
             }

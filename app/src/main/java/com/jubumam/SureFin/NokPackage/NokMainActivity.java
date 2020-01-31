@@ -22,5 +22,12 @@ public class NokMainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(NokMainActivity.this, MealmenuActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }
