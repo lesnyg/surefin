@@ -10,6 +10,7 @@ import android.widget.ImageView;
 
 import com.jubumam.SureFin.QuestionActivity;
 import com.jubumam.SureFin.R;
+import com.ortiz.touchview.TouchImageView;
 
 import java.sql.Blob;
 import java.sql.Connection;
@@ -30,9 +31,12 @@ public class MealmenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mealmenu);
 
+        Nok nok = Nok.getInstance();
+        center = nok.getCenterName();
+
         img_meal = findViewById(R.id.img_meal);
 
-        center = "삼성동";
+
         date = "2020-01-30";
         mTask = new MySyncTask().execute();
     }
@@ -69,7 +73,7 @@ public class MealmenuActivity extends AppCompatActivity {
             ResultSet resultSetPhoto = statement.executeQuery("select * from Su_식단표 where 지점='" + center + "' and 일자 = '"+date+"'");
             byte b[];
             while (resultSetPhoto.next()) {
-                Blob blob = resultSetPhoto.getBlob(4);
+                Blob blob = resultSetPhoto.getBlob(3);
                 b = blob.getBytes(1, (int) blob.length());
                 bitmap = BitmapFactory.decodeByteArray(b, 0, b.length);
 

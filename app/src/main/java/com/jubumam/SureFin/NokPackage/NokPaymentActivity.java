@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.jubumam.SureFin.R;
@@ -114,6 +116,13 @@ public class NokPaymentActivity extends AppCompatActivity {
         tv_limitbed = findViewById(R.id.tv_limitbed);
 
         mTask = new MyAsyncTask().execute();
+
+        findViewById(R.id.btn_payment).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     public class MyAsyncTask extends AsyncTask<String, String, String> {

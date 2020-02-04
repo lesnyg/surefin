@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".QuestionActivity">
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/toolbar" />
@@ -24,6 +25,7 @@
             android:paddingLeft="8dp"
             android:paddingRight="8dp"
             android:src="@drawable/icon_back" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,23 +40,24 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="1:1 문의하기"
-        android:gravity="center"
-        android:layout_marginRight="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
         android:background="@drawable/servicebtnedge"
-        android:textColor="#ffffff"
+        android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
-        android:textSize="20dp"/>
+        android:text="1:1 문의하기"
+        android:textColor="#ffffff"
+        android:textSize="20dp" />
+
     <EditText
         android:id="@+id/et_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        android:hint="제목을 입력해 주세요"
         android:background="#eeeeee"
+        android:hint="제목을 입력해 주세요"
         android:padding="8dp"
         android:textSize="16dp" />
 
@@ -66,24 +69,37 @@
         android:layout_marginRight="8dp"
         android:layout_weight="1"
         android:background="#eeeeee"
-        android:hint="내용을 입력해 주세요"
-        android:padding="8dp"
         android:gravity="top"
-        android:maxLength="400"
+        android:hint="내용을 입력해 주세요"
         android:inputType="text|textMultiLine"
+        android:maxLength="400"
+        android:padding="8dp"
         android:textSize="16dp" />
-    <TextView
-        android:id="@+id/tv_textnumber"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#eeeeee"
-        android:gravity="right|bottom"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:padding="8dp"
-        android:text="0/한글 2000자"/>
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingRight="8dp"
+        android:background="#eeeeee"
+        android:gravity="right|bottom"
+        android:orientation="horizontal">
 
+        <TextView
+            android:id="@+id/tv_textnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" / 한글 400자" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/btn_send"

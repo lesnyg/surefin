@@ -211,5 +211,11 @@
         android:layout_marginTop="8dp"
         android:text="상급침실비한도액"
         android:textSize="16dp" />
+    <Button
+        android:id="@+id/btn_payment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="결제하기"
+        />
 
 </LinearLayout>

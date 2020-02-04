@@ -65,7 +65,7 @@ public class NokLoginActivity extends AppCompatActivity {
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                centerName = txt_centerName.getText().toString();
+                centerName = txt_centerName.getText().toString()+"동";
                 recipiName = txt_recipiName.getText().toString();
                 recipiPhone = txt_recipiPhone.getText().toString();
 
@@ -89,7 +89,7 @@ public class NokLoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if(centerName.equals(dbCenterName)){
-                new Nok(recipiName,recipiPhone);
+                new Nok(recipiName,recipiPhone,centerName);
                 Intent intent = new Intent(NokLoginActivity.this, NokMainActivity.class);
                 startActivity(intent);
             }

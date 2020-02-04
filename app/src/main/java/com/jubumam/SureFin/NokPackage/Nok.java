@@ -5,6 +5,7 @@ public class Nok {
     private static String nokPhone;
     private static String recipientName;
     private static String recipientPhone;
+    private static String centerName;
     private static Nok nok;
 
     public Nok(String nokName, String nokPhone, String recipientName, String recipientPhone) {
@@ -14,14 +15,15 @@ public class Nok {
         this.recipientPhone = recipientPhone;
     }
 
-    public Nok(String recipientName, String recipientPhone) {
+    public Nok(String recipientName, String recipientPhone,String centerName) {
         this.recipientName = recipientName;
         this.recipientPhone = recipientPhone;
+        this.centerName = centerName;
     }
 
     static Nok getInstance(){
         if(nok==null) {
-            nok = new Nok(recipientName,recipientPhone);
+            nok = new Nok(recipientName,recipientPhone,centerName);
         }
         return nok;
     }
@@ -56,5 +58,13 @@ public class Nok {
 
     public void setRecipientPhone(String recipientPhone) {
         this.recipientPhone = recipientPhone;
+    }
+
+    public String getCenterName() {
+        return centerName;
+    }
+
+    public void setCenterName(String centerName) {
+        Nok.centerName = centerName;
     }
 }

@@ -3,27 +3,45 @@ package com.jubumam.SureFin;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BaseActivity extends AppCompatActivity {
     private Toolbar mToolbar;
@@ -47,6 +65,7 @@ public class BaseActivity extends AppCompatActivity {
     private String TAG = "PickerActivity";
     private AsyncTask<String, String, String> cTask;
     private AsyncTask<String, String, String> notiTask;
+    private int listcount = 0;
 
     //noti count
     private TextView smsCountTxt;
@@ -55,21 +74,26 @@ public class BaseActivity extends AppCompatActivity {
     protected String noti_id = "0";
     private int notiCount = 0;
     private String strnotiID;
+    private Date dialogdate;
+    private List<Dialog> list;
+    List<Map<String, String>> dialogItemList;
+    private static final String TAG_TIME = "time";
+    private static final String TAG_NAME = "name";
+    private Map<String, String> itemMap;
 
     protected Toolbar activateToolbar() {
-        SharedPreferences sharedPreferences = getSharedPreferences("file",0);
-        noti_id = sharedPreferences.getString("notiID","");
+        SharedPreferences sharedPreferences = getSharedPreferences("file", 0);
+        noti_id = sharedPreferences.getString("notiID", "");
 
         notiTask = new NotiSyncTask().execute();
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
 
-        if(commute == null){
+        if (commute == null) {
             Login login = Login.getInstance();
-            responsibility =login.getResponsibility();
+            responsibility = login.getResponsibility();
         }
-
 
         return mToolbar;
     }
@@ -104,7 +128,6 @@ public class BaseActivity extends AppCompatActivity {
             }
 
 
-
         }
 
         protected void onCancelled() {
@@ -119,7 +142,7 @@ public class BaseActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet notiRS = statement.executeQuery("select id from Su_공지사항 where id > '"+noti_id+"' order by id");
+            ResultSet notiRS = statement.executeQuery("select id from Su_공지사항 where id > '" + noti_id + "' order by id");
             while (notiRS.next()) {
                 strnotiID = notiRS.getString("id");
                 notiCount++;
@@ -148,7 +171,16 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
+            if (dialogItemList.size() == 0) {
+                android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(BaseActivity.this);
+                builder.setTitle(divisiondate).setMessage("선택하신 날짜에 일정이 없습니다.");
+                android.app.AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            } else {
+                showAlertDialog();
+            }
         }
+
 
         protected void onCancelled() {
             super.onCancelled();
@@ -163,8 +195,9 @@ public class BaseActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='"+responsibility+"' and 일자 ='" + date2 + "';");
-
+            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date1 + "' order by 근무시간");
+            list = new ArrayList<>();
+            dialogItemList = new ArrayList<>();
             while (calres.next()) {
 
                 schedule_date = calres.getString("일자");//일자
@@ -173,33 +206,17 @@ public class BaseActivity extends AppCompatActivity {
                 schedulename = calres.getString("수급자명");//계약수급자명
                 division = calres.getString("구분");//구분
 
+                itemMap = new HashMap<>();
+
+                divisiontotal = "      " + schedulename + "     " + division;
+                divisiontime = scheduletime + " (" + contracttime + ")";
+
+                itemMap.put(TAG_TIME, divisiontime);
+                itemMap.put(TAG_NAME, divisiontotal);
+
+                dialogItemList.add(itemMap);
+
             }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    if (schedule_date != null) {
-
-                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
-                        divisiondate = schedule_date + "";
-                        divisiontime = scheduletime + " (" + contracttime + ")";
-
-                        Schedule_dialog schedule_dialog = new Schedule_dialog(BaseActivity.this);
-
-                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
-
-
-                    } else if (schedule_date == null) {
-                        Toast.makeText(getBaseContext(), "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
-
-                    }
-
-
-                }
-            });
-
             conn.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -228,7 +245,7 @@ public class BaseActivity extends AppCompatActivity {
             frame_noti.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                SharedPreferences sharedPreferences = getSharedPreferences("file", 0);
+                    SharedPreferences sharedPreferences = getSharedPreferences("file", 0);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString("notiID", strnotiID);
                     editor.commit();
@@ -238,7 +255,6 @@ public class BaseActivity extends AppCompatActivity {
             });
 
         }
-
 
 
         return super.onCreateOptionsMenu(menu);
@@ -253,29 +269,59 @@ public class BaseActivity extends AppCompatActivity {
                 return true;
             case R.id.action_notice:
                 Intent intent1 = new Intent(this, CustomerServiceActivity.class);
-                intent1.putExtra("responsibility",responsibility);
+                intent1.putExtra("responsibility", responsibility);
                 startActivity(intent1);
                 return true;
             case R.id.action_cal:
                 final Calendar cal = Calendar.getInstance();
-                Log.e(TAG, cal.get(Calendar.YEAR) + "");
-                Log.e(TAG, cal.get(Calendar.MONTH) + 1 + "");
-                Log.e(TAG, cal.get(Calendar.DATE) + "");
-                Log.e(TAG, cal.get(Calendar.HOUR_OF_DAY) + "");
-                Log.e(TAG, cal.get(Calendar.MINUTE) + "");
-
-
                 DatePickerDialog dialog = new DatePickerDialog(BaseActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
                         date1 = String.format("%d-%02d-%02d", year, month + 1, date);
-                        date2 = date1;
+                        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd");
+                        try {
+                            dialogdate = dt.parse(date1);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        divisiondate = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일").format(dialogdate);
                         cTask = new CalSyncTask().execute();
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
                 dialog.show();
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showAlertDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(BaseActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        View view = inflater.inflate(R.layout.schedule_dialog, null);
+        builder.setView(view);
+
+        final ListView listview = view.findViewById(R.id.listview_dialog);
+        final TextView title = view.findViewById(R.id.tv_title);
+
+
+        title.setText(divisiondate);
+
+        final AlertDialog dialog = builder.create();
+        title.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        SimpleAdapter simpleAdapter = new SimpleAdapter(BaseActivity.this, dialogItemList,
+                R.layout.item_dialog,
+                new String[]{TAG_TIME, TAG_NAME},
+                new int[]{R.id.schedule_time, R.id.schedule_name});
+
+        listview.setAdapter(simpleAdapter);
+        dialog.show();
     }
 }
