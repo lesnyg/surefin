@@ -13,8 +13,10 @@ public class CommuteRecipient {
     private static String startWork;
     private static CommuteRecipient commuteRecipient;
 
+
     public CommuteRecipient() {
     }
+
 
     public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute,String startTime,String startWork ) {
         this.personId = personId;
@@ -96,5 +98,6 @@ public class CommuteRecipient {
     public void setRating(String rating) {
         this.rating = rating;
     }
+
 
 }
