@@ -277,8 +277,8 @@ public class BaseActivity extends AppCompatActivity {
                 DatePickerDialog dialog = new DatePickerDialog(BaseActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int date) {
-                        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-mm-dd");
                         date1 = String.format("%d-%02d-%02d", year, month + 1, date);
+                        SimpleDateFormat dt = new SimpleDateFormat("yyyyy-MM-dd");
                         try {
                             dialogdate = dt.parse(date1);
                         } catch (ParseException e) {
