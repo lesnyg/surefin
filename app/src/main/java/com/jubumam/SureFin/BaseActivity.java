@@ -208,7 +208,7 @@ public class BaseActivity extends AppCompatActivity {
 
                 itemMap = new HashMap<>();
 
-                divisiontotal = "   " + schedulename + "     " + division;
+                divisiontotal = "      " + schedulename + "     " + division;
                 divisiontime = scheduletime + " (" + contracttime + ")";
 
                 itemMap.put(TAG_TIME, divisiontime);

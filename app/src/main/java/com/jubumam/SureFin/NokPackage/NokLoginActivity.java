@@ -65,7 +65,7 @@ public class NokLoginActivity extends AppCompatActivity {
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                centerName = txt_centerName.getText().toString();
+                centerName = txt_centerName.getText().toString()+"동";
                 recipiName = txt_recipiName.getText().toString();
                 recipiPhone = txt_recipiPhone.getText().toString();
 

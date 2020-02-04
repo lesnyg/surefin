@@ -51,8 +51,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="20dp"
                     android:gravity="center_vertical"
-                    android:hint="기관명 입력"
-                  />
+                    android:hint="기관명 입력   예)삼성동->삼성" />
 
 
                 <EditText

@@ -211,102 +211,8 @@ public class RecipientDetailActivity extends BaseActivity {
         btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Intent ica= new Intent(RecipientDetailActivity.this,cameraActivity.class);
-                // ica.putExtra("name", name);
-                // ica.putExtra("gender", gender);
-                // ica.putExtra("rating", rating);
-                // ica.putExtra("birth", birth);
-                // ica.putExtra("pastdisease", pastdisease);
-                // ica.putExtra("responsibility", responsibility);
-                //  startActivity(ica);
-
-                // Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                // startActivityForResult(cameraIntent, TAKE_PICTURE);
-
-                // caTask = new caAsyncTask().execute();
-
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
-
-         /*       final CharSequence[] options = { "사진촬영","전송" };
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecipientDetailActivity.this);
-                builder.setTitle("출근관리");
-
-                builder.setItems(options, new DialogInterface.OnClickListener() {
-
-                    @Override
-                    public void onClick(DialogInterface dialog, int item) {
-
-                        if (options[item].equals("사진촬영")) {
-
-                        } else if (options[item].equals("전송")) {
-
-                        }
-                    }
-                });
-                builder.show();
-
-
-          */
-
-/*
-                final AlertDialog.Builder alertadd = new AlertDialog.Builder(RecipientDetailActivity.this);
-
-                LayoutInflater inflater = LayoutInflater.from(RecipientDetailActivity.this);
-                final View view = inflater.inflate(R.layout.camera_image, null);
-                alertadd.setView(view);
-                alertadd.setNeutralButton("촬영", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dlg, int sumthin) {
-
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, TAKE_PICTURE);
-
-                    }
-                });
-
-                alertadd.setNegativeButton("전송", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                        caTask = new caAsyncTask().execute();
-
-                        try {
-
-                            long now = System.currentTimeMillis();
-                            Date date = new Date(now);
-
-                            SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
-                            SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-                            SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
-                            String nowDate = time.format(date);
-
-                            nowTime = (TextView) findViewById(R.id.nowtime);
-                            nowTime.setText(nowDate);
-
-                            s3 = nowDate;
-                            ymd1 = ymd.format(date);
-                            hms1 = hms.format(date);
-
-
-                        } catch (Exception e) {
-
-                        }
-
-
-                        Intent ica= new Intent(RecipientDetailActivity.this,MenuMain.class);
-                        ica.putExtra("name", name);
-                        ica.putExtra("gender", gender);
-                        ica.putExtra("rating", rating);
-                        ica.putExtra("birth", birth);
-                        ica.putExtra("pastdisease", pastdisease);
-                        ica.putExtra("responsibility", responsibility);
-                        startActivity(ica);
-                    }
-                });
-
-
-                alertadd.show();*/
-
             }
         });
 
@@ -359,192 +265,26 @@ public class RecipientDetailActivity extends BaseActivity {
                         long now = System.currentTimeMillis();
                         Date date = new Date(now);
 
-                        // SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
                         ymd = new SimpleDateFormat("yyyy-MM-dd");
                         hm = new SimpleDateFormat("HH:mm");
-                        //String nowDate = time.format(date);
 
-
-                        //  nowTime = (TextView) findViewById(R.id.nowtime);
-                        //  nowTime.setText(nowDate);
-                        //  s3 = nowDate;
                         ymd1 = ymd.format(date);
                         hms1 = hm.format(date);
 
-                        // Toast.makeText(RecipientDetailActivity.this,hms1,Toast.LENGTH_LONG).show();
 
                     } catch (Exception e) {
 
                     }
-
-
-
-/*
-                    try {
-
-                        long now = System.currentTimeMillis();
-                        Date date = new Date(now);
-
-                        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
-                        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-                        SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
-                        String nowDate = time.format(date);
-
-                        nowTime = (TextView) findViewById(R.id.nowtime);
-                        nowTime.setText(nowDate);
-
-                        s3 = nowDate;
-                        ymd1 = ymd.format(date);
-                        hms1 = hms.format(date);
-
-
-                    } catch (Exception e) {
-
-                    }
-
-  */
 
                     caTask = new caAsyncTask().execute();
                     new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, "true", hms1, ymd1);
                     Intent ica = new Intent(RecipientDetailActivity.this, MenuMain.class);
                     startActivity(ica);
-
-/*
-                    if (bitmap != null) {
-
-                        try {
-
-                            long now = System.currentTimeMillis();
-                            Date date = new Date(now);
-
-                            SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
-                            SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-                            SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
-                            String nowDate = time.format(date);
-
-                            nowTime = (TextView) findViewById(R.id.nowtime);
-                            nowTime.setText(nowDate);
-
-                            s3 = nowDate;
-                            ymd1 = ymd.format(date);
-                            hms1 = hms.format(date);
-
-
-                        } catch (Exception e) {
-
-                        }
-
-
-                    }*/
                 }
 
                 break;
         }
     }
-
-/*
-    public void BitmapToString(Bitmap bitmap) {
-        baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);    //bitmap compress
-        imageBytes = baos.toByteArray();
-    }*/
-
-    public class CalSyncTask extends AsyncTask<String, String, String> {
-
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-
-            calQuery();
-            return null;
-
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-
-    }
-
-
-    public void calQuery() {
-
-        Connection conn = null;
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-            Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date2 + "';");
-
-            while (calres.next()) {
-
-
-                schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
-                schedulename = calres.getString("수급자명");//계약수급자명
-                division = calres.getString("구분");//구분
-
-            }
-
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-
-
-                    if (schedule_date != null) {
-                        //              divisiontotal = "어르신 : " + schedulename+"  "
-                        //                              +"일정 : " + division + "  일자:" +schedule_date+ "일" + scheduletime + "(" + contracttime + ")";
-//                        cal_txt.setText(division + ":" + schedule_date + "일  " + scheduletime + "(" + contracttime + ")");
-                        //                      cal_txt1.setText("어르신:" + schedulename);
-
-
-                        divisiontotal = "어르신 : " + schedulename + "  " + "일정 : " + division;
-                        divisiondate = schedule_date + "일";
-                        divisiontime = scheduletime + "(" + contracttime + ")";
-
-
-                        Schedule_dialog schedule_dialog = new Schedule_dialog(RecipientDetailActivity.this);
-
-                        schedule_dialog.callFunction(divisiondate, divisiontime, divisiontotal);
-
-         /*               AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setTitle("일정관리");
-                        builder.setPositiveButton(divisiontotal,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        // Toast.makeText(getApplicationContext(), "전송이 완료되었습니다.", Toast.LENGTH_LONG).show();
-                                    }
-
-                                });
-                        builder.show();*/
-                    } else if (schedule_date == null) {
-                        Toast.makeText(RecipientDetailActivity.this, "선택하신 날짜에 일정이 없습니다", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-            });
-
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-
-
 
     public class MySyncTask extends AsyncTask<String, String, String> {
 
@@ -572,29 +312,6 @@ public class RecipientDetailActivity extends BaseActivity {
 
     }
 
-    /*
-      public void query1() {
-          Connection connection = null;
-
-          try {
-              Class.forName("net.sourceforge.jtds.jdbc.Driver");
-              connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
-              Statement statement = connection.createStatement();
-              ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_직원출퇴근정보(수급자명,일자,직원명,출근시간,BLOBData)VALUES ('"+name+"','"+ymd1+"','"+responsibility+"','"+hms1+"',convert(VARBINARY(max),'"+s4+"'))");
-
-
-              while (resultSet.next()) {
-
-
-              }
-              connection.close();
-
-          } catch (Exception e) {
-              Log.w("Error connection", "" + e.getMessage());
-          }
-
-      }
-  */
     private void query1() {
         Connection connection = null;
         try {

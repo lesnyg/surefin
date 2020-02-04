@@ -53,6 +53,7 @@ public class QuestionActivity extends BaseActivity {
     private String divisiondate;
     private String divisiontime;
     private String division;//구분
+    private String commute;//출근확인
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +63,13 @@ public class QuestionActivity extends BaseActivity {
 
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        commute = commuteRecipient.getCommute();
+        rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
+        Intent intent = getIntent();
+        if (commute == null) {
+            responsibility = intent.getExtras().getString("responsibility");
+        }
 
         et_title = findViewById(R.id.et_title);
         et_contents = findViewById(R.id.et_contents);
@@ -71,7 +78,7 @@ public class QuestionActivity extends BaseActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 String input = et_contents.getText().toString();
-                tv_textnumber.setText(input.length()+" / 한글 400자");
+                tv_textnumber.setText(input.length()+"");
             }
 
             @Override
@@ -101,7 +108,15 @@ public class QuestionActivity extends BaseActivity {
             public void onClick(View v) {
                 title = et_title.getText().toString();
                 contents = et_contents.getText().toString();
-                mTask = new MySyncTask().execute();
+                if(title.equals("")) {
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QuestionActivity.this);
+                    builder.setTitle("").setMessage("제목을 입력하세요.");
+                    android.app.AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }else {
+                    mTask = new MySyncTask().execute();
+                    finish();
+                }
             }
         });
 
@@ -123,7 +138,9 @@ public class QuestionActivity extends BaseActivity {
         }
 
         protected void onPostExecute(String result) {
-        }
+            Intent intent = new Intent(QuestionActivity.this,AnswerActivity.class);
+            intent.putExtra("responsibility",responsibility);
+            startActivity(intent);        }
 
         protected void onCancelled() {
             super.onCancelled();
