@@ -94,8 +94,6 @@ public class Non_Payment_Item extends BaseActivity {
     private TextView tv_thisMonth;
 
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,7 +161,7 @@ public class Non_Payment_Item extends BaseActivity {
         TextView vtxt1 = findViewById(R.id.vtxt1);
         TextView tv_currentDate = findViewById(R.id.tv_currentDate);
         vtxt1.setText(currentDate);
-        tv_currentDate.setText(currentDate+"월");
+        tv_currentDate.setText(currentDate + "월");
         tv_thisMonth = findViewById(R.id.tv_thisMonth);
         strDate = new SimpleDateFormat("yyyy-MM").format(date);
         startMon = strDate + "-" + "01";
@@ -179,7 +177,7 @@ public class Non_Payment_Item extends BaseActivity {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            con = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement sts = con.createStatement();
 
             ResultSet resultSet = sts.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "') order by id");
@@ -199,59 +197,9 @@ public class Non_Payment_Item extends BaseActivity {
                 offerDate = resultSet.getString("서비스제공일자");
 
                 nonList.add(new Non(classification, htitle, memberdivision, utilization));
-                if(offer.equals("제공")) {
-                    nonUseList.add(new Non(classification, htitle, memberdivision, utilization,offerDate,"1회"));
+                if (offer.equals("제공")) {
+                    nonUseList.add(new Non(classification, htitle, memberdivision, utilization, offerDate, "1회"));
                 }
-
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//
-//
-//                        if (classification.equals("해-치유")){
-//                            linsun.setVisibility(View.VISIBLE);
-//                            suntext.setText("해 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("산-운동")){
-//                            linmountain.setVisibility(View.VISIBLE);
-//                            mountaintext.setText("산 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("물-수치료")){
-//                            linwater.setVisibility(View.VISIBLE);
-//                            watertext.setText("물 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("돌-보안")){
-//                            linstone.setVisibility(View.VISIBLE);
-//                            stonetext.setText("돌 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("구름-교육")){
-//                            lincloud.setVisibility(View.VISIBLE);
-//                            cloudtext.setText("구름 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("학-여가")){
-//                            lincrane.setVisibility(View.VISIBLE);
-//                            cranetext.setText("학 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("불로초-식사")){
-//                            linblocho.setVisibility(View.VISIBLE);
-//                            blochotext.setText("불로초 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("거북-건강")){
-//                            linturtle.setVisibility(View.VISIBLE);
-//                            turtletext.setText("거북 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("소나무-일상생활")){
-//                            linpinetree.setVisibility(View.VISIBLE);
-//                            pinetreetext.setText("소나무 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }else if (classification.equals("사슴-미용")){
-//                            lindeer.setVisibility(View.VISIBLE);
-//                            deertext.setText("사슴 서비스 : "+htitle);
-//                            tv_mdiv.setText(memberdivision+"  회원");
-//                        }
-//                    }
-//                });
-//
 
             }
 
@@ -408,7 +356,7 @@ public class Non_Payment_Item extends BaseActivity {
         @Override
         public void onBindViewHolder(@NonNull OfferViewHolder holder, int position) {
             Non item = mItems.get(position);
-            holder.tv_servicedate.setText(item.getOfferDate().substring(8)+"일");
+            holder.tv_servicedate.setText(item.getOfferDate().substring(8) + "일");
             holder.tv_serviceTitle.setText(item.getHtitle());
             holder.tv_serviceTime.setText(item.getOfferTime());
         }

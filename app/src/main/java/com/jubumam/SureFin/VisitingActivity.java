@@ -2,7 +2,6 @@ package com.jubumam.SureFin;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,24 +9,16 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -39,7 +30,6 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -233,10 +223,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
-
-     //   Intent intent = getIntent();
-      //  vistime = intent.getExtras().getFloat("vistime");
-        Toast.makeText(VisitingActivity.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
+        Toast.makeText(VisitingActivity.this, Integer.toString((int) vistime), Toast.LENGTH_SHORT).show();
 
         tv_date = findViewById(R.id.tv_date);
 
@@ -256,7 +243,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
         TextView tv_date = findViewById(R.id.tv_date);
         tv_date.setText(today);
-        
+
 
         aTask = new mSyncTask().execute();
 
@@ -375,7 +362,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_start.getText().equals("시작")) {
+                if (btn_start.getText().equals("시작")) {
                     startTime = new Date();
                     strStartTime = timeformatter.format(startTime);
                     long lgStartTime = startTime.getTime();
@@ -387,7 +374,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     } else if (extraTime >= 2200 || extraTime < 600) {
                         todayMoney = (int) (hourmoney * 1.3);
                     } else {
-                        todayMoney =  hourmoney;
+                        todayMoney = hourmoney;
                     }
                     tv_price.setText(new DecimalFormat("###,###").format(todayMoney) + "원");
                 }
@@ -415,35 +402,18 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-                    if((diff / (60 * 1000)) < batime) {
+                    if ((diff / (60 * 1000)) < batime) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                        builder.setTitle("시간확인").setMessage("계약한 "+batime+"분이 지나지 않았습니다.");
+                        builder.setTitle("시간확인").setMessage("계약한 " + batime + "분이 지나지 않았습니다.");
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
 
-                    }else{
+                    } else {
                         btn_end.setText(strEndTime);
                         tv_endTime.setText(strEndTime);
                         totalUsingTime = Long.toString(diff / (60 * 1000));
                         tv_time.setText(totalUsingTime);
                     }
-//                    if (tv_time.getText().equals("")) {
-//                        totalUsingTime = Long.toString(diff / (60 * 1000));
-//                        tv_time.setText(totalUsingTime);
-//                    } else {
-//                        try {
-//                            totalnumber = tv_time.getText().toString();
-//                            Date s1 = timeformatter.parse(totalnumber);
-//                            tdiff = diff + s1.getTime();
-//                            totalUsingTime = Long.toString(diff / (60 * 1000));
-//                            tv_time.setText(totalUsingTime);
-//
-//
-//                        } catch (Exception e) {
-//
-//                        }
-//
-//                    }
                 }
             }
         });
@@ -549,7 +519,6 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                                     }
                                     Date dbDate = new Date();
                                     dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
-
 
 
                                     if (dateCheck != null && dateCheck.equals(currentDate)) {
@@ -693,7 +662,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문요양급여정보 WHERE 수급자명 = '" + name + "' AND 일자='" + currentDate + "'");
             while (dateRS.next()) {
@@ -736,7 +705,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문요양급여정보 WHERE 수급자명 = '" + name + "' AND 일자='" + currentDate + "'");
             while (dbCheckRS.next()) {
@@ -844,7 +813,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
             ResultSet visitingRS = statement.executeQuery("select 신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계 from Su_방문요양급여정보 where 수급자명='" + name + "' and (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
@@ -940,8 +909,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     tv_remainingTime.setText("남은시간:" + strSumth + ":" + strSumtm);
 
                     tv_price.setText(new DecimalFormat("###,###").format(hourmoney) + "원");
-                        //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
-
+                    //  tv_remainingTime.setText("남은시간:" + Integer.toString(nhour) + ":" + Integer.toString(nmin));
 
 
                 }
@@ -960,7 +928,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         Connection connection;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
 
@@ -975,7 +943,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     "'" + body + "','" + meal + "','" + cognitive + "','" + mNumber4 + "','" + mNumber5 + "','" + uniqueness + "'," +
                     "'" + stime + "','" + stime1 + "','" + stime2 + "','" + stime3 + "'," +
                     "'" + usingTime1_1 + "','" + bodyactiv1 + "','" + bodyactiv2 + "','" + bodyactiv3 + "','" + bodyactiv4 + "','" + bodyactiv5 + "','" + bodyactiv6 + "','" + housework1 + "','" + housework2 + "'," +
-                    "'" + dbCheck + "','" + strStartTime + "','" + strEndTime + "','" + totaltime + "','요양','" + number + "','"+todayMoney+"')");
+                    "'" + dbCheck + "','" + strStartTime + "','" + strEndTime + "','" + totaltime + "','요양','" + number + "','" + todayMoney + "')");
 
 
             connection.close();

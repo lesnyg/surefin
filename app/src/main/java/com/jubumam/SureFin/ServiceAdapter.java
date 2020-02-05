@@ -59,29 +59,30 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceH
         holder.tv_servicedate.setText(service.getDate());
 
 
-        if(service.getSumUsingTime1() == 0){
+        if (service.getSumUsingTime1() == 0) {
             holder.tv_careDayTime.setText("0");
-        }else{
-            holder.tv_careDayTime.setText(service.getSumUsingTime1()/60000+"");
+        } else {
+            holder.tv_careDayTime.setText(service.getSumUsingTime1() / 60000 + "");
         }
-        if (service.getCount() != null && service.getCount().equals("TRUE")){
+        if (service.getCount() != null && service.getCount().equals("TRUE")) {
             holder.tv_bathDayCount.setText("1");
-        }else {
+        } else {
             holder.tv_bathDayCount.setText("0");
         }
-        if(service.getNursingCount()!=null){
+        if (service.getNursingCount() != null) {
             holder.tv_nursingDayCount.setText("1회");
-        }else{
+        } else {
             holder.tv_nursingDayCount.setText("0회");
         }
         holder.tv_nursingDayTime.setText(service.getNursingTotal());
-            if(service.getNonPay()!=null && service.getNonPay().equals("제공")) {
+        if (service.getNonPay() != null && service.getNonPay().equals("제공")) {
             holder.tv_tenObjectDayCount.setText("1건");
-        }else{
+        } else {
             holder.tv_tenObjectDayCount.setText("0건");
         }
 
     }
+
     @Override
     public int getItemCount() {
         return mItems.size();

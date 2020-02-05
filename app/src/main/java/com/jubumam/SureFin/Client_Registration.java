@@ -41,7 +41,7 @@ public class Client_Registration extends Activity {
     String c_gnumber;
     String c_gadress;
 
-    private AsyncTask<String,String,String> crTask;
+    private AsyncTask<String, String, String> crTask;
 
 
     @Override
@@ -49,17 +49,17 @@ public class Client_Registration extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.client_registration);
 
-        c_name_insert = (EditText)findViewById(R.id.c_name_insert);
-        c_phone_insert = (EditText)findViewById(R.id.c_phone_insert);
-        c_rating_insert = (EditText)findViewById(R.id.c_rating_insert);
-        c_birth_insert = (EditText)findViewById(R.id.c_birth_insert);
-        c_adress_insert = (EditText)findViewById(R.id.c_adress_insert);
-        c_guardian_insert = (EditText)findViewById(R.id.c_guardian_insert);
-        c_relationship_insert = (EditText)findViewById(R.id.c_relationship_insert);
-        c_gbirth_insert = (EditText)findViewById(R.id.c_gbirth_insert);
-        c_gnumber_insert = (EditText)findViewById(R.id.c_gnumber_insert);
-        c_gadress_insert = (EditText)findViewById(R.id.c_gadress_insert);
-        btn_save = (Button)findViewById(R.id.btn_save);
+        c_name_insert = (EditText) findViewById(R.id.c_name_insert);
+        c_phone_insert = (EditText) findViewById(R.id.c_phone_insert);
+        c_rating_insert = (EditText) findViewById(R.id.c_rating_insert);
+        c_birth_insert = (EditText) findViewById(R.id.c_birth_insert);
+        c_adress_insert = (EditText) findViewById(R.id.c_adress_insert);
+        c_guardian_insert = (EditText) findViewById(R.id.c_guardian_insert);
+        c_relationship_insert = (EditText) findViewById(R.id.c_relationship_insert);
+        c_gbirth_insert = (EditText) findViewById(R.id.c_gbirth_insert);
+        c_gnumber_insert = (EditText) findViewById(R.id.c_gnumber_insert);
+        c_gadress_insert = (EditText) findViewById(R.id.c_gadress_insert);
+        btn_save = (Button) findViewById(R.id.btn_save);
 
 
         btn_save.setOnClickListener(new View.OnClickListener() {
@@ -77,22 +77,23 @@ public class Client_Registration extends Activity {
                 c_gadress = c_gadress_insert.getText().toString();
 
                 crTask = new CRAsyncTask().execute();
-                Toast.makeText(getApplicationContext(),"입력완료",Toast.LENGTH_SHORT).show();
-              //  Intent intent = new Intent(getApplicationContext(),.class);
-               // startActivity(intent);
+                Toast.makeText(getApplicationContext(), "입력완료", Toast.LENGTH_SHORT).show();
+                //  Intent intent = new Intent(getApplicationContext(),.class);
+                // startActivity(intent);
             }
         });
 
 
     }
 
-    public class CRAsyncTask extends AsyncTask<String,String,String> {
+    public class CRAsyncTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             query();
 
@@ -100,9 +101,10 @@ public class Client_Registration extends Activity {
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
     }
@@ -113,9 +115,9 @@ public class Client_Registration extends Activity {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("INSERT INTO Su_수급자기본정보(수급자명,hp,등급,생년월일,주소1,보호자성명,관계,생년월일1,hp2,주소11)VALUES ('"+c_name+"','"+c_phone+"','"+c_rating+"','"+c_birth+"','"+c_adress+"','"+c_guardian+"','"+c_relationship+"','"+c_gbirth+"','"+c_gnumber+"','"+c_gadress+"')");
+            ResultSet resultSet = statement.executeQuery("INSERT INTO Su_수급자기본정보(수급자명,hp,등급,생년월일,주소1,보호자성명,관계,생년월일1,hp2,주소11)VALUES ('" + c_name + "','" + c_phone + "','" + c_rating + "','" + c_birth + "','" + c_adress + "','" + c_guardian + "','" + c_relationship + "','" + c_gbirth + "','" + c_gnumber + "','" + c_gadress + "')");
 
             while (resultSet.next()) {
 

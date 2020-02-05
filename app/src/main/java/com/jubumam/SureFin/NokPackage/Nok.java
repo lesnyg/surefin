@@ -15,15 +15,15 @@ public class Nok {
         this.recipientPhone = recipientPhone;
     }
 
-    public Nok(String recipientName, String recipientPhone,String centerName) {
+    public Nok(String recipientName, String recipientPhone, String centerName) {
         this.recipientName = recipientName;
         this.recipientPhone = recipientPhone;
         this.centerName = centerName;
     }
 
-    static Nok getInstance(){
-        if(nok==null) {
-            nok = new Nok(recipientName,recipientPhone,centerName);
+    static Nok getInstance() {
+        if (nok == null) {
+            nok = new Nok(recipientName, recipientPhone, centerName);
         }
         return nok;
     }

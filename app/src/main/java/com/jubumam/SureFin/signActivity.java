@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -19,8 +18,6 @@ import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 
 public class signActivity extends AppCompatActivity {
@@ -132,7 +129,6 @@ public class signActivity extends AppCompatActivity {
                 caTask = new caAsyncTask().execute();
 
 
-
                 //  Toast.makeText(signActivity.this,signimage,Toast.LENGTH_SHORT).show();
             }
 
@@ -157,7 +153,7 @@ public class signActivity extends AppCompatActivity {
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
                 startActivity(intent);*/
-     finish();
+                finish();
 
 
             }
@@ -175,7 +171,7 @@ public class signActivity extends AppCompatActivity {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             if (route.equals("MenuMain")) {
                 PreparedStatement ps = connection.prepareStatement("update Su_직원출퇴근정보 set 요양사서명 = ? where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
                 ps.setBytes(1, imageBytes);

@@ -5,14 +5,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
@@ -24,7 +22,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.WeakHashMap;
 
 public class ServiceListActivity extends BaseActivity {
 //    private NumberPicker picker1;
@@ -190,7 +187,6 @@ public class ServiceListActivity extends BaseActivity {
         mTask = new ServiceSyncTask().execute();
 
 
-
         img_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -267,7 +263,7 @@ public class ServiceListActivity extends BaseActivity {
     public void servicelistQuery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
             ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
@@ -417,7 +413,6 @@ public class ServiceListActivity extends BaseActivity {
                 strNhour = String.format("%02d", nhour);
                 strNmin = String.format("%02d", nmin);
                 tv_nursingTotalTT.setText(strNhour + "시간" + strNmin + "분");
-
 
 
                 //개인부담 비용 및 공단부담 비용

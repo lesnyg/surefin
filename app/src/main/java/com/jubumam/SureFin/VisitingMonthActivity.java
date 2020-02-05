@@ -109,11 +109,11 @@ public class VisitingMonthActivity extends AppCompatActivity {
     private void visitingMonthQuery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
             String name = "홍길동";
-            resultSet = statement.executeQuery("select * from Su_방문요양급여정보 where 수급자명 = '"+name+"' and (일자 between '" + startMon + "' and '" + endMon + "')");
+            resultSet = statement.executeQuery("select * from Su_방문요양급여정보 where 수급자명 = '" + name + "' and (일자 between '" + startMon + "' and '" + endMon + "')");
 
 //            SSQL = "select * from Hy_입출력정보 where (일자 between '" + Date1.Text + "'" + "and'" + Date2.Text + "')" + "and 입고처 LIKE '%" + s1.Text + "%'and 입출구분='자재입고'" + "ORDER BY 일자"
             final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.KOREA);
@@ -124,14 +124,14 @@ public class VisitingMonthActivity extends AppCompatActivity {
                 emotionalMon = resultSet.getString("정서사용시간계");
                 lifeMon = resultSet.getString("생활지원사용시간계");
 
-                Date d1= format.parse(bodyMon);
-                diff1 = d1.getTime()+diff1;
+                Date d1 = format.parse(bodyMon);
+                diff1 = d1.getTime() + diff1;
                 Date d2 = format.parse(cognitiveMon);
-                diff2 = d2.getTime()+diff2;
+                diff2 = d2.getTime() + diff2;
                 Date d3 = format.parse(emotionalMon);
-                diff3 = d3.getTime()+diff3;
+                diff3 = d3.getTime() + diff3;
                 Date d4 = format.parse(lifeMon);
-                diff4 = d4.getTime()+diff4;
+                diff4 = d4.getTime() + diff4;
 //                DecimalFormat myFormatter = new DecimalFormat("###,###");
 //                formattedGongPrice = myFormatter.format(gongPrice);
 //                formattedindividualPrice = myFormatter.format(indiviPrice);
@@ -142,10 +142,10 @@ public class VisitingMonthActivity extends AppCompatActivity {
                     @Override
                     public void run() {
 
-                        tv_result1.setText(format.format(diff1)+"");
-                        tv_result2.setText(format.format(diff2)+"");
-                        tv_result3.setText(format.format(diff3)+"");
-                        tv_result4.setText(format.format(diff4)+"");
+                        tv_result1.setText(format.format(diff1) + "");
+                        tv_result2.setText(format.format(diff2) + "");
+                        tv_result3.setText(format.format(diff3) + "");
+                        tv_result4.setText(format.format(diff4) + "");
                     }
                 });
             }

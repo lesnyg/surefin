@@ -2,22 +2,17 @@ package com.jubumam.SureFin;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -25,11 +20,6 @@ import android.widget.RadioGroup;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -41,7 +31,6 @@ import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -306,7 +295,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_start.getText().equals("시작")) {
+                if (btn_start.getText().equals("시작")) {
                     Date startTime = new Date();
                     strStartTime = timeformatter.format(startTime);
                     btn_start.setText(strStartTime);
@@ -335,41 +324,18 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                         e.printStackTrace();
                     }
 
-                    if((diff / (60 * 1000)) < 60) {
+                    if ((diff / (60 * 1000)) < 60) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
                         builder.setTitle("시간확인").setMessage("계약한 60분이 지나지 않았습니다.");
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
 
-                    }else{
+                    } else {
                         btn_end.setText(strEndTime);
                         tv_endTime.setText(strEndTime);
                         usingTime = Long.toString(diff / (60 * 1000));
                         tv_time.setText(usingTime);
                     }
-
-//                    if (tv_time.getText().equals("")) {
-//                        usingTime = Long.toString(diff / (60 * 1000));
-////                        usingTime = utctime.format(diff);
-//
-//                        tv_time.setText(usingTime);
-//                    } else {
-//                        try {
-//                            totalnumber = tv_time.getText().toString();
-//                            Date s1 = timeformatter.parse(totalnumber);
-//                            tdiff = diff + s1.getTime();
-//                            usingTime = Long.toString(diff / (60 * 1000));
-//                            tv_time.setText(usingTime);
-////                            usingTime = utctime.format(diff);
-//
-//
-//                        } catch (Exception e) {
-//
-//
-//                        }
-//
-//                    }
-
                 }
             }
         });
@@ -595,7 +561,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문목욕정보 WHERE 수급자명 = '" + name + "' AND 일자='" + strDate + "'");
             while (dateRS.next()) {
@@ -614,7 +580,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문목욕정보 WHERE 수급자명 = '" + name + "' AND 일자='" + strDate + "'");
             while (dbCheckRS.next()) {
@@ -747,7 +713,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery("select A.수급자명, A.성별, A.등급, A.인정번호1, A.생년월일, A.지점, A.담당, A.기본시간,A.목욕횟수, A.hp, A.구분, A.과거병력, B.기관명, B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점 = B.지점 and A.수급자명 = '" + name + "'");
             while (rs.next()) {
@@ -798,7 +764,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
 
@@ -811,11 +777,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                     "VALUES('" + strDate + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "','" + birth + "','" + acceptnumber + "'," +
                     "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + strCar + "','" + carNumber + "','" + strNoCar + "','" + providing + "','" + beforeCK01 + "','" + beforeCK02 + "','" + beforeCK03 + "'," +
                     "'" + afterCK01 + "','" + afterCK02 + "','" + afterCK03 + "','" + etc + "','" + nonPayment + "'," +
-                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "','"+price+"')");
-//                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
-//                    "시작시간,종료시간,총시간,방문종류구분,디비체크)" +
-//                    "values('" + strDate + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "','" + organization + "','" + organizationId + "'," +
-//                    "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','목욕','" + dbCheck + "')");
+                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "','" + price + "')");
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -828,7 +790,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet priceResultSet = statement.executeQuery("select * from Su_년도별적용급액 where 상세구분='" + carPrice + "' and 년도 = '" + thisYear + "'");
             while (priceResultSet.next()) {

@@ -42,7 +42,7 @@ public class NokLoginActivity extends AppCompatActivity {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 int digits = txt_recipiPhone.getText().toString().length();
                 if (digits > 1)
-                    lastChar = txt_recipiPhone.getText().toString().substring(digits-1);
+                    lastChar = txt_recipiPhone.getText().toString().substring(digits - 1);
             }
 
             @Override
@@ -65,7 +65,7 @@ public class NokLoginActivity extends AppCompatActivity {
         findViewById(R.id.btn_login).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                centerName = txt_centerName.getText().toString()+"동";
+                centerName = txt_centerName.getText().toString() + "동";
                 recipiName = txt_recipiName.getText().toString();
                 recipiPhone = txt_recipiPhone.getText().toString();
 
@@ -88,8 +88,8 @@ public class NokLoginActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            if(centerName.equals(dbCenterName)){
-                new Nok(recipiName,recipiPhone,centerName);
+            if (centerName.equals(dbCenterName)) {
+                new Nok(recipiName, recipiPhone, centerName);
                 Intent intent = new Intent(NokLoginActivity.this, NokMainActivity.class);
                 startActivity(intent);
             }
@@ -105,7 +105,7 @@ public class NokLoginActivity extends AppCompatActivity {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + recipiName + "' and  hp = '" + recipiPhone + "'");
 

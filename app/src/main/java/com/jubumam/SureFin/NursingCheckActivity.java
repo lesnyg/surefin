@@ -73,7 +73,7 @@ public class NursingCheckActivity extends AppCompatActivity {
     private String excretion;       //배설
     private String etetc2;          //기타2
 
-    private AsyncTask<String,String,String> NursingCheckSyncTask;
+    private AsyncTask<String, String, String> NursingCheckSyncTask;
     private String strToday;
 
 
@@ -112,26 +112,106 @@ public class NursingCheckActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(cb_breath1.isChecked()){ breath1 = "True";}else {breath1 = "False";}
-                if(cb_breath2.isChecked()){ breath2 = "True";}else {breath2 = "False";}
-                if(cb_breath3.isChecked()){ breath3 = "True";}else {breath3 = "False";}
-                if(cb_breath4.isChecked()){ breath4 = "True";}else {breath4 = "False";}
-                if(cb_skin1.isChecked()){ skin1 = "True";}else {skin1 = "False";}
-                if(cb_skin2.isChecked()){ skin2 = "True";}else {skin2 = "False";}
-                if(cb_skin3.isChecked()){ skin3 = "True";}else {skin3 = "False";}
-                if(cb_skin4.isChecked()){ skin4 = "True";}else {skin4 = "False";}
-                if(cb_skin5.isChecked()){ skin5 = "True";}else {skin5 = "False";}
-                if(cb_ache1.isChecked()){ ache1 = "True";}else {ache1 = "False";}
-                if(cb_excretion1.isChecked()){ excretion1 = "True";}else {excretion1 = "False";}
-                if(cb_excretion2.isChecked()){ excretion2 = "True";}else {excretion2 = "False";}
-                if(cb_excretion3.isChecked()){ excretion3 = "True";}else {excretion3 = "False";}
-                if(cb_excretion4.isChecked()){ excretion4 = "True";}else {excretion4 = "False";}
-                if(cb_excretion5.isChecked()){ excretion5 = "True";}else {excretion5 = "False";}
-                if(cb_excretion6.isChecked()){ excretion6 = "True";}else {excretion6 = "False";}
-                if(cb_etc1.isChecked()){ etc1 = "True";}else { etc1 = "False";}
-                if(cb_etc2.isChecked()){ etc2 = "True";}else { etc2 = "False";}
-                if(cb_etc3.isChecked()){ etc3 = "True";}else { etc3 = "False";}
-                if(cb_etc4.isChecked()){ etc4 = "True";}else { etc4 = "False";}
+                if (cb_breath1.isChecked()) {
+                    breath1 = "True";
+                } else {
+                    breath1 = "False";
+                }
+                if (cb_breath2.isChecked()) {
+                    breath2 = "True";
+                } else {
+                    breath2 = "False";
+                }
+                if (cb_breath3.isChecked()) {
+                    breath3 = "True";
+                } else {
+                    breath3 = "False";
+                }
+                if (cb_breath4.isChecked()) {
+                    breath4 = "True";
+                } else {
+                    breath4 = "False";
+                }
+                if (cb_skin1.isChecked()) {
+                    skin1 = "True";
+                } else {
+                    skin1 = "False";
+                }
+                if (cb_skin2.isChecked()) {
+                    skin2 = "True";
+                } else {
+                    skin2 = "False";
+                }
+                if (cb_skin3.isChecked()) {
+                    skin3 = "True";
+                } else {
+                    skin3 = "False";
+                }
+                if (cb_skin4.isChecked()) {
+                    skin4 = "True";
+                } else {
+                    skin4 = "False";
+                }
+                if (cb_skin5.isChecked()) {
+                    skin5 = "True";
+                } else {
+                    skin5 = "False";
+                }
+                if (cb_ache1.isChecked()) {
+                    ache1 = "True";
+                } else {
+                    ache1 = "False";
+                }
+                if (cb_excretion1.isChecked()) {
+                    excretion1 = "True";
+                } else {
+                    excretion1 = "False";
+                }
+                if (cb_excretion2.isChecked()) {
+                    excretion2 = "True";
+                } else {
+                    excretion2 = "False";
+                }
+                if (cb_excretion3.isChecked()) {
+                    excretion3 = "True";
+                } else {
+                    excretion3 = "False";
+                }
+                if (cb_excretion4.isChecked()) {
+                    excretion4 = "True";
+                } else {
+                    excretion4 = "False";
+                }
+                if (cb_excretion5.isChecked()) {
+                    excretion5 = "True";
+                } else {
+                    excretion5 = "False";
+                }
+                if (cb_excretion6.isChecked()) {
+                    excretion6 = "True";
+                } else {
+                    excretion6 = "False";
+                }
+                if (cb_etc1.isChecked()) {
+                    etc1 = "True";
+                } else {
+                    etc1 = "False";
+                }
+                if (cb_etc2.isChecked()) {
+                    etc2 = "True";
+                } else {
+                    etc2 = "False";
+                }
+                if (cb_etc3.isChecked()) {
+                    etc3 = "True";
+                } else {
+                    etc3 = "False";
+                }
+                if (cb_etc4.isChecked()) {
+                    etc4 = "True";
+                } else {
+                    etc4 = "False";
+                }
 
                 etc = et_etc.getText().toString();
                 treatment = et_treatment.getText().toString();
@@ -146,7 +226,6 @@ public class NursingCheckActivity extends AppCompatActivity {
                 NursingCheckSyncTask = new NursingCheckSyncTask().execute();
             }
         });
-
 
 
     }
@@ -177,9 +256,8 @@ public class NursingCheckActivity extends AppCompatActivity {
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-
 
 
             String name = "홍길동";            //수급자 이름
@@ -197,10 +275,10 @@ public class NursingCheckActivity extends AppCompatActivity {
                     "흡입실시,가습기,네이브라이저,산소공급,외상처치,봉대교환,연고바르기,욕창간호,약욕제공,온냉습포제공," +
                     "방광훈련,유치도뇨,단순도뇨,Fingerevacustion,관장,장루간호," +
                     "복막투석,기관절개간호,위독시간호,기타,기타내용,상세처지내용,식사,배설,기타1) " +
-                    "values('"+strToday+"','" + name + "','"+gender+"','"+rating+"','"+pastdisease+"','"+room+"','"+birth+"','" + manager + "','"+division+"','"+baseTime+"','"+place+"'," +
+                    "values('" + strToday + "','" + name + "','" + gender + "','" + rating + "','" + pastdisease + "','" + room + "','" + birth + "','" + manager + "','" + division + "','" + baseTime + "','" + place + "'," +
                     "'" + breath1 + "','" + breath2 + "','" + breath3 + "','" + breath4 + "','" + skin1 + "','" + skin2 + "','" + skin3 + "','" + skin4 + "','" + skin5 + "','" + ache1 + "'," +
                     "'" + excretion1 + "','" + excretion2 + "','" + excretion3 + "','" + excretion4 + "','" + excretion5 + "','" + excretion6 + "'," +
-                    "'" + etc1 + "','" + etc2 + "','" + etc3 + "','" + etc4 + "','"+etc+"','"+treatment+"','" + meal + "','" + excretion + "','" + etetc2 + "')");
+                    "'" + etc1 + "','" + etc2 + "','" + etc3 + "','" + etc4 + "','" + etc + "','" + treatment + "','" + meal + "','" + excretion + "','" + etetc2 + "')");
             while (resultSet.next()) {
             }
             connection.close();

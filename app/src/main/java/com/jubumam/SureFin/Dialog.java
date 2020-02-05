@@ -6,7 +6,7 @@ public class Dialog {
     private String contracttime;
     private String division;
 
-    public Dialog(String schedule_time, String schedule_name, String contracttime,String division) {
+    public Dialog(String schedule_time, String schedule_name, String contracttime, String division) {
         this.schedule_time = schedule_time;
         this.schedule_name = schedule_name;
         this.contracttime = contracttime;
