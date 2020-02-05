@@ -81,24 +81,22 @@ public class CustomerServiceActivity extends BaseActivity {
         findViewById(R.id.btn_question).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CustomerServiceActivity.this,QuestionActivity.class);
-                intent.putExtra("responsibility",responsibility);
+                Intent intent = new Intent(CustomerServiceActivity.this, QuestionActivity.class);
+                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
             }
         });
         findViewById(R.id.btn_answer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CustomerServiceActivity.this,AnswerActivity.class);
-                intent.putExtra("responsibility",responsibility);
+                Intent intent = new Intent(CustomerServiceActivity.this, AnswerActivity.class);
+                intent.putExtra("responsibility", responsibility);
                 startActivity(intent);
             }
         });
 
 
         recyclerView = findViewById(R.id.recyclerview_notice);
-
-
 
 
     }
@@ -130,7 +128,7 @@ public class CustomerServiceActivity extends BaseActivity {
     private void listQuery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet resultSetlist = statement.executeQuery("select * from Su_공지사항 order by id desc");
             final List<Notice> list = new ArrayList<>();
@@ -141,7 +139,7 @@ public class CustomerServiceActivity extends BaseActivity {
                 title = resultSetlist.getString("제목");
                 contents = resultSetlist.getString("내용");
 
-                list.add(new Notice(id,date,writer,title,contents));
+                list.add(new Notice(id, date, writer, title, contents));
             }
             runOnUiThread(new Runnable() {
                 @Override
@@ -149,8 +147,8 @@ public class CustomerServiceActivity extends BaseActivity {
                     adapter = new NoticeAdapter(new NoticeAdapter.NoticeListener() {
                         @Override
                         public void setNoticeListener(Notice model) {
-                            Intent intent = new Intent(CustomerServiceActivity.this,NoticeActivity.class);
-                            intent.putExtra("id",model.getId());
+                            Intent intent = new Intent(CustomerServiceActivity.this, NoticeActivity.class);
+                            intent.putExtra("id", model.getId());
                             startActivity(intent);
                         }
                     });
@@ -166,8 +164,6 @@ public class CustomerServiceActivity extends BaseActivity {
         }
 
     }
-
-
 
 
 }

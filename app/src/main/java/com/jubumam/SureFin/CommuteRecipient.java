@@ -1,7 +1,5 @@
 package com.jubumam.SureFin;
 
-import android.util.Printer;
-
 public class CommuteRecipient {
     private static int personId;
     private static String name;
@@ -18,7 +16,7 @@ public class CommuteRecipient {
     }
 
 
-    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute,String startTime,String startWork ) {
+    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute, String startTime, String startWork) {
         this.personId = personId;
         this.name = name;
         this.rating = rating;
@@ -29,9 +27,9 @@ public class CommuteRecipient {
         this.startWork = startWork;
     }
 
-    static CommuteRecipient getInstance(){
-        if(commuteRecipient==null) {
-            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime,startWork);
+    static CommuteRecipient getInstance() {
+        if (commuteRecipient == null) {
+            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime, startWork);
         }
         return commuteRecipient;
     }
@@ -84,7 +82,9 @@ public class CommuteRecipient {
         this.responsibility = responsibility;
     }
 
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
 
     public void setName(String name) {
         this.name = name;

@@ -1,11 +1,11 @@
 package com.jubumam.SureFin;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -35,6 +35,7 @@ public class AnswerActivity extends BaseActivity {
     private String divisiondate;
     private String divisiontime;
     private String division;//구분
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +91,7 @@ public class AnswerActivity extends BaseActivity {
     private void listQuery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet resultSetlist = statement.executeQuery("select * from Su_요양사문의 where 작성자='" + responsibility + "' order by id desc");
             final List<Answer> list = new ArrayList<>();
@@ -100,7 +101,7 @@ public class AnswerActivity extends BaseActivity {
                 String contents = resultSetlist.getString("내용");
                 String answer = resultSetlist.getString("답변");
                 String answerDate = resultSetlist.getString("답변일자");
-                if(answer==null || answerDate == null){
+                if (answer == null || answerDate == null) {
                     answer = "답변내역이 없습니다.";
                     answerDate = "";
                 }
@@ -125,7 +126,7 @@ public class AnswerActivity extends BaseActivity {
                 }
             });
 
-        connection.close();
+            connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

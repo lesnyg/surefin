@@ -23,9 +23,9 @@ public class LoginActivity extends Activity {
 
     Button btn1;
     EditText txthp;
-    String hp,name,hp1,pass1;
+    String hp, name, hp1, pass1;
     String PhoneNum;
-    private AsyncTask<String,String,String> mTask;
+    private AsyncTask<String, String, String> mTask;
     String lastChar = "";
     private String pass;
     private EditText txt_pass;
@@ -57,19 +57,19 @@ public class LoginActivity extends Activity {
 
 */
 
-        txthp = (EditText)findViewById(R.id.txt_hp);
+        txthp = (EditText) findViewById(R.id.txt_hp);
         txthp.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 int digits = txthp.getText().toString().length();
                 if (digits > 1)
-                    lastChar = txthp.getText().toString().substring(digits-1);
+                    lastChar = txthp.getText().toString().substring(digits - 1);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int digits = txthp.getText().toString().length();
-                Log.d("LENGTH",""+digits);
+                Log.d("LENGTH", "" + digits);
                 if (!lastChar.equals("-")) {
                     if (digits == 3 || digits == 8) {
                         txthp.append("-");
@@ -82,20 +82,19 @@ public class LoginActivity extends Activity {
 
             }
         });
-        txt_pass = (EditText)findViewById(R.id.txt_pass);
+        txt_pass = (EditText) findViewById(R.id.txt_pass);
 
-        btn1 = (Button)findViewById(R.id.btn1);
+        btn1 = (Button) findViewById(R.id.btn1);
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
 
-               hp = txthp.getText().toString();
-               pass = txt_pass.getText().toString();
+                hp = txthp.getText().toString();
+                pass = txt_pass.getText().toString();
 
 
                 //Toast.makeText(LoginActivity.this,PhoneNum,Toast.LENGTH_SHORT).show();
-
 
 
                 query();
@@ -125,28 +124,25 @@ public class LoginActivity extends Activity {
 
                 try {
                     if (hp.equals(hp1)) {
-                        new Login(hp,name);
+                        new Login(hp, name);
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("caregiverPhone",hp);
-                        intent.putExtra("responsibility",name);
-                        intent.putExtra("route","LoginActivity");
+                        intent.putExtra("caregiverPhone", hp);
+                        intent.putExtra("responsibility", name);
+                        intent.putExtra("route", "LoginActivity");
                         startActivity(intent);
                         finish();
 
-                    } else if(hp==null){
+                    } else if (hp == null) {
                         Toast.makeText(getApplicationContext(), "휴대폰번호를 입력하세요.", Toast.LENGTH_SHORT).show();
 
-                    }else if(pass==null){
+                    } else if (pass == null) {
                         Toast.makeText(getApplicationContext(), "비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (pass != pass1) {
+                    } else if (pass != pass1) {
                         Toast.makeText(getApplicationContext(), "비밀번호를 잘못 입력하셨습니다.", Toast.LENGTH_SHORT).show();
 
 
-
-
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
 
                 }
@@ -158,16 +154,14 @@ public class LoginActivity extends Activity {
     }
 
 
-
-
     public void query() {
         Connection connection = null;
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_직원기본정보 where hp='"+hp+"' and  비밀번호 = '"+pass+"'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_직원기본정보 where hp='" + hp + "' and  비밀번호 = '" + pass + "'");
 
             while (resultSet.next()) {
 
@@ -187,31 +181,30 @@ public class LoginActivity extends Activity {
             Log.w("Error connection", "" + e.getMessage());
 
 
-
         }
-
 
 
     }
 
-    public class MyAsyncTask extends AsyncTask<String,String,String> {
+    public class MyAsyncTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             query();
-
 
 
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
     }

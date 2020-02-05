@@ -2,7 +2,6 @@ package com.jubumam.SureFin;
 
 import android.animation.Animator;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,23 +11,16 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.airbnb.lottie.LottieAnimationView;
 
@@ -37,7 +29,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -370,7 +361,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(btn_start.getText().equals("시작")) {
+                if (btn_start.getText().equals("시작")) {
                     Date startTime = new Date();
                     strStartTime = timeformatter.format(startTime);
                     btn_start.setText(strStartTime);
@@ -595,7 +586,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            con = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement sts = con.createStatement();
             ResultSet rs = sts.executeQuery("SELECT A.수급자명,A.성별,A.등급,A.지점,A.담당,A.인정번호1,A.구분,A.기본시간,A.생년월일,A.기본시간,A.과거병력,A.구분,A.성별,A.hp,B.기관명,B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점=B.지점 and 수급자명='" + name + "';");
 
@@ -629,21 +620,6 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
 
             }
 
-//            ResultSet res = sts.executeQuery("select * from Su_년도별적용급액 where 상세구분 = '"+ptime+"'");
-//            while (res.next()) {
-//
-//                money = res.getInt("금액");
-//                smoney = res.getInt("비급여액");
-//            }
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    tv_phone1.setText(phone);
-//                    tv_rating1.setText(rating);
-////                    tv_price.setText(new DecimalFormat("###,###").format(money)+"원");
-//                }
-//            });
-
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
@@ -664,7 +640,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
             ResultSet resultSet = statement.executeQuery("insert into Su_방문간호정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호,의료기관명칭,발급일자,유효기간," +
@@ -676,10 +652,6 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
                     "'" + vnumber + "','" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + bpressure + "','" + bpressure1 + "','" + pressure + "'," + "'" + btemperature + "'," +
                     "'" + usingTime1 + "','" + usingTime4 + "','" + uniqueness + "','" + smoney + "','" + place + "','" + responsibility + "','" + baseTime + "','" + tmoney + "','" + gender + "','" + division + "','" + mhistory + "'," +
                     "'" + ck_string1 + "','" + ck_string2 + "','" + ck_string3 + "','" + ck_string4 + "','" + ck_string5 + "','" + ck_string6 + "','" + ck_string7 + "','" + ck_string8 + "','" + ck_string9 + "','" + ck_string10 + "','" + ck_string11 + "','" + ck_string12 + "','" + ptime + "','" + dbCheck + "','" + number + "')");
-//                    "insert into Su_방문요양급여정보(일자,수급자명,성별,등급,인정번호,생년월일,구분,기본시간,지점,담당,기관명,기관기호," +
-//                    "건강관리,간호관리,시작시간,종료시간,총시간,방문종류구분,디비체크)" +
-//                    "values('" + date1 + "','" + name + "','" + gender + "','" + rating + "','" + acceptnumber + "','" + birth + "','" + division + "','" + baseTime + "','" + place + "','" + responsibility + "','" + organization + "','" + organizationId + "'," +
-//                    "'" + usingTime4 + "','" + usingTime1 + "','" + strStartTime + "','" + strEndTime + "','" + usingTime + "','간호','"+dbCheck+"')");
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -715,7 +687,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문간호정보 WHERE 수급자명 = '" + name + "' AND 일자='" + date1 + "'");
             while (dateRS.next()) {
@@ -778,7 +750,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         Connection connection = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
             ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문간호정보 WHERE 수급자명 = '" + name + "' AND 일자='" + date1 + "'");
             while (dbCheckRS.next()) {

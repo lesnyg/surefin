@@ -1,25 +1,13 @@
 package com.jubumam.SureFin;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +15,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 public class QuestionActivity extends BaseActivity {
@@ -54,12 +41,13 @@ public class QuestionActivity extends BaseActivity {
     private String divisiontime;
     private String division;//구분
     private String commute;//출근확인
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question);
 
-       activateToolbar();
+        activateToolbar();
 
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
@@ -78,7 +66,7 @@ public class QuestionActivity extends BaseActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 String input = et_contents.getText().toString();
-                tv_textnumber.setText(input.length()+"");
+                tv_textnumber.setText(input.length() + "");
             }
 
             @Override
@@ -108,12 +96,12 @@ public class QuestionActivity extends BaseActivity {
             public void onClick(View v) {
                 title = et_title.getText().toString();
                 contents = et_contents.getText().toString();
-                if(title.equals("")) {
+                if (title.equals("")) {
                     android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QuestionActivity.this);
                     builder.setTitle("").setMessage("제목을 입력하세요.");
                     android.app.AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-                }else {
+                } else {
                     mTask = new MySyncTask().execute();
                     finish();
                 }
@@ -138,9 +126,10 @@ public class QuestionActivity extends BaseActivity {
         }
 
         protected void onPostExecute(String result) {
-            Intent intent = new Intent(QuestionActivity.this,AnswerActivity.class);
-            intent.putExtra("responsibility",responsibility);
-            startActivity(intent);        }
+            Intent intent = new Intent(QuestionActivity.this, AnswerActivity.class);
+            intent.putExtra("responsibility", responsibility);
+            startActivity(intent);
+        }
 
         protected void onCancelled() {
             super.onCancelled();
@@ -151,9 +140,9 @@ public class QuestionActivity extends BaseActivity {
     private void listQuery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetlist = statement.executeQuery("insert into Su_요양사문의(일자,작성자,제목,내용) values('"+date+"','"+responsibility+"','"+title+"','"+contents+"') ");
+            ResultSet resultSetlist = statement.executeQuery("insert into Su_요양사문의(일자,작성자,제목,내용) values('" + date + "','" + responsibility + "','" + title + "','" + contents + "') ");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

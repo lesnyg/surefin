@@ -3,31 +3,22 @@ package com.jubumam.SureFin;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -54,6 +45,7 @@ public class BaseActivity extends AppCompatActivity {
     private String commute;
     private String schedule_date;//일자
     private String scheduletime;//근무시간
+    private String scheduletime2;//근무시간
     private String contracttime; //계약시간
     private String schedulename;//계약수급자명
     private String divisiontotal;
@@ -140,7 +132,7 @@ public class BaseActivity extends AppCompatActivity {
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = conn.createStatement();
             ResultSet notiRS = statement.executeQuery("select id from Su_공지사항 where id > '" + noti_id + "' order by id");
             while (notiRS.next()) {
@@ -193,23 +185,30 @@ public class BaseActivity extends AppCompatActivity {
         Connection conn = null;
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            conn = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_요양사일정관리 where 직원명 ='" + responsibility + "' and 일자 ='" + date1 + "' order by 근무시간");
+            ResultSet calres = statement.executeQuery("select * from Su_서비스제공일정표 where (담당1 ='" + responsibility + "' or 담당2 ='" + responsibility + "') and 일자 ='" + divisiondate + "' order by 시간1");
             list = new ArrayList<>();
             dialogItemList = new ArrayList<>();
             while (calres.next()) {
 
+//                schedule_date = calres.getString("일자");//일자
+//                scheduletime = calres.getString("근무시간");//근무시간
+//                contracttime = calres.getString("계약시간"); //계약시간
+//                schedulename = calres.getString("수급자명");//계약수급자명
+//                division = calres.getString("구분");//구분
+
                 schedule_date = calres.getString("일자");//일자
-                scheduletime = calres.getString("근무시간");//근무시간
-                contracttime = calres.getString("계약시간"); //계약시간
+                scheduletime = calres.getString("시간1");//근무시간
+                scheduletime2 = calres.getString("시간2");//근무시간
+                contracttime = calres.getString("기본시간"); //계약시간
                 schedulename = calres.getString("수급자명");//계약수급자명
-                division = calres.getString("구분");//구분
+                division = calres.getString("재가구분");//구분
 
                 itemMap = new HashMap<>();
 
                 divisiontotal = "      " + schedulename + "     " + division;
-                divisiontime = scheduletime + " (" + contracttime + ")";
+                divisiontime = scheduletime + "~" + scheduletime2 + " (" + contracttime + ")";
 
                 itemMap.put(TAG_TIME, divisiontime);
                 itemMap.put(TAG_NAME, divisiontotal);
@@ -284,7 +283,7 @@ public class BaseActivity extends AppCompatActivity {
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
-                        divisiondate = new SimpleDateFormat("yyyy년 MM월 dd일 EE요일").format(dialogdate);
+                        divisiondate = new SimpleDateFormat("yyyy년 MM월 d일 EE요일").format(dialogdate);
                         cTask = new CalSyncTask().execute();
                     }
                 }, cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));

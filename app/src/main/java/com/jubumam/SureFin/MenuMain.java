@@ -1,9 +1,6 @@
 package com.jubumam.SureFin;
 
 import android.Manifest;
-
-import android.app.DatePickerDialog;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,18 +12,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.util.Log;
-import android.util.MonthDisplayHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
-
-import android.widget.Toast;
-import android.widget.ViewAnimator;
-
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,7 +44,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 
 public class MenuMain extends BaseActivity {
@@ -179,8 +169,6 @@ public class MenuMain extends BaseActivity {
         stime = commuteRecipient.getStartTime();
 
 
-
-
         currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String month = sdf.format(currentTime);
@@ -189,7 +177,7 @@ public class MenuMain extends BaseActivity {
         startMon = month + "-" + "01";
         endMon = month + "-" + "32";
 
-    //   Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
+        //   Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
 
         n1 = findViewById(R.id.n1);
@@ -217,8 +205,6 @@ public class MenuMain extends BaseActivity {
         tv_startWork.setText(stime);
 
 
-
-
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -230,7 +216,6 @@ public class MenuMain extends BaseActivity {
         dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
 
-
         init();
 
         mRecipientTask = new RecipientTask().execute();
@@ -239,7 +224,7 @@ public class MenuMain extends BaseActivity {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
-             //   i1.putExtra("vistime",vistime);
+                //   i1.putExtra("vistime",vistime);
                 startActivity(i1);
             }
         });
@@ -277,12 +262,11 @@ public class MenuMain extends BaseActivity {
         });
 
 
-
         n1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i1 = new Intent(MenuMain.this, VisitingActivity.class);
-            //
+                //
                 startActivity(i1);
 
             }
@@ -545,12 +529,9 @@ public class MenuMain extends BaseActivity {
         }
 
         protected void onPostExecute(String result) {
-
-            Intent intent = new Intent(MenuMain.this,VisitingActivity.class);
-            intent.putExtra("vistime",vistime);
-
-
-            Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MenuMain.this, VisitingActivity.class);
+            intent.putExtra("vistime", vistime);
+//            Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
         }
 
 
@@ -588,7 +569,7 @@ public class MenuMain extends BaseActivity {
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
 
             PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
             byte[] s5 = imageBytes;
@@ -610,7 +591,7 @@ public class MenuMain extends BaseActivity {
     private void recipiquery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
 
@@ -697,7 +678,7 @@ public class MenuMain extends BaseActivity {
                     strTmin = String.format("%02d", tmin);
                     tv_careTotalTime.setText(strThour + ":" + strTmin);
                     vistime = sumUsingTimeMonth / 60000;
-               //     Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
+                    //     Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
 
                     //방문요양 사용시간
                     int sumtime = (int) sumUsingTimeMonth / 60000;

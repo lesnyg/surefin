@@ -37,11 +37,11 @@ public class cameraActivity extends AppCompatActivity {
     final String TAG = getClass().getSimpleName();
     ImageView cameraimage;
     Button cameraBtn;
-    Button button,button1,button2;
+    Button button, button1, button2;
     String imageString;
-    String s3,s4;
-    String ymd1,hms1;
-    int s1,s2;
+    String s3, s4;
+    String ymd1, hms1;
+    int s1, s2;
     byte[] s5;
     final static int TAKE_PICTURE = 1;
     private String name;        //이름
@@ -52,13 +52,13 @@ public class cameraActivity extends AppCompatActivity {
     private String responsibility;      //직원명
 
 
-    private AsyncTask<String,String,String> caTask;
+    private AsyncTask<String, String, String> caTask;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-     //   setContentView(R.layout.activity_camera1);
+        //   setContentView(R.layout.activity_camera1);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -80,12 +80,10 @@ public class cameraActivity extends AppCompatActivity {
         responsibility = intent.getExtras().getString("responsibility");
 
 
-
-
         // 레이아웃과 변수 연결
-   //     cameraimage = findViewById(R.id.cameraimage);
+        //     cameraimage = findViewById(R.id.cameraimage);
         //button = findViewById(R.id.button);
-       // button1 = findViewById(R.id.button1);
+        // button1 = findViewById(R.id.button1);
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,20 +106,20 @@ public class cameraActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(cameraActivity.this,"전송완료",Toast.LENGTH_SHORT).show();
+                Toast.makeText(cameraActivity.this, "전송완료", Toast.LENGTH_SHORT).show();
                 caTask = new caAsyncTask().execute();
 
-                Intent intent = new Intent(getApplication(),MenuMain.class);
-               // intent.putExtra("time",s3);
+                Intent intent = new Intent(getApplication(), MenuMain.class);
+                // intent.putExtra("time",s3);
                 intent.putExtra("name", name);
                 intent.putExtra("gender", gender);
                 intent.putExtra("rating", rating);
                 intent.putExtra("birth", birth);
                 intent.putExtra("pastdisease", pastdisease);
                 intent.putExtra("responsibility", responsibility);
-               // intent.putExtra("ymd",ymd1);
-               // intent.putExtra("hms",hms1);
-               // Toast.makeText(cameraActivity.this,s3,Toast.LENGTH_SHORT).show();
+                // intent.putExtra("ymd",ymd1);
+                // intent.putExtra("hms",hms1);
+                // Toast.makeText(cameraActivity.this,s3,Toast.LENGTH_SHORT).show();
                 startActivity(intent);
 
 
@@ -129,10 +127,9 @@ public class cameraActivity extends AppCompatActivity {
         });
 
 
-
         // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 Log.d(TAG, "권한 설정 완료");
             } else {
                 Log.d(TAG, "권한 설정 요청");
@@ -146,7 +143,7 @@ public class cameraActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         Log.d(TAG, "onRequestPermissionsResult");
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
             Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
         }
     }
@@ -238,8 +235,7 @@ public class cameraActivity extends AppCompatActivity {
                             hms1 = hms.format(date);
 
 
-
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
 
@@ -252,22 +248,20 @@ public class cameraActivity extends AppCompatActivity {
     }
 
 
-
     public void query() {
         Connection connection = null;
 
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_직원출퇴근정보(일자,직원명,출근시간,BLOBData)VALUES ('"+ymd1+"','"+responsibility+"','"+hms1+"',convert(VARBINARY(max),'"+s4+"'))");
+            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_직원출퇴근정보(일자,직원명,출근시간,BLOBData)VALUES ('" + ymd1 + "','" + responsibility + "','" + hms1 + "',convert(VARBINARY(max),'" + s4 + "'))");
 
             //ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_사진1(BLOBData)VALUES ('"+s5+"')");
             // PreparedStatement pst = connection.prepareStatement("INSERT INTO  Su_사진1(BLOBData)VALUES ('"+imageString+"',convert(VARBINARY(max))");
             // pst.executeUpdate();
 
             //
-
 
 
             while (resultSet.next()) {
@@ -282,38 +276,40 @@ public class cameraActivity extends AppCompatActivity {
 
     }
 
-    public class caAsyncTask extends AsyncTask<String,String,String> {
+    public class caAsyncTask extends AsyncTask<String, String, String> {
 
-        protected void onPreExecute(){}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected String doInBackground(String... strings) {
-            if(isCancelled())
+            if (isCancelled())
                 return (null);
             query();
 
             return null;
         }
 
-        protected  void onPostExecute(String result){}
+        protected void onPostExecute(String result) {
+        }
 
-        protected  void onCancelled(){
+        protected void onCancelled() {
             super.onCancelled();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.appbar_action,menu);
+        getMenuInflater().inflate(R.menu.appbar_action, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = new Intent(cameraActivity.this,MenuMain.class);
-                intent.putExtra("name",name);
+                Intent intent = new Intent(cameraActivity.this, MenuMain.class);
+                intent.putExtra("name", name);
                 startActivity(intent);
                 return true;
         }

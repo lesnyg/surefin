@@ -1,16 +1,14 @@
 package com.jubumam.SureFin.NokPackage;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.ImageView;
 
-import com.jubumam.SureFin.QuestionActivity;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.jubumam.SureFin.R;
-import com.ortiz.touchview.TouchImageView;
 
 import java.sql.Blob;
 import java.sql.Connection;
@@ -68,9 +66,9 @@ public class MealmenuActivity extends AppCompatActivity {
     private void listQuery() {
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://222.122.213.216/mashw08", "mashw08", "msts0850op");
+            Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetPhoto = statement.executeQuery("select * from Su_식단표 where 지점='" + center + "' and 일자 = '"+date+"'");
+            ResultSet resultSetPhoto = statement.executeQuery("select * from Su_식단표 where 지점='" + center + "' and 일자 = '" + date + "'");
             byte b[];
             while (resultSetPhoto.next()) {
                 Blob blob = resultSetPhoto.getBlob(3);
