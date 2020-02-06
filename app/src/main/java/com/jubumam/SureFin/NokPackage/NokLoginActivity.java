@@ -26,6 +26,7 @@ public class NokLoginActivity extends AppCompatActivity {
     private String dbCenterName;
     private String recipiName;
     private String recipiPhone;
+    private String rating;
     private String lastChar = "";
 
     private AsyncTask<String, String, String> mTask;
@@ -89,7 +90,7 @@ public class NokLoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if (centerName.equals(dbCenterName)) {
-                new Nok(recipiName, recipiPhone, centerName);
+                new Nok(recipiName, recipiPhone, centerName,rating);
                 Intent intent = new Intent(NokLoginActivity.this, NokMainActivity.class);
                 startActivity(intent);
             }
@@ -111,6 +112,7 @@ public class NokLoginActivity extends AppCompatActivity {
 
             while (resultSet.next()) {
                 dbCenterName = resultSet.getString("지점");
+                rating = resultSet.getString("등급");
 
             }
             connection.close();

@@ -149,12 +149,6 @@ public class MenuMain extends BaseActivity {
     private Button btn_offwork;
     private String bathTotalCount;
 
-//    //noti count
-//    private TextView smsCountTxt;
-//    private int pendingSMSCount = 12;
-//    private MenuItem menuItem;
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -717,13 +711,4 @@ public class MenuMain extends BaseActivity {
 
 
     }
-
-    @Override
-    protected void onPause() {
-        swipeTimer.cancel();
-        super.onPause();
-
-    }
-
-
 }

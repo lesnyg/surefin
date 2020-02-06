@@ -8,6 +8,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jubumam.SureFin.NokPackage.Nok;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -71,6 +73,7 @@ public class ServiceListActivity extends BaseActivity {
     private String name;
     private String date;
     private String responsibility;
+    private String commute;
     private String usingTime1;
     private String nursingCount;
     private String nursingTotal;
@@ -123,6 +126,7 @@ public class ServiceListActivity extends BaseActivity {
     private long sumUsingTimeMonth = 0;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,7 +137,12 @@ public class ServiceListActivity extends BaseActivity {
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
-
+        commute = commuteRecipient.getCommute();
+        if(commute==null) {
+            Nok nok = Nok.getInstance();
+            name = nok.getRecipientName();
+            rating = nok.getRating();
+        }
 
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));
