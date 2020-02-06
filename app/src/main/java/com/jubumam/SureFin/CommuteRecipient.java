@@ -27,7 +27,7 @@ public class CommuteRecipient {
         this.startWork = startWork;
     }
 
-    static CommuteRecipient getInstance() {
+    public static CommuteRecipient getInstance() {
         if (commuteRecipient == null) {
             commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime, startWork);
         }

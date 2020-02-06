@@ -201,14 +201,14 @@ public class BaseActivity extends AppCompatActivity {
                 schedule_date = calres.getString("일자");//일자
                 scheduletime = calres.getString("시간1");//근무시간
                 scheduletime2 = calres.getString("시간2");//근무시간
-                contracttime = calres.getString("기본시간"); //계약시간
+                contracttime = calres.getString("서비스제공시간"); //서비스제공시간
                 schedulename = calres.getString("수급자명");//계약수급자명
                 division = calres.getString("재가구분");//구분
 
                 itemMap = new HashMap<>();
 
                 divisiontotal = "      " + schedulename + "     " + division;
-                divisiontime = scheduletime + "~" + scheduletime2 + " (" + contracttime + ")";
+                divisiontime = scheduletime + "~" + scheduletime2 + " (" + contracttime + "분)";
 
                 itemMap.put(TAG_TIME, divisiontime);
                 itemMap.put(TAG_NAME, divisiontotal);
