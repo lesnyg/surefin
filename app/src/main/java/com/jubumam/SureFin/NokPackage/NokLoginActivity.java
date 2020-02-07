@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -90,9 +91,11 @@ public class NokLoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if (centerName.equals(dbCenterName)) {
-                new Nok(recipiName, recipiPhone, centerName,rating);
+                new Nok(recipiName, recipiPhone, centerName, rating);
                 Intent intent = new Intent(NokLoginActivity.this, NokMainActivity.class);
                 startActivity(intent);
+            }else{
+                Toast.makeText(NokLoginActivity.this, "센터에 문의하세요", Toast.LENGTH_SHORT).show();
             }
         }
 

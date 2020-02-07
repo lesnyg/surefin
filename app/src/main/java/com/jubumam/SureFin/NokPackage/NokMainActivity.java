@@ -195,12 +195,12 @@ public class NokMainActivity extends BaseActivity {
 
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {           //서비스 사용내역
                 startActivity(new Intent(NokMainActivity.this,ServiceListActivity.class));
             }
         });
 
-        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {      //앨범
             @Override
             public void onClick(View v) {
 
@@ -208,23 +208,23 @@ public class NokMainActivity extends BaseActivity {
         });
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {       //식단
                 startActivity(new Intent(NokMainActivity.this,MealmenuActivity.class));
             }
         });
         findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v) {       //결제
                 startActivity(new Intent(NokMainActivity.this,NokPaymentActivity.class));
             }
         });
-        findViewById(R.id.button5).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button5).setOnClickListener(new View.OnClickListener() {      //입금내역
             @Override
             public void onClick(View v) {
 
             }
         });
-        findViewById(R.id.button6).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.button6).setOnClickListener(new View.OnClickListener() {      //공지사항
             @Override
             public void onClick(View v) {
 
