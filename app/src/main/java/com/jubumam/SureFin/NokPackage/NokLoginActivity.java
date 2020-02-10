@@ -29,7 +29,6 @@ public class NokLoginActivity extends AppCompatActivity {
     private String recipiPhone;
     private String rating;
     private String lastChar = "";
-
     private AsyncTask<String, String, String> mTask;
 
     @Override

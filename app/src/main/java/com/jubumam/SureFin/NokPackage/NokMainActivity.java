@@ -203,7 +203,7 @@ public class NokMainActivity extends BaseActivity {
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {      //앨범
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(NokMainActivity.this,GalleryActivity.class));
             }
         });
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
@@ -221,13 +221,13 @@ public class NokMainActivity extends BaseActivity {
         findViewById(R.id.button5).setOnClickListener(new View.OnClickListener() {      //입금내역
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(NokMainActivity.this,NokDepositActivity.class));
             }
         });
         findViewById(R.id.button6).setOnClickListener(new View.OnClickListener() {      //공지사항
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(NokMainActivity.this,NokCustomerServiceActivity.class));
             }
         });
     }
