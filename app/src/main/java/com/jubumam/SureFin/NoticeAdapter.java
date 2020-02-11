@@ -22,7 +22,7 @@ public class NoticeAdapter extends RecyclerView.Adapter<NoticeAdapter.NoticeHold
     private int prePosition = -1;
     private Context context;
 
-    interface NoticeListener {
+    public interface NoticeListener {
         void setNoticeListener(Notice model);
     }
 

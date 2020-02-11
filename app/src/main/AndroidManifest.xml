@@ -22,13 +22,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".NokPackage.MealmenuActivity"></activity>
+        <activity android:name=".NokPackage.GalleryDetailActivity"></activity>
+        <activity android:name=".NokPackage.GalleryActivity" />
+        <activity android:name=".NokPackage.NokDepositActivity" />
+        <activity android:name=".NokPackage.MealmenuActivity" />
         <activity android:name=".NokPackage.NokMainActivity" />
+        <activity android:name=".NokPackage.NokCustomerServiceActivity" />
         <activity android:name=".NokPackage.SelectActivity" />
         <activity
             android:name=".NokPackage.NokLoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NokPackage.NokPaymentActivity"></activity>
+        <activity android:name=".NokPackage.NokPaymentActivity" />
         <activity android:name=".NoticeActivity" />
         <activity android:name=".AnswerActivity" />
         <activity
