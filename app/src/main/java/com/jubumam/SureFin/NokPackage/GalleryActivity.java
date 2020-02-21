@@ -25,6 +25,7 @@ public class GalleryActivity extends AppCompatActivity {
     private AsyncTask<String, String, String> mTask;
     private List<Gallery> list;
     private Bitmap bitmap;
+    private Bitmap bitmap2;
     private GalleryAdapter mAdapter;
     private RecyclerView recyclerView;
 
@@ -73,16 +74,24 @@ public class GalleryActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             final Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_직원출퇴근정보 where 수급자명='" + name + "'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_직원출퇴근정보 where 수급자명='" + name + "' order by 일자 DESC");
             byte bt[];
+            byte bt2[];
             list = new ArrayList<>();
             while (resultSet.next()){
                 Blob bloblist = resultSet.getBlob("BLOBData");
                 if (bloblist != null) {
                     bt = bloblist.getBytes(1, (int) bloblist.length());
                     bitmap = BitmapFactory.decodeByteArray(bt, 0, bt.length);
-            }
-                list.add(new Gallery(bitmap));
+                    list.add(new Gallery(bitmap));
+                }
+
+                Blob bloblist2 = resultSet.getBlob("퇴근BLOB");
+                if (bloblist2 != null) {
+                    bt2 = bloblist2.getBytes(1, (int) bloblist2.length());
+                    bitmap2 = BitmapFactory.decodeByteArray(bt2, 0, bt2.length);
+                    list.add(new Gallery(bitmap2));
+                }
             }
 
             runOnUiThread(new Runnable() {
