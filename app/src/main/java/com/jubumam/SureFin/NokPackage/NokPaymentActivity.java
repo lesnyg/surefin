@@ -1,5 +1,6 @@
 package com.jubumam.SureFin.NokPackage;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -80,6 +81,7 @@ public class NokPaymentActivity extends AppCompatActivity {
     private int twobedroom;
     private int beauty;
     private int sum;
+    private DecimalFormat moneyfm;
 
 
     @Override
@@ -121,7 +123,11 @@ public class NokPaymentActivity extends AppCompatActivity {
         findViewById(R.id.btn_payment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(NokPaymentActivity.this,SMPayWebSampleAutoActivity.class);
+                intent.putExtra("totalPrice",sum);
+                intent.putExtra("recipiName",recipiName);
+                intent.putExtra("recipiPhone",recipiPhone);
+                startActivity(intent);
             }
         });
     }
@@ -190,7 +196,7 @@ public class NokPaymentActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    DecimalFormat moneyfm = new DecimalFormat("###,###");
+                    moneyfm = new DecimalFormat("###,###");
                     tv_recipiname.setText(recipiName + " ");
                     tv_nokname.setText(nokname + " ");
 //                    tv_payway.setText(payway + " ");

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.widget.Adapter;
 import android.widget.TextView;
 
+import com.jubumam.SureFin.BaseActivity;
 import com.jubumam.SureFin.R;
 import com.jubumam.SureFin.Recipient;
 
@@ -18,10 +19,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class NokDepositActivity extends AppCompatActivity {
+public class NokDepositActivity extends BaseActivity {
     private AsyncTask<String, String, String> mTask;
     private String name;        //이름
     private String rating;      //등급
@@ -42,11 +45,15 @@ public class NokDepositActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private TextView tv_totalbal;
     private DecimalFormat moneyfm;
+    private SimpleDateFormat sdf;
+    private SimpleDateFormat sdf2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nok_deposit);
+
+        activateToolbar();
 
         Nok nok = Nok.getInstance();
         name = nok.getRecipientName();
@@ -55,6 +62,8 @@ public class NokDepositActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerview_nok);
         tv_totalbal = findViewById(R.id.tv_totalbalance);
         moneyfm = new DecimalFormat("###,###");
+        sdf = new SimpleDateFormat("yyyy-MM");
+        sdf2 = new SimpleDateFormat("yyyy년\nMM월");
         mTask = new MyAsyncTask().execute();
 
     }
@@ -73,7 +82,7 @@ public class NokDepositActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            tv_totalbal.setText(moneyfm.format(totalbal));
+            tv_totalbal.setText(moneyfm.format(totalbal) + " 원");
         }
 
         protected void onCancelled() {
@@ -88,7 +97,7 @@ public class NokDepositActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_본인부담금정산 where 수급자명='" + name + "'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_본인부담금정산 where 수급자명='" + name + "' order by 일자 desc");
             list = new ArrayList<>();
             while (resultSet.next()) {
                 date = resultSet.getString("일자");
@@ -97,7 +106,11 @@ public class NokDepositActivity extends AppCompatActivity {
                 deposit = resultSet.getInt("입금액");
                 balance = resultSet.getInt("잔액");
 
-                list.add(new Deposit(date, settlement, charge, deposit, balance));
+
+
+                Date dt = sdf.parse(date);
+
+                list.add(new Deposit(sdf2.format(dt), settlement, charge, deposit, balance));
 
                 totalbal = totalbal + balance;
             }
@@ -114,6 +127,8 @@ public class NokDepositActivity extends AppCompatActivity {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }

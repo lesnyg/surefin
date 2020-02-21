@@ -5,14 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="#ffffff"
     tools:context=".NokPackage.NokDepositActivity">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:gravity="center"
-        android:text="입금내역및 미납금액" />
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center|top"
+        android:text="입금내역 및 미납금액"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        android:background="#e0e0e0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_nok"
@@ -24,6 +37,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="#eeeeee"
         android:orientation="horizontal">
 
         <TextView
@@ -31,7 +46,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center"
-            android:text="총 미납금액 : " />
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:text="총 미납금액  " />
 
         <TextView
             android:id="@+id/tv_totalbalance"
@@ -39,8 +56,15 @@
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
             android:gravity="center"
+            android:textSize="24dp"
+            android:textColor="#ff5151"
             android:text="총 미납금액" />
     </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_centerInParent="true"
+        android:background="#e0e0e0" />
 
 
 </LinearLayout>
