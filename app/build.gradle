@@ -37,4 +37,6 @@ dependencies {
     // Android X
     implementation 'com.loopj.android:android-async-http:1.4.9'
 
+    implementation files('libs/android-zoom-view.jar')
+
 }
