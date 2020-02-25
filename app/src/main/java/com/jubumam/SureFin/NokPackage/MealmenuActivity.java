@@ -1,10 +1,16 @@
 package com.jubumam.SureFin.NokPackage;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,6 +22,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import pl.polidea.view.ZoomView;
 
 public class MealmenuActivity extends AppCompatActivity {
     private AsyncTask<String, String, String> mTask;
@@ -29,11 +37,21 @@ public class MealmenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mealmenu);
 
+        View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.zoom_item, null, false);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        ZoomView zoomView = new ZoomView(this);
+        zoomView.addView(v);
+        zoomView.setLayoutParams(layoutParams);
+        zoomView.setMaxZoom(4f);// 줌 Max 배율 설정  1f 로 설정하면 줌 안됩니다.
+
+        RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
+        container.addView(zoomView);
+
         Nok nok = Nok.getInstance();
         center = nok.getCenterName();
 
         img_meal = findViewById(R.id.img_meal);
-
 
         date = "2020-01-30";
         mTask = new MySyncTask().execute();
@@ -60,6 +78,7 @@ public class MealmenuActivity extends AppCompatActivity {
         protected void onCancelled() {
             super.onCancelled();
         }
+
 
     }
 
