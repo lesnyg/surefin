@@ -136,8 +136,8 @@ public class RecipientDetailActivity extends BaseActivity {
         tv_individualper = findViewById(R.id.tv_individualper_result);
         tv_individualprice = findViewById(R.id.tv_individualprice_result);
         tv_sum = findViewById(R.id.tv_sum_result);
-        img_person = findViewById(R.id.img_person);
-        btn_camera = (Button) findViewById(R.id.btn_camera);
+            img_person = findViewById(R.id.img_person);
+            btn_camera = (Button) findViewById(R.id.btn_camera);
         update = (TextView) findViewById(R.id.update);
         list = (TextView) findViewById(R.id.list);
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -153,9 +153,25 @@ public class RecipientDetailActivity extends BaseActivity {
         name = intent.getExtras().getString("name");
         responsibility = intent.getExtras().getString("responsibility");
         if (commute == null) {
-            btn_camera.setVisibility(View.VISIBLE);
+            //btn_camera.setVisibility(View.VISIBLE);
+            btn_camera.setText("출근하기");
+            btn_camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, TAKE_PICTURE);
+                }
+            });
         } else {
-            btn_camera.setVisibility(View.INVISIBLE);
+            btn_camera.setText("이미 출근중입니다");
+            btn_camera.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent mainintent = new Intent(RecipientDetailActivity.this,MenuMain.class);
+                    startActivity(mainintent);
+                }
+            });
+            //btn_camera.setVisibility(View.INVISIBLE);
         }
 
 
@@ -196,13 +212,13 @@ public class RecipientDetailActivity extends BaseActivity {
             }
         });
 
-        btn_camera.setOnClickListener(new View.OnClickListener() {
+     /*   btn_camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
             }
-        });
+        });*/
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {

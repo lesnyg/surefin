@@ -164,6 +164,7 @@ public class NokPaymentActivity extends AppCompatActivity {
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + recipiName + "' and  hp = '" + recipiPhone + "'");
 
+
             while (resultSet.next()) {
                 nokname = resultSet.getString("보호자성명");
                 rating = resultSet.getString("등급");
