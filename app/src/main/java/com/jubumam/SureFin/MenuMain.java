@@ -146,8 +146,12 @@ public class MenuMain extends BaseActivity {
     private ImageView n4;
     private ImageView n6;
     private ImageView n10;
+    private ImageView n11;
     private Button btn_offwork;
     private String bathTotalCount;
+    private String commute;
+    private String responsibilityID;
+    private String department;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -156,11 +160,27 @@ public class MenuMain extends BaseActivity {
 
         activateToolbar();
 
+        Login login = Login.getInstance();
+        responsibility = login.getResponsibility();
+        responsibilityID = login.getPersonId();
+        department = login.getDepartment();
+
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
         stime = commuteRecipient.getStartTime();
+        commute = commuteRecipient.getCommute();
+
+        final Intent intent = getIntent();
+        if (commute == null && department.equals("송영")) {
+            findViewById(R.id.layout_songyeung).setVisibility(View.GONE);
+
+        }else if (commute == null && !department.equals("송영")){
+            name = intent.getExtras().getString("name");
+            rating = intent.getExtras().getString("rating");
+            responsibility = intent.getExtras().getString("responsibility");
+        }
 
 
         currentTime = new Date();
@@ -180,6 +200,7 @@ public class MenuMain extends BaseActivity {
         n4 = findViewById(R.id.n4);
         n6 = findViewById(R.id.n6);
         n10 = findViewById(R.id.n10);
+        n11 = findViewById(R.id.n11);
 
         tv_name = findViewById(R.id.tv_name);
         tv_name.setText(name + "님");
@@ -309,6 +330,14 @@ public class MenuMain extends BaseActivity {
                 Intent i10 = new Intent(MenuMain.this, VisitingBathActivity.class);
                 startActivity(i10);
 
+            }
+        });
+
+        n11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MenuMain.this, SongyeongActivity.class);
+                startActivity(i);
             }
         });
 

@@ -73,6 +73,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final String TAG_NAME = "name";
     private Map<String, String> itemMap;
 
+
     protected Toolbar activateToolbar() {
         SharedPreferences sharedPreferences = getSharedPreferences("file", 0);
         noti_id = sharedPreferences.getString("notiID", "");

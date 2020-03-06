@@ -17,6 +17,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class LoginActivity extends Activity {
@@ -29,6 +31,10 @@ public class LoginActivity extends Activity {
     String lastChar = "";
     private String pass;
     private EditText txt_pass;
+    private String personId;
+    private String responsibility;
+    private String department;
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,12 +130,16 @@ public class LoginActivity extends Activity {
 
                 try {
                     if (hp.equals(hp1)) {
-                        new Login(hp, name);
-                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("caregiverPhone", hp);
-                        intent.putExtra("responsibility", name);
-                        intent.putExtra("route", "LoginActivity");
-                        startActivity(intent);
+                        new Login(personId,hp, responsibility , department);
+                        if(department.equals("송영")){
+                           startActivity(new Intent(LoginActivity.this,MenuMain.class));
+                        }else {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.putExtra("caregiverPhone", hp);
+                            intent.putExtra("responsibility", name);
+                            intent.putExtra("route", "LoginActivity");
+                            startActivity(intent);
+                        }
                         finish();
 
                     } else if (hp == null) {
@@ -168,6 +178,11 @@ public class LoginActivity extends Activity {
                 name = resultSet.getString("직원명");
                 hp1 = resultSet.getString("hp");
                 pass1 = resultSet.getString("비밀번호");
+                personId = resultSet.getString("직원코드");
+                responsibility = resultSet.getString("직원명");
+                department = resultSet.getString("담당직종");
+
+
 
                 // id = resultSet.getString(2);
                 //wd = resultSet.getString(3);
@@ -175,6 +190,8 @@ public class LoginActivity extends Activity {
 
 
             }
+
+
             connection.close();
 
         } catch (Exception e) {

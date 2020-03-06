@@ -70,6 +70,8 @@ public class MainActivity extends BaseActivity {
     private String divisiontime;
     private String route;   //경로
     private String gender;
+    private String responsibilityID;
+    private String department;
 
     //noti count
     private TextView smsCountTxt;
@@ -82,6 +84,11 @@ public class MainActivity extends BaseActivity {
 
         activateToolbar();
 
+        Login login = Login.getInstance();
+        responsibility = login.getResponsibility();
+        responsibilityID = login.getPersonId();
+        department = login.getPersonId();
+
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         responsibility = commuteRecipient.getResponsibility();
@@ -89,7 +96,7 @@ public class MainActivity extends BaseActivity {
 
 
         final Intent intent = getIntent();
-        if (commute == null) {
+        if (commute == null ) {
             name = intent.getExtras().getString("name");
             rating = intent.getExtras().getString("rating");
             responsibility = intent.getExtras().getString("responsibility");

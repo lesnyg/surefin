@@ -4,6 +4,7 @@ package com.jubumam.SureFin.NokPackage;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -16,20 +17,26 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
+import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.LinearLayout;
 
+import com.jubumam.SureFin.MainActivity;
 import com.jubumam.SureFin.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
 
 import cz.msebera.android.httpclient.entity.mime.Header;
+import cz.msebera.android.httpclient.util.EncodingUtils;
 
 /******************************************************************************
  *
@@ -103,9 +110,10 @@ public class SMPayWebSampleAutoActivity extends Activity {
     private String strtotalPrice;
     private String recipiName;
     private String recipiPhone;
+    private String param;
 
 
-    @SuppressLint("SetJavaScriptEnabled")
+    @SuppressLint({"SetJavaScriptEnabled", "JavascriptInterface"})
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,19 +126,24 @@ public class SMPayWebSampleAutoActivity extends Activity {
         // /////////////////////////////////////////////////
 
         Intent intent = getIntent();
-        totalPrice = intent.getIntExtra("totalPrice",0);
+        totalPrice = intent.getIntExtra("totalPrice", 0);
         recipiName = intent.getStringExtra("recipiName");
         recipiPhone = intent.getStringExtra("recipiPhone");
         strtotalPrice = new DecimalFormat("###,###").format(totalPrice);
 //        myURL = "http://192.168.0.12:8080/Example2_Servlet/mainMobilePay.jsp?totalPrice="+totalPrice+"&recipiName="+recipiName+"&recipiPhone="+recipiPhone;
 //        myURL = "http://192.168.0.12:8080/Example2_Servlet/mainMobilePay.jsp";
-        myURL = "http://surefin1.cafe24.com:8085/smartrotest/mainMobilePay.jsp?totalPrice="+totalPrice+"&recipiName="+recipiName+"&recipiPhone="+recipiPhone;
 //        myURL = "http://119.194.5.109:80/smartrotest/mainMobilePay.jsp?totalPrice="+totalPrice+"&recipiName="+recipiName+"&recipiPhone="+recipiPhone;
+        myURL = "http://surefin1.cafe24.com:8085/smartrotest/mainMobilePay.jsp?totalPrice=" + totalPrice + "&recipiName=" + recipiName + "&recipiPhone=" + recipiPhone;
+//        myURL = "http://surefin1.cafe24.com:8085/smartrotest/mainMobilePay.jsp";
+//        param = "totalPrice="+totalPrice+"&"+"recipiName="+recipiName+"&"+"recipiPhone="+recipiPhone;
 
         mWebView = (WebView) findViewById(R.id.webview);
+
         mWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         mWebView.getSettings().setJavaScriptEnabled(true);
+        mWebView.addJavascriptInterface(new JavaScriptInterface(this),"android");
 //        mWebView.getSettings().setPluginsEnabled(true);
+
 
 
         getHttpStrData();
@@ -139,7 +152,10 @@ public class SMPayWebSampleAutoActivity extends Activity {
         mWebView.setWebChromeClient(new WebChromeClient());
         mWebView.setWebViewClient(new SMPayViewClient());
         mWebView.loadUrl(myURL);
+//        mWebView.postUrl(myURL, EncodingUtils.getBytes(param,"BASE64"));
+
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -220,7 +236,6 @@ public class SMPayWebSampleAutoActivity extends Activity {
         public void onFailure(int statusCode, cz.msebera.android.httpclient.Header[] headers, byte[] responseBody, Throwable error) {
             handler.sendEmptyMessage(FAIL);
         }
-
 
 
         @Override
@@ -416,4 +431,20 @@ public class SMPayWebSampleAutoActivity extends Activity {
         }
     }
 
+    private class JavaScriptInterface {
+        Context mContext;
+        JavaScriptInterface(Context c){
+            mContext = c;
+        }
+
+        @JavascriptInterface
+        public void webview_finish(){
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            });
+        }
+    }
 }
