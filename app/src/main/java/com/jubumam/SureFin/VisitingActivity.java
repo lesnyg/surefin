@@ -279,6 +279,9 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
 
         var = findViewById(R.id.var);
+        if(name==null){
+            name = "";
+        }
         var.setText(name + " 님의 건강상태 체크");
         tv_startTime = findViewById(R.id.tv_startTime);
         tv_endTime = findViewById(R.id.tv_endTime);

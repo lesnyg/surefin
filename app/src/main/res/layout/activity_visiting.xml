@@ -1027,7 +1027,7 @@
                         android:ellipsize="none"
                         android:scrollHorizontally="false"
                         android:singleLine="false"
-                        android:text="급여제공시 확인한 사항 및 조치상항 등을 기록해 주세요. 예) 엉덩이 짓물러 파우더 바름, 혈액투석 받으로 병원 동행함 등"
+                        android:text="급여제공시 확인한 사항 및 조치상항 등을 기록해 주세요. 예) 엉덩이 짓물러 파우더 바름, 혈액투석 받으러 병원 동행함 등"
                         android:textColor="#717171" />
 
                     <EditText
