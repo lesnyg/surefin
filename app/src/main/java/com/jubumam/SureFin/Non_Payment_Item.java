@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jubumam.SureFin.NokPackage.Nok;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -105,6 +107,20 @@ public class Non_Payment_Item extends BaseActivity {
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
+        String commute = commuteRecipient.getCommute();
+
+        Login login = Login.getInstance();
+        responsibility = login.getResponsibility();
+        String responsibilityID = login.getPersonId();
+        String department = login.getDepartment();
+
+        if(commute==null && department ==null) {
+            Nok nok = Nok.getInstance();
+            name = nok.getRecipientName();
+            rating = nok.getRating();
+        }else if(commute==null && department !=null){
+            findViewById(R.id.lin_recipi).setVisibility(View.GONE);
+        }
 
 
 //        suntext = findViewById(R.id.suntext);

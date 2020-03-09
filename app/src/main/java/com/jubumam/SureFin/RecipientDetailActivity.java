@@ -108,6 +108,8 @@ public class RecipientDetailActivity extends BaseActivity {
 
     private Bitmap bitmap;
     private byte[] s5;
+    private String route;
+    private Intent ica;
 
 
     @Override
@@ -151,6 +153,7 @@ public class RecipientDetailActivity extends BaseActivity {
         commute = commuteRecipient.getCommute();
         Intent intent = getIntent();
         name = intent.getExtras().getString("name");
+        route = intent.getExtras().getString("route");
         responsibility = intent.getExtras().getString("responsibility");
         if (commute == null) {
             //btn_camera.setVisibility(View.VISIBLE);
@@ -281,8 +284,15 @@ public class RecipientDetailActivity extends BaseActivity {
                     }
 
                     caTask = new caAsyncTask().execute();
-                    new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, "true", hms1, ymd1);
-                    Intent ica = new Intent(RecipientDetailActivity.this, MenuMain.class);
+                    new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, "true", hms1, ymd1,route);
+                    if(route.equals("VisitingActivity")){
+                    ica = new Intent(RecipientDetailActivity.this, VisitingActivity.class);
+                    }else if(route.equals("VisitingBathActivity")){
+                    ica = new Intent(RecipientDetailActivity.this, VisitingBathActivity.class);
+                    }else if(route.equals("VistingNurse")){
+                     ica = new Intent(RecipientDetailActivity.this, VistingNurse.class);
+                    }
+
                     startActivity(ica);
                 }
 

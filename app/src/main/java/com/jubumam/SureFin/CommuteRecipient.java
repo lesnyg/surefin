@@ -1,5 +1,7 @@
 package com.jubumam.SureFin;
 
+import java.util.Date;
+
 public class CommuteRecipient {
     private static int personId;
     private static String name;
@@ -9,14 +11,11 @@ public class CommuteRecipient {
     private static String commute;
     private static String startTime;
     private static String startWork;
+    private static String route;
     private static CommuteRecipient commuteRecipient;
 
 
-    public CommuteRecipient() {
-    }
-
-
-    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute, String startTime, String startWork) {
+    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute, String startTime, String startWork, String route) {
         this.personId = personId;
         this.name = name;
         this.rating = rating;
@@ -25,11 +24,12 @@ public class CommuteRecipient {
         this.commute = commute;
         this.startTime = startTime;
         this.startWork = startWork;
+        this.route = route;
     }
 
     public static CommuteRecipient getInstance() {
         if (commuteRecipient == null) {
-            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime, startWork);
+            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime, startWork, route);
         }
         return commuteRecipient;
     }
@@ -99,5 +99,11 @@ public class CommuteRecipient {
         this.rating = rating;
     }
 
+    public String getRoute() {
+        return route;
+    }
 
+    public void setRoute(String route) {
+        this.route = route;
+    }
 }
