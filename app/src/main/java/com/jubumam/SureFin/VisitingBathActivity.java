@@ -471,8 +471,8 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                         e.printStackTrace();
                     }
 
-//                    if ((diff / (60 * 1000)) < 60) {
-                    if (diff < 1000) {
+                    if ((diff / (60 * 1000)) < 60) {
+//                    if (diff < 1000) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
                         builder.setTitle("시간확인").setMessage("60분이 지나지 않았습니다.");
                         AlertDialog alertDialog = builder.create();

@@ -234,6 +234,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private String route;
 
 
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -277,9 +278,15 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         tv_remainingTime = findViewById(R.id.tv_remainingTime);
         tv_remainingTime.setText(totalhour + "분");
 
-
+        String nim;
         var = findViewById(R.id.var);
-        var.setText(name + " 님의 건강상태 체크");
+        if(name==null){
+            name = "";
+            nim = "";
+        }else {
+            nim = " 님의 ";
+        }
+        var.setText(name + nim + "건강상태 체크");
         tv_startTime = findViewById(R.id.tv_startTime);
         tv_endTime = findViewById(R.id.tv_endTime);
 
@@ -422,44 +429,44 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                 }
             }
         });
-        btn_end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btn_start.getText().equals("출근하기")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                    builder.setTitle("시작확인").setMessage("출근하기를 눌러주세요.");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                } else {
-
-                    endTime = new Date();
-                    strEndTime = timeformatter.format(endTime);
-
-                    try {
-                        Date endtimes = timeformatter.parse(strEndTime);
-                        Date starttimes = timeformatter.parse(strStartTime);
-
-                        //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
-                        diff = endtimes.getTime() - starttimes.getTime();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-//                    if (diff   < 1) {
-                    if ((diff / (60 * 1000)) < batime) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                        builder.setTitle("시간확인").setMessage(batime + "분이 지나지 않았습니다.");
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-
-                    } else {
-                        btn_end.setText(strEndTime);
-                        tv_endTime.setText(strEndTime);
-                        totalUsingTime = Long.toString(diff / (60 * 1000));
-                        tv_time.setText(totalUsingTime);
-                    }
-                }
-            }
-        });
+//        btn_end.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btn_start.getText().equals("출근하기")) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+//                    builder.setTitle("시작확인").setMessage("출근하기를 눌러주세요.");
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//                } else {
+//
+//                    endTime = new Date();
+//                    strEndTime = timeformatter.format(endTime);
+//
+//                    try {
+//                        Date endtimes = timeformatter.parse(strEndTime);
+//                        Date starttimes = timeformatter.parse(strStartTime);
+//
+//                        //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
+//                        diff = endtimes.getTime() - starttimes.getTime();
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+////                    if (diff   < 1) {
+//                    if ((diff / (60 * 1000)) < batime) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+//                        builder.setTitle("시간확인").setMessage(batime + "분이 지나지 않았습니다.");
+//                        AlertDialog alertDialog = builder.create();
+//                        alertDialog.show();
+//
+//                    } else {
+//                        btn_end.setText(strEndTime);
+//                        tv_endTime.setText(strEndTime);
+//                        totalUsingTime = Long.toString(diff / (60 * 1000));
+//                        tv_time.setText(totalUsingTime);
+//                    }
+//                }
+//            }
+//        });
 
         findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -493,8 +500,8 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-//                    if ((diff / (60 * 1000)) < batime) {
-                    if (diff < 1000) {
+                    if ((diff / (60 * 1000)) < batime) {
+//                    if (diff < 1000) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
                         builder.setTitle("시간확인").setMessage(batime + "분이 지나지 않았습니다.");
                         AlertDialog alertDialog = builder.create();
