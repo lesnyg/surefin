@@ -113,10 +113,9 @@ public class BaseActivity extends AppCompatActivity {
                     ActionBar actionBar = getSupportActionBar();
                     actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
                     actionBar.setDisplayShowTitleEnabled(false);
-                    if (commute != null) {
                         actionBar.setDisplayHomeAsUpEnabled(true);
                         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
-                    }
+
                 }
             }
 

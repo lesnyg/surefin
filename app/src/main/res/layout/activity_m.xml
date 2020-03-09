@@ -510,14 +510,36 @@
                     android:layout_marginBottom="16dp"
                     android:orientation="horizontal">
 
+                    <FrameLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:layout_margin="1dp"
+                        >
+
                     <ImageView
                         android:id="@+id/n11"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="1dp"
-                        android:layout_weight="1"
+
                         android:background="#ffffff"
                         android:src="@drawable/icon_delivery" />
+                    <TextView
+                        android:id="@+id/notification_badge"
+                        android:visibility="gone"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="right|end|bottom"
+                        android:layout_marginEnd="30dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="45dp"
+                        android:background="@drawable/badge_background"
+                        android:gravity="center"
+                        android:padding="3dp"
+                        android:textColor="@android:color/white"
+                        android:text="0"
+                        android:textSize="10sp"/>
+                    </FrameLayout>
 
                     <ImageView
                         android:id="@+id/n12"

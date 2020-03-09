@@ -1,14 +1,23 @@
 package com.jubumam.SureFin;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.ContextThemeWrapper;
 
 import com.jubumam.SureFin.NokPackage.SelectActivity;
+
+import java.lang.ref.WeakReference;
 
 public class SplashActivity extends AppCompatActivity {
 
@@ -34,22 +43,5 @@ public class SplashActivity extends AppCompatActivity {
         //초반 플래시 화면에서 넘어갈때 뒤로가기 버튼 못누르게 함
     }
 
-    private class VersionCheck extends AsyncTask<Void,Void,Void>{
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            HttpHandler sh = new HttpHandler();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
 
 }

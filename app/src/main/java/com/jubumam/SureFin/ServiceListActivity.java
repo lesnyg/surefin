@@ -138,11 +138,21 @@ public class ServiceListActivity extends BaseActivity {
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
-        if(commute==null) {
+
+        Login login = Login.getInstance();
+        responsibility = login.getResponsibility();
+        String responsibilityID = login.getPersonId();
+        String department = login.getDepartment();
+
+        if(commute==null && department ==null) {
             Nok nok = Nok.getInstance();
             name = nok.getRecipientName();
             rating = nok.getRating();
+        }else if(commute==null && department !=null){
+            findViewById(R.id.lin_recipi).setVisibility(View.GONE);
         }
+
+
 
         utctime = new SimpleDateFormat("mm", Locale.KOREA);
         utctime.setTimeZone(TimeZone.getTimeZone("UTC"));

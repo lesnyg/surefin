@@ -6,7 +6,7 @@ public class Login {
     private static String personId;     //직원코드
     private static String phone;        //직원전화번호
     private static String responsibility;   //직원이름
-    private static String department;   //직원이름
+    private static String department;   //직원부서
     private static Login login;
 
     public Login() {

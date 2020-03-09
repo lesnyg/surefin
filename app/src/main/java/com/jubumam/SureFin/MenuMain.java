@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -115,6 +116,7 @@ public class MenuMain extends BaseActivity {
 
     private AsyncTask<String, String, String> mTask;
     private AsyncTask<String, String, String> mRecipientTask;
+    private AsyncTask<String, String, String> orderTask;
     private AsyncTask<String, String, String> tTask;
     private AsyncTask<String, String, String> cTask;
     private final static int TAKE_PICTURE = 1;
@@ -152,6 +154,8 @@ public class MenuMain extends BaseActivity {
     private String commute;
     private String responsibilityID;
     private String department;
+    private int orderCount;
+    private TextView notification_badge;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -209,7 +213,7 @@ public class MenuMain extends BaseActivity {
         tv_nosupport = findViewById(R.id.tv_nosupport);
         tv_startWork = findViewById(R.id.tv_startWork);
         TextView tv_rating = findViewById(R.id.tv_rating);
-
+        notification_badge = findViewById(R.id.notification_badge);
 
         tv_rating.setText(rating);
         tv_startWork.setText(stime);
@@ -230,6 +234,10 @@ public class MenuMain extends BaseActivity {
 
         mRecipientTask = new RecipientTask().execute();
 
+        if(department.equals("송영")) {
+            notification_badge.setVisibility(View.VISIBLE);
+            orderTask = new OrderSyncTask().execute();
+        }
         findViewById(R.id.lin_care).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -733,6 +741,77 @@ public class MenuMain extends BaseActivity {
             e.printStackTrace();
         }
 
+
+    }
+    public class OrderSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+
+            orderQuery();
+            return null;
+
+        }
+        protected void onPostExecute(String result) {
+
+
+
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+
+    }
+
+    private void orderQuery() {
+        Connection connection = null;
+
+        String strToday = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
+            Statement statement = connection.createStatement();
+            List<String> areaList = new ArrayList<>();
+
+            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + responsibilityID + "'");
+            while (areaRS.next()){
+                String area = areaRS.getString("지역명");
+                areaList.add(area);
+            }
+
+            for (int i = 0; i < areaList.size(); i++) {
+                String area = areaList.get(i).toString();
+                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '진행중' order by 주문시간 DESC");
+                while (resultSetlist.next()) {
+
+                    String complete = resultSetlist.getString("배달확인");
+
+                    if(complete.equals("진행중")){
+                        orderCount++;
+                    }
+
+
+                }}
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    notification_badge.setText(orderCount+"");
+                }
+            });
+            connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 }
