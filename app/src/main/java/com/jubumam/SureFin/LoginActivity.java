@@ -36,7 +36,6 @@ public class LoginActivity extends Activity {
     private String department;
 
 
-
     protected void onCreate(Bundle savedInstanceState) {
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -130,16 +129,12 @@ public class LoginActivity extends Activity {
 
                 try {
                     if (hp.equals(hp1)) {
-                        new Login(personId,hp, responsibility , department);
-                        if(department.equals("송영")){
-                           startActivity(new Intent(LoginActivity.this,MenuMain.class));
-                        }else {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.putExtra("caregiverPhone", hp);
-                            intent.putExtra("responsibility", name);
-                            intent.putExtra("route", "LoginActivity");
-                            startActivity(intent);
-                        }
+                        new Login(personId, hp, responsibility, department);
+                        Intent intent = new Intent(getApplicationContext(), MenuMain.class);
+                        intent.putExtra("caregiverPhone", hp);
+                        intent.putExtra("responsibility", name);
+                        intent.putExtra("route", "LoginActivity");
+                        startActivity(intent);
                         finish();
 
                     } else if (hp == null) {
@@ -181,7 +176,6 @@ public class LoginActivity extends Activity {
                 personId = resultSet.getString("직원코드");
                 responsibility = resultSet.getString("직원명");
                 department = resultSet.getString("담당직종");
-
 
 
                 // id = resultSet.getString(2);

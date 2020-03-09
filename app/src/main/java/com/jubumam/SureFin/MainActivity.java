@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
     private AsyncTask<String, String, String> cTask;
     private List<Recipient> list;
     private EditText et_search;
-    private String name;
+    private String name = "출근전 입니다.";
     private RecipientAdapter mAdapter;
     private List<Recipient> arrayList;
     private RecyclerView recyclerView;
@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
     private Bitmap bitmap;
     private Connection connection;
     private ResultSet resultSetlist;
-    private String responsibility;   //요양사 이름
+    private String responsibility ="";   //요양사 이름
     private String s1;
     private String number;
     private String adress;
@@ -76,6 +76,7 @@ public class MainActivity extends BaseActivity {
     //noti count
     private TextView smsCountTxt;
     private int pendingSMSCount = 10;
+    private String route1;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -91,16 +92,11 @@ public class MainActivity extends BaseActivity {
 
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
-        responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
 
 
-        final Intent intent = getIntent();
-        if (commute == null ) {
-            name = intent.getExtras().getString("name");
-            rating = intent.getExtras().getString("rating");
-            responsibility = intent.getExtras().getString("responsibility");
-        }
+        Intent intent = getIntent();
+        route1 = intent.getExtras().getString("route");
 
         mTask = new MySyncTask().execute();
         et_search = findViewById(R.id.et_search);
@@ -209,6 +205,7 @@ public class MainActivity extends BaseActivity {
                         intent.putExtra("responsibility", responsibility);
                         intent.putExtra("name", recipient.getName());
                         intent.putExtra("title", "main");
+                        intent.putExtra("route",route1);
                         startActivity(intent);
 
 

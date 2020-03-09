@@ -1,6 +1,7 @@
 package com.jubumam.SureFin;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -31,6 +32,24 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //초반 플래시 화면에서 넘어갈때 뒤로가기 버튼 못누르게 함
+    }
+
+    private class VersionCheck extends AsyncTask<Void,Void,Void>{
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            HttpHandler sh = new HttpHandler();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+        }
     }
 
 }

@@ -173,13 +173,8 @@ public class MenuMain extends BaseActivity {
         commute = commuteRecipient.getCommute();
 
         final Intent intent = getIntent();
-        if (commute == null && department.equals("송영")) {
+        if (commute == null) {
             findViewById(R.id.layout_songyeung).setVisibility(View.GONE);
-
-        }else if (commute == null && !department.equals("송영")){
-            name = intent.getExtras().getString("name");
-            rating = intent.getExtras().getString("rating");
-            responsibility = intent.getExtras().getString("responsibility");
         }
 
 
