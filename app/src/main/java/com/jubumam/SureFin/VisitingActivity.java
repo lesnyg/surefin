@@ -5,15 +5,19 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Layout;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -22,8 +26,10 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -57,6 +63,18 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 //    private String date3;
 //    private TextView tv_date;
 
+    //퇴근에 필요한 필드
+    private final static int TAKE_PICTURE = 1;
+    private AsyncTask<String, String, String> tTask;
+    private String ttime;
+    private ImageView dialog_imageview;
+    private byte[] imageBytes;
+    private String s3, s4;
+    private String ymd1, hms1;
+    private String imageString;
+    private int s2;
+
+
     private float vistime;
     private String stime1_1;
     private int batime; //기본시간
@@ -78,6 +96,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private Button btn_start2;
     private Button btn_start3;
     private Button btn_start1_1;
+    private LinearLayout lin_recipi;
 
     private CheckBox ck_bodyactiv1;
     private CheckBox ck_bodyactiv2;
@@ -112,7 +131,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private String bodyactiv6;
     private String housework1;
     private String housework2;
-    private String name;
+    private String name = "";
 
     private AsyncTask<String, String, String> aTask;
     private AsyncTask<String, String, String> mTask;
@@ -210,6 +229,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private Date endTime;
     private int extraTime;
     private int todayMoney;
+    private String commute;
+    private ImageView img_back;
+    private String route;
+
 
 
     @Override
@@ -223,7 +246,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
-        Toast.makeText(VisitingActivity.this, Integer.toString((int) vistime), Toast.LENGTH_SHORT).show();
+        commute = commuteRecipient.getCommute();
+        route = commuteRecipient.getRoute();
+
+//        Toast.makeText(VisitingActivity.this, Integer.toString((int) vistime), Toast.LENGTH_SHORT).show();
 
         tv_date = findViewById(R.id.tv_date);
 
@@ -252,9 +278,15 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         tv_remainingTime = findViewById(R.id.tv_remainingTime);
         tv_remainingTime.setText(totalhour + "분");
 
-
+        String nim;
         var = findViewById(R.id.var);
-        var.setText(name + " 님의 건강상태 체크");
+        if(name==null){
+            name = "";
+            nim = "";
+        }else {
+            nim = " 님의 ";
+        }
+        var.setText(name + nim + "건강상태 체크");
         tv_startTime = findViewById(R.id.tv_startTime);
         tv_endTime = findViewById(R.id.tv_endTime);
 
@@ -274,6 +306,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         ck_housework1 = findViewById(R.id.ck_housework1);
         ck_housework2 = findViewById(R.id.ck_housework2);
         lin_careAll = findViewById(R.id.lin_careAll);
+        lin_recipi = findViewById(R.id.lin_recipi);
         btn_start = findViewById(R.id.btn_start);
         btn_end = findViewById(R.id.btn_end);
         tv_time = findViewById(R.id.tv_time);
@@ -290,12 +323,16 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             }
         });
 
-        findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
+        img_back = findViewById(R.id.img_back);
+        img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        if(commute != null){
+            img_back.setVisibility(View.GONE);
+        }
         findViewById(R.id.lin_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -336,14 +373,16 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         tv_rating = findViewById(R.id.tv_rating1);
         tv_sumTime = findViewById(R.id.tv_sumTime);
 
-        tv_name.setText(name);
+        LayoutInflater inflater = LayoutInflater.from(VisitingActivity.this);
+        final View view = inflater.inflate(R.layout.camera_image, null);
+        dialog_imageview = view.findViewById(R.id.dialog_imageview);
 
+        tv_name.setText(name);
 
         formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.KOREA);
         timeformatter = new SimpleDateFormat("HH:mm", Locale.KOREA);
         extratimeformatter = new SimpleDateFormat("HHmm", Locale.KOREA);
-        date = new Date();
-        currentDate = formatter.format(date);
+        currentDate = commuteRecipient.getStartWork();
 //        formatterScreen = new SimpleDateFormat("yyyy.MM.dd", Locale.KOREA);
 
         utctime = new SimpleDateFormat("HH:mm", Locale.KOREA);
@@ -359,15 +398,22 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         rg_meal = findViewById(R.id.rg_meal);
         rg_cognitive = findViewById(R.id.rg_cognitive);
 
+        if (commute == null) {
+            lin_recipi.setVisibility(View.GONE);
+        } else if (commute != null && commute.equals("true") && route.equals("VisitingActivity")) {
+            strStartTime = commuteRecipient.getStartTime();
+            btn_start.setText(strStartTime);
+            tv_startTime.setText(strStartTime);
+        }
+
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btn_start.getText().equals("시작")) {
+                if (btn_start.getText().equals("출근하기")) {
                     startTime = new Date();
                     strStartTime = timeformatter.format(startTime);
                     long lgStartTime = startTime.getTime();
-                    btn_start.setText(strStartTime);
-                    tv_startTime.setText(strStartTime);
+
                     extraTime = Integer.parseInt(extratimeformatter.format(startTime));
                     if (extraTime >= 1800 && extraTime < 2200) {
                         todayMoney = (int) (hourmoney * 1.2);
@@ -377,19 +423,71 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                         todayMoney = hourmoney;
                     }
                     tv_price.setText(new DecimalFormat("###,###").format(todayMoney) + "원");
+                    Intent intent = new Intent(VisitingActivity.this, MainActivity.class);
+                    intent.putExtra("route", "VisitingActivity");
+                    startActivity(intent);
                 }
             }
         });
-        btn_end.setOnClickListener(new View.OnClickListener() {
+//        btn_end.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btn_start.getText().equals("출근하기")) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+//                    builder.setTitle("시작확인").setMessage("출근하기를 눌러주세요.");
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//                } else {
+//
+//                    endTime = new Date();
+//                    strEndTime = timeformatter.format(endTime);
+//
+//                    try {
+//                        Date endtimes = timeformatter.parse(strEndTime);
+//                        Date starttimes = timeformatter.parse(strStartTime);
+//
+//                        //diff = timeformatter.parse(strEndTime).getTime() - timeformatter.parse(strStartTime).getTime();
+//                        diff = endtimes.getTime() - starttimes.getTime();
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+////                    if (diff   < 1) {
+//                    if ((diff / (60 * 1000)) < batime) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+//                        builder.setTitle("시간확인").setMessage(batime + "분이 지나지 않았습니다.");
+//                        AlertDialog alertDialog = builder.create();
+//                        alertDialog.show();
+//
+//                    } else {
+//                        btn_end.setText(strEndTime);
+//                        tv_endTime.setText(strEndTime);
+//                        totalUsingTime = Long.toString(diff / (60 * 1000));
+//                        tv_time.setText(totalUsingTime);
+//                    }
+//                }
+//            }
+//        });
+
+        findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btn_start.getText().equals("시작")) {
+//                if (btn_end.getText().equals("종료")) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+//                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//                } else {
+
+
+
+                if (btn_start.getText().equals("출근하기")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                    builder.setTitle("시작확인").setMessage("시작시간을 눌러주세요.");
+                    builder.setTitle("시작확인").setMessage("출근하기를 눌러주세요.");
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else {
-
+                    Date endTime = new Date();
+                    strEndTime = timeformatter.format(endTime);
                     endTime = new Date();
                     strEndTime = timeformatter.format(endTime);
 
@@ -403,165 +501,158 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                         e.printStackTrace();
                     }
                     if ((diff / (60 * 1000)) < batime) {
+//                    if (diff < 1000) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                        builder.setTitle("시간확인").setMessage("계약한 " + batime + "분이 지나지 않았습니다.");
+                        builder.setTitle("시간확인").setMessage(batime + "분이 지나지 않았습니다.");
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
 
                     } else {
+
+
                         btn_end.setText(strEndTime);
                         tv_endTime.setText(strEndTime);
                         totalUsingTime = Long.toString(diff / (60 * 1000));
                         tv_time.setText(totalUsingTime);
-                    }
-                }
-            }
-        });
 
-        findViewById(R.id.btn_send).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btn_end.getText().equals("종료")) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                } else {
+                        checkQuery();
 
-                    checkQuery();
+                        add_total = 1;
+                        add_time = 20;
+                        add_offertime = 4;
+                        String rst = "1";
 
-                    add_total = 1;
-                    add_time = 20;
-                    add_offertime = 4;
-                    String rst = "1";
-
-                    int rint = Integer.parseInt(rst);
-                    double torf = rint * 0.2 * add_time / add_offertime;
+                        int rint = Integer.parseInt(rst);
+                        double torf = rint * 0.2 * add_time / add_offertime;
 
 //                    Toast.makeText(getApplicationContext(), Integer.toString((int) torf) + Integer.toString(rint) + "/" + Integer.toString((int) add_offertime) + "/" + Integer.toString((int) add_total) + "/" + Integer.toString((int) add_offertime), Toast.LENGTH_SHORT).show();
 
-                    totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
-                    int thour = totaltime / 60;
-                    int tmin = totaltime % 60;
-                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
-                    builder.setTitle("내용전송");
-                    builder.setMessage("총시간" + totaltime + "분을 전송하시겠습니까?");
-                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                    builder.setPositiveButton("예",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
+                        totaltime = Integer.parseInt(usingTime) + Integer.parseInt(usingTime1) + Integer.parseInt(usingTime1_1) + Integer.parseInt(usingTime2) + Integer.parseInt(usingTime3);
+                        int thour = totaltime / 60;
+                        int tmin = totaltime % 60;
+                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingActivity.this);
+                        builder.setTitle("내용전송");
+                        builder.setMessage("총시간" + totaltime + "분을 전송하시겠습니까?");
+                        // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                        builder.setPositiveButton("예",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                    int bodyId = rg_body.getCheckedRadioButtonId();
-                                    int mealId = rg_meal.getCheckedRadioButtonId();
-                                    int cognitiveId = rg_cognitive.getCheckedRadioButtonId();
-                                    String sr = Integer.toString(bodyId);
-                                    String or = Integer.toString(mealId);
-                                    String co = Integer.toString(cognitiveId);
+                                        int bodyId = rg_body.getCheckedRadioButtonId();
+                                        int mealId = rg_meal.getCheckedRadioButtonId();
+                                        int cognitiveId = rg_cognitive.getCheckedRadioButtonId();
+                                        String sr = Integer.toString(bodyId);
+                                        String or = Integer.toString(mealId);
+                                        String co = Integer.toString(cognitiveId);
 
-                                    // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
+                                        // Toast.makeText(VisitingActivity.this,sr+or+co,Toast.LENGTH_SHORT).show();
 
-                                    if (sr.equals("-1")) {
-                                        body = "";
-                                    } else {
-                                        body = ((RadioButton) findViewById(bodyId)).getText().toString();
+                                        if (sr.equals("-1")) {
+                                            body = "";
+                                        } else {
+                                            body = ((RadioButton) findViewById(bodyId)).getText().toString();
+                                        }
+
+                                        if (or.equals("-1")) {
+                                            meal = "";
+                                        } else {
+                                            meal = ((RadioButton) findViewById(mealId)).getText().toString();
+                                        }
+
+                                        if (co.equals("-1")) {
+                                            cognitive = "";
+                                        } else {
+                                            cognitive = ((RadioButton) findViewById(cognitiveId)).getText().toString();
+                                        }
+
+                                        uniqueness = ((EditText) findViewById(R.id.et_uniqueness)).getText().toString();
+
+                                        if (usingTime != null) {
+                                            stime = "신체활동";
+                                        } else if (usingTime.equals("0")) {
+
+                                            stime = "";
+                                            usingTime = "";
+                                        }
+                                        if (usingTime1 != null) {
+                                            stime1 = "인지활동";
+
+                                        } else if (usingTime1.equals("0")) {
+                                            stime1 = "";
+                                            usingTime1 = "";
+                                        }
+
+                                        if (usingTime1_1 != null) {
+                                            stime1_1 = "일상생활";
+
+                                        } else if (usingTime1.equals("0")) {
+                                            stime1_1 = "";
+                                            usingTime1_1 = "";
+                                        }
+
+                                        if (usingTime2 != null) {
+                                            stime2 = "정서지원";
+
+                                        } else if (usingTime2.equals("0")) {
+                                            stime2 = "";
+                                            usingTime2 = "";
+                                        }
+                                        if (usingTime3 != null) {
+                                            stime3 = "생활지원";
+
+                                        } else if (usingTime3.equals("0")) {
+                                            stime3 = "";
+                                            usingTime3 = "";
+                                        }
+                                        Date dbDate = new Date();
+                                        dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
+
+
+                                        if (dateCheck != null && dateCheck.equals(currentDate)) {
+                                            AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
+                                            builder2.setTitle("방문요양");
+                                            builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                            // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                            builder2.setPositiveButton("예",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            number++;
+                                                            mTask = new MySyncTask().execute();
+
+                                                        }
+                                                    });
+                                            builder2.setNegativeButton("아니오",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                        }
+                                                    });
+
+                                            builder2.show();
+                                        } else {
+                                            number = 1;
+                                            mTask = new MySyncTask().execute();
+                                            dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                        }
                                     }
+                                });
 
-                                    if (or.equals("-1")) {
-                                        meal = "";
-                                    } else {
-                                        meal = ((RadioButton) findViewById(mealId)).getText().toString();
+                        builder.setNegativeButton("아니오",
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                        Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
+
+
                                     }
-
-                                    if (co.equals("-1")) {
-                                        cognitive = "";
-                                    } else {
-                                        cognitive = ((RadioButton) findViewById(cognitiveId)).getText().toString();
-                                    }
-
-                                    uniqueness = ((EditText) findViewById(R.id.et_uniqueness)).getText().toString();
-
-                                    if (usingTime != null) {
-                                        stime = "신체활동";
-                                    } else if (usingTime.equals("0")) {
-
-                                        stime = "";
-                                        usingTime = "";
-                                    }
-                                    if (usingTime1 != null) {
-                                        stime1 = "인지활동";
-
-                                    } else if (usingTime1.equals("0")) {
-                                        stime1 = "";
-                                        usingTime1 = "";
-                                    }
-
-                                    if (usingTime1_1 != null) {
-                                        stime1_1 = "일상생활";
-
-                                    } else if (usingTime1.equals("0")) {
-                                        stime1_1 = "";
-                                        usingTime1_1 = "";
-                                    }
-
-                                    if (usingTime2 != null) {
-                                        stime2 = "정서지원";
-
-                                    } else if (usingTime2.equals("0")) {
-                                        stime2 = "";
-                                        usingTime2 = "";
-                                    }
-                                    if (usingTime3 != null) {
-                                        stime3 = "생활지원";
-
-                                    } else if (usingTime3.equals("0")) {
-                                        stime3 = "";
-                                        usingTime3 = "";
-                                    }
-                                    Date dbDate = new Date();
-                                    dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
-
-
-                                    if (dateCheck != null && dateCheck.equals(currentDate)) {
-                                        AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingActivity.this);
-                                        builder2.setTitle("방문요양");
-                                        builder2.setMessage("오늘 방문요양은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
-                                        // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                                        builder2.setPositiveButton("예",
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        number++;
-                                                        mTask = new MySyncTask().execute();
-
-                                                    }
-                                                });
-                                        builder2.setNegativeButton("아니오",
-                                                new DialogInterface.OnClickListener() {
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
-
-                                        builder2.show();
-                                    } else {
-                                        number = 1;
-                                        mTask = new MySyncTask().execute();
-                                        dbCheckSyncTask = new DbCheckSyncTask().execute();
-                                    }
-                                }
-                            });
-
-                    builder.setNegativeButton("아니오",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                    Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
-
-
-                                }
-                            });
-                    builder.show();
+                                });
+                        builder.show();
+                    }
                 }
             }
+
+
+//            }
         });
 
     }
@@ -719,7 +810,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                             animationView = (LottieAnimationView) findViewById(R.id.animation_view);
                             animationView.setVisibility(View.VISIBLE);
                             lin_careAll.setVisibility(View.GONE);
-                            Toast.makeText(getApplicationContext(), "전송 완료", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "전송 완료", Toast.LENGTH_SHORT).show();
                             animationView.setAnimation("success.json");
                             animationView.playAnimation();
                             animationView.addAnimatorListener(new Animator.AnimatorListener() {
@@ -730,12 +821,11 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-//                                    animationView.setVisibility(View.GONE);
-//                                    lin_careAll.setVisibility(View.VISIBLE);
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            finish();
+                                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                            startActivityForResult(cameraIntent, TAKE_PICTURE);
                                         }
                                     }, 1000);
 
@@ -983,5 +1073,112 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                 break;
 
         }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case TAKE_PICTURE:
+
+                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
+
+
+                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+
+                    dialog_imageview.setImageBitmap(bitmap);
+                    dialog_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    imageBytes = baos.toByteArray();
+//                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                    //s1 = 8;
+
+                    s2 = 32;
+                    s4 = imageString;
+
+
+                    try {
+
+                        long now = System.currentTimeMillis();
+                        Date date = new Date(now);
+
+                        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
+                        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
+                        String nowDate = time.format(date);
+                        SimpleDateFormat hm = new SimpleDateFormat("HH:mm");
+
+                        s3 = nowDate;
+                        ymd1 = ymd.format(date);
+                        hms1 = hms.format(date);
+                        ttime = hm.format(date);
+
+
+                    } catch (Exception e) {
+
+                    }
+
+                    //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
+                    //  startActivity(i8);
+                    tTask = new TSyncTask().execute();
+
+
+                    Intent i8 = new Intent(VisitingActivity.this, signActivity.class);
+                    i8.putExtra("route", "MenuMain");
+                    startActivity(i8);
+
+                }
+
+                break;
+        }
+
+    }
+    public class TSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            query1();
+
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
+
+    public void query1() {
+        Connection connection = null;
+
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
+
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ?,담당업부 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
+            byte[] s5 = imageBytes;
+            ps.setBytes(1, s5);
+            ps.setString(2, ttime);
+            ps.setString(3,"방문요양");
+            ps.executeUpdate();
+            ps.close();
+            connection.close();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

@@ -5,15 +5,18 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -23,8 +26,10 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 
+import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -55,12 +60,24 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
 //    private long hour;
 //    private long today;
 
+    //퇴근에 필요한 필드
+    private final static int TAKE_PICTURE = 1;
+    private AsyncTask<String, String, String> tTask;
+    private String ttime;
+    private ImageView dialog_imageview;
+    private byte[] imageBytes;
+    private String s3, s4;
+    private String ymd1, hms1;
+    private String imageString;
+    private int s2;
+
     private long tdiff;
     private Switch aSwitch1;
     private LinearLayout bath_car;
     private LinearLayout bath_nocar;
     private LinearLayout lin_bathBefore;
     private LinearLayout lin_bathAfter;
+    private LinearLayout lin_recipi;
     private SimpleDateFormat formatter;
     private SimpleDateFormat formatterScreen;
     private SimpleDateFormat timeformatter;
@@ -164,7 +181,10 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
 
 
     private AsyncTask<String, String, String> cTask;
-    private String bathTotalCount;
+    private String bathTotalCount = "0";
+    private String commute;
+    private ImageView img_back;
+    private String route;
 
 
     @Override
@@ -178,6 +198,8 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
+        commute = commuteRecipient.getCommute();
+        route = commuteRecipient.getRoute();
 
         Date currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -226,12 +248,22 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         lin_bathAll = findViewById(R.id.lin_bathAll);
         lin_bathBefore = findViewById(R.id.lin_bathBefore);
         lin_bathAfter = findViewById(R.id.lin_bathAfter);
-        findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
+        lin_recipi = findViewById(R.id.lin_recipi);
+
+        LayoutInflater inflater = LayoutInflater.from(VisitingBathActivity.this);
+        final View view = inflater.inflate(R.layout.camera_image, null);
+        dialog_imageview = view.findViewById(R.id.dialog_imageview);
+
+        img_back = findViewById(R.id.img_back);
+        img_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
+        if(commute != null){
+            img_back.setVisibility(View.GONE);
+        }
         findViewById(R.id.lin_info).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -292,53 +324,67 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         tv_date.setText(strDateScreen);
         dateSyncTask = new DateSyncTask().execute();
 
+        if (commute == null) {
+            lin_recipi.setVisibility(View.GONE);
+        } else if (commute != null && commute.equals("true") && route.equals("VisitingBathActivity")) {
+            strStartTime = commuteRecipient.getStartTime();
+            btn_start.setText(strStartTime);
+            tv_startTime.setText(strStartTime);
+        }
+
         btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btn_start.getText().equals("시작")) {
-                    Date startTime = new Date();
-                    strStartTime = timeformatter.format(startTime);
-                    btn_start.setText(strStartTime);
-                    tv_startTime.setText(strStartTime);
+                if (btn_start.getText().equals("출근하기")) {
+                    Intent intent = new Intent(VisitingBathActivity.this, MainActivity.class);
+                    intent.putExtra("route", "VisitingBathActivity");
+                    startActivity(intent);
+//                    Date startTime = new Date();
+//                    strStartTime = timeformatter.format(startTime);
+//                    btn_start.setText(strStartTime);
+//                    tv_startTime.setText(strStartTime);
                 }
             }
         });
-        btn_end.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btn_start.getText().equals("시작")) {
-                    Toast.makeText(VisitingBathActivity.this, "시작시간을 눌러주세요", Toast.LENGTH_SHORT).show();
-                } else {
-                    lin_bathBefore.setVisibility(View.GONE);
-                    lin_bathAfter.setVisibility(View.VISIBLE);
-                    Date endTime = new Date();
-                    strEndTime = timeformatter.format(endTime);
-
-                    try {
-                        Date endtimes = timeformatter.parse(strEndTime);
-                        Date starttimes = timeformatter.parse(strStartTime);
-                        diff = endtimes.getTime() - starttimes.getTime();
-
-
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    if ((diff / (60 * 1000)) < 60) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                        builder.setTitle("시간확인").setMessage("계약한 60분이 지나지 않았습니다.");
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
-
-                    } else {
-                        btn_end.setText(strEndTime);
-                        tv_endTime.setText(strEndTime);
-                        usingTime = Long.toString(diff / (60 * 1000));
-                        tv_time.setText(usingTime);
-                    }
-                }
-            }
-        });
+//        btn_end.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btn_start.getText().equals("출근하기")) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+//                    builder.setTitle("시작확인").setMessage("출근하기를 눌러주세요.");
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//                } else {
+//                    lin_bathBefore.setVisibility(View.GONE);
+//                    lin_bathAfter.setVisibility(View.VISIBLE);
+//                    Date endTime = new Date();
+//                    strEndTime = timeformatter.format(endTime);
+//
+//                    try {
+//                        Date endtimes = timeformatter.parse(strEndTime);
+//                        Date starttimes = timeformatter.parse(strStartTime);
+//                        diff = endtimes.getTime() - starttimes.getTime();
+//
+//
+//                    } catch (ParseException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if (diff < 1) {
+////                    if ((diff / (60 * 1000)) < 60) {
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+//                        builder.setTitle("시간확인").setMessage("60분이 지나지 않았습니다.");
+//                        AlertDialog alertDialog = builder.create();
+//                        alertDialog.show();
+//
+//                    } else {
+//                        btn_end.setText(strEndTime);
+//                        tv_endTime.setText(strEndTime);
+//                        usingTime = Long.toString(diff / (60 * 1000));
+//                        tv_time.setText(usingTime);
+//                    }
+//                }
+//            }
+//        });
 
 
         rg_nocar.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -397,116 +443,153 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         switch (v.getId()) {
 
             case R.id.btn_send:
-                if (btn_end.getText().equals("종료")) {
+//                if (btn_end.getText().equals("종료")) {
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+//                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
+//                    AlertDialog alertDialog = builder.create();
+//                    alertDialog.show();
+//                } else {
+
+
+
+                if (btn_start.getText().equals("출근하기")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                    builder.setTitle("종료확인").setMessage("종료시간을 눌러주세요.");
+                    builder.setTitle("시작확인").setMessage("출근하기를 눌러주세요.");
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 } else {
-                    if (ck_before01.isChecked()) {
-                        beforeCK01 = "True";
-                    } else {
-                        beforeCK01 = "False";
-                    }
-                    if (ck_before02.isChecked()) {
-                        beforeCK02 = "True";
-                    } else {
-                        beforeCK02 = "False";
-                    }
-                    if (ck_before03.isChecked()) {
-                        beforeCK03 = "True";
-                    } else {
-                        beforeCK03 = "False";
-                    }
-                    if (ck_after01.isChecked()) {
-                        afterCK01 = "True";
-                    } else {
-                        afterCK01 = "False";
-                    }
-                    if (ck_after02.isChecked()) {
-                        afterCK02 = "True";
-                    } else {
-                        afterCK02 = "False";
-                    }
-                    if (ck_after03.isChecked()) {
-                        afterCK03 = "True";
-                    } else {
-                        afterCK03 = "False";
+                    Date endTime = new Date();
+                    strEndTime = timeformatter.format(endTime);
+
+                    try {
+                        Date endtimes = timeformatter.parse(strEndTime);
+                        Date starttimes = timeformatter.parse(strStartTime);
+                        diff = endtimes.getTime() - starttimes.getTime();
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
 
-                    intProviding = rg_providing.getCheckedRadioButtonId();
-                    rb_providing = findViewById(intProviding);
-                    carNumber = et_carNumber.getText().toString();
-                    if (strCar == null) {
+                    if ((diff / (60 * 1000)) < 60) {
+//                    if (diff < 1000) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                        builder.setTitle("차량이용방법").setMessage("차량이용방법을 선택해 주세요.");
+                        builder.setTitle("시간확인").setMessage("60분이 지나지 않았습니다.");
                         AlertDialog alertDialog = builder.create();
                         alertDialog.show();
-                    } else if (rb_providing == null) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                        builder.setTitle("목욕제공방법").setMessage("제공방법을 선택해 주세요.");
-                        AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
+
                     } else {
-                        if (aSwitch1.isChecked() && carNumber.equals("")) {
+                        btn_end.setText(strEndTime);
+                        tv_endTime.setText(strEndTime);
+                        usingTime = Long.toString(diff / (60 * 1000));
+                        tv_time.setText(usingTime);
+
+
+                        if (ck_before01.isChecked()) {
+                            beforeCK01 = "True";
+                        } else {
+                            beforeCK01 = "False";
+                        }
+                        if (ck_before02.isChecked()) {
+                            beforeCK02 = "True";
+                        } else {
+                            beforeCK02 = "False";
+                        }
+                        if (ck_before03.isChecked()) {
+                            beforeCK03 = "True";
+                        } else {
+                            beforeCK03 = "False";
+                        }
+                        if (ck_after01.isChecked()) {
+                            afterCK01 = "True";
+                        } else {
+                            afterCK01 = "False";
+                        }
+                        if (ck_after02.isChecked()) {
+                            afterCK02 = "True";
+                        } else {
+                            afterCK02 = "False";
+                        }
+                        if (ck_after03.isChecked()) {
+                            afterCK03 = "True";
+                        } else {
+                            afterCK03 = "False";
+                        }
+
+                        intProviding = rg_providing.getCheckedRadioButtonId();
+                        rb_providing = findViewById(intProviding);
+                        carNumber = et_carNumber.getText().toString();
+                        if (strCar == null) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                            builder.setTitle("차량번호").setMessage("차량번호를 입력해 주세요.");
+                            builder.setTitle("차량이용방법").setMessage("차량이용방법을 선택해 주세요.");
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        } else if (rb_providing == null) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                            builder.setTitle("목욕제공방법").setMessage("제공방법을 선택해 주세요.");
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
                         } else {
+                            if (aSwitch1.isChecked() && carNumber.equals("")) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                                builder.setTitle("차량번호").setMessage("차량번호를 입력해 주세요.");
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+                            } else {
 
-                            carNumber = et_carNumber.getText().toString();
-                            etc = et_etc.getText().toString();
-                            providing = ((RadioButton) findViewById(intProviding)).getText().toString();
-                            Date dbDate = new Date();
-                            dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
+                                carNumber = et_carNumber.getText().toString();
+                                etc = et_etc.getText().toString();
+                                providing = ((RadioButton) findViewById(intProviding)).getText().toString();
+                                Date dbDate = new Date();
+                                dbCheck = new SimpleDateFormat("yyyyMMddHHmmss").format(dbDate);
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
-                            builder.setTitle("내용전송");
-                            builder.setMessage("총시간" + usingTime + "분을 전송하시겠습니까?");
-                            // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                            builder.setPositiveButton("예",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
+                                AlertDialog.Builder builder = new AlertDialog.Builder(VisitingBathActivity.this);
+                                builder.setTitle("내용전송");
+                                builder.setMessage("총시간" + usingTime + "분을 전송하시겠습니까?");
+                                // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                builder.setPositiveButton("예",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
 
-                                            if (dateCheck != null && dateCheck.equals(strDate)) {
-                                                AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingBathActivity.this);
-                                                builder2.setTitle("방문목욕");
-                                                builder2.setMessage("오늘 방문목욕은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
-                                                // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
-                                                builder2.setPositiveButton("예",
-                                                        new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                number++;
-                                                                bathSyncTask = new BathSyncTask().execute();
-                                                                dbCheckSyncTask = new DbCheckSyncTask().execute();
-                                                            }
-                                                        });
-                                                builder2.setNegativeButton("아니오",
-                                                        new DialogInterface.OnClickListener() {
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        });
-                                                builder2.show();
-                                            } else {
-                                                number = 1;
-                                                bathSyncTask = new BathSyncTask().execute();
-                                                dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                if (dateCheck != null && dateCheck.equals(strDate)) {
+                                                    AlertDialog.Builder builder2 = new AlertDialog.Builder(VisitingBathActivity.this);
+                                                    builder2.setTitle("방문목욕");
+                                                    builder2.setMessage("오늘 방문목욕은 이미 진행되었습니다. 그래도 전송하시겠습니까?");
+                                                    // builder.setMessage("총시간 " + totaltime + " 분을 전송하시겠습니까?");
+                                                    builder2.setPositiveButton("예",
+                                                            new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    number++;
+                                                                    bathSyncTask = new BathSyncTask().execute();
+                                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                                }
+                                                            });
+                                                    builder2.setNegativeButton("아니오",
+                                                            new DialogInterface.OnClickListener() {
+                                                                public void onClick(DialogInterface dialog, int which) {
+                                                                    Toast.makeText(getApplicationContext(), "전송이 취소되었습니다.", Toast.LENGTH_LONG).show();
+                                                                }
+                                                            });
+                                                    builder2.show();
+                                                } else {
+                                                    number = 1;
+                                                    bathSyncTask = new BathSyncTask().execute();
+                                                    dbCheckSyncTask = new DbCheckSyncTask().execute();
+                                                }
                                             }
-                                        }
-                                    });
-                            builder.setNegativeButton("아니오",
-                                    new DialogInterface.OnClickListener() {
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
-                                        }
-                                    });
-                            builder.show();
+                                        });
+                                builder.setNegativeButton("아니오",
+                                        new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Toast.makeText(getApplicationContext(), "다시 입력해주세요.", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                builder.show();
+                            }
                         }
+//                }
                     }
                 }
-
                 break;
         }
     }
@@ -605,17 +688,13 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
 
                                 @Override
                                 public void onAnimationEnd(Animator animation) {
-//                                    animationView.setVisibility(View.GONE);
-//                                    intBathcount = 0;
-//                                    recipientSyncTask = new RecipientSyncTask().execute();
-//                                    lin_bathAll.setVisibility(View.VISIBLE);
                                     new Handler().postDelayed(new Runnable() {
                                         @Override
                                         public void run() {
-                                            finish();
+                                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                                            startActivityForResult(cameraIntent, TAKE_PICTURE);
                                         }
                                     }, 1000);
-
                                 }
 
                                 @Override
@@ -816,5 +895,112 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        switch (requestCode) {
+            case TAKE_PICTURE:
+
+                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
+
+
+                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+
+                    dialog_imageview.setImageBitmap(bitmap);
+                    dialog_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                    imageBytes = baos.toByteArray();
+//                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+
+                    //s1 = 8;
+
+                    s2 = 32;
+                    s4 = imageString;
+
+
+                    try {
+
+                        long now = System.currentTimeMillis();
+                        Date date = new Date(now);
+
+                        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
+                        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+                        SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
+                        String nowDate = time.format(date);
+                        SimpleDateFormat hm = new SimpleDateFormat("HH:mm");
+
+                        s3 = nowDate;
+                        ymd1 = ymd.format(date);
+                        hms1 = hms.format(date);
+                        ttime = hm.format(date);
+
+
+                    } catch (Exception e) {
+
+                    }
+
+                    //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
+                    //  startActivity(i8);
+                    tTask = new TSyncTask().execute();
+
+
+                    Intent i8 = new Intent(VisitingBathActivity.this, signActivity.class);
+                    i8.putExtra("route", "MenuMain");
+                    startActivity(i8);
+
+                }
+
+                break;
+        }
+
+    }
+    public class TSyncTask extends AsyncTask<String, String, String> {
+
+        protected void onPreExecute() {
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return null;
+            query1();
+
+            return null;
+
+        }
+
+        protected void onPostExecute(String result) {
+        }
+
+        protected void onCancelled() {
+            super.onCancelled();
+        }
+    }
+
+    public void query1() {
+        Connection connection = null;
+
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
+
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ?,담당업부 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
+            byte[] s5 = imageBytes;
+            ps.setBytes(1, s5);
+            ps.setString(2, ttime);
+            ps.setString(3,"방문목욕");
+            ps.executeUpdate();
+            ps.close();
+            connection.close();
+
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 }

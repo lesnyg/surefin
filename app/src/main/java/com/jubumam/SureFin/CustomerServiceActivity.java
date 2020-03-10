@@ -54,12 +54,11 @@ public class CustomerServiceActivity extends BaseActivity {
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
         Intent intent = getIntent();
-        String route = intent.getExtras().getString("route");
-        if (commute == null) {
-            name = intent.getExtras().getString("name");
-            rating = intent.getExtras().getString("rating");
-            responsibility = intent.getExtras().getString("responsibility");
-        }
+//        if (commute == null) {
+//            name = intent.getExtras().getString("name");
+//            rating = intent.getExtras().getString("rating");
+//            responsibility = intent.getExtras().getString("responsibility");
+//        }
 
         mTask = new MySyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
