@@ -16,6 +16,7 @@ public class SquareImageView extends AppCompatImageView {
 
     public SquareImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        
     }
 
     @Override

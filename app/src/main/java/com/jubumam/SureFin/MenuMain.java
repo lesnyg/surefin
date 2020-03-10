@@ -602,6 +602,7 @@ public class MenuMain extends BaseActivity {
 
             ResultSet rs2 = statement.executeQuery("select 금액,기본시간 from Su_년도별금액 where 년도='" + thisYear + "' AND 구분='방문' and 상세구분 = '" + basetime + "'");
             while (rs2.next()) {
+
                 hourmoney = Integer.parseInt(rs2.getString("금액"));
                 batime = rs2.getFloat("기본시간");
 
