@@ -41,6 +41,7 @@ public class QuestionActivity extends BaseActivity {
     private String divisiontime;
     private String division;//구분
     private String commute;//출근확인
+    private String personId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,9 @@ public class QuestionActivity extends BaseActivity {
         if (commute == null) {
             responsibility = intent.getExtras().getString("responsibility");
         }
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
 
         et_title = findViewById(R.id.et_title);
         et_contents = findViewById(R.id.et_contents);
@@ -142,7 +146,7 @@ public class QuestionActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetlist = statement.executeQuery("insert into Su_요양사문의(일자,작성자,제목,내용) values('" + date + "','" + responsibility + "','" + title + "','" + contents + "') ");
+            ResultSet resultSetlist = statement.executeQuery("insert into Su_요양사문의(일자,작성자,제목,내용,직원코드) values('" + date + "','" + responsibility + "','" + title + "','" + contents + "','"+personId+"') ");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

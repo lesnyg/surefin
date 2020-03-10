@@ -2,8 +2,9 @@ package com.jubumam.SureFin;
 import android.graphics.Bitmap;
 
 public class Recipient {
-    private int personId;
+    private String personId;
     private int photoId;
+    private String recipiId;
     private String name;
     private String indiviPay;
     private String rating;
@@ -14,8 +15,9 @@ public class Recipient {
     private String responsibility;
 
 
-    public Recipient(Bitmap bitmap,String name, String number, String adress,String gender){
+    public Recipient(Bitmap bitmap,String recipiId,String name, String number, String adress,String gender){
         this.bitmap = bitmap;
+        this.recipiId = recipiId;
         this.name = name;
         this.number = number;
         this.adress = adress;
@@ -72,11 +74,11 @@ public class Recipient {
         this.photoId = photoId;
     }
 
-    public int getPersonId() {
+    public String getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
 
@@ -121,4 +123,11 @@ public class Recipient {
         this.rating = rating;
     }
 
+    public String getRecipiId() {
+        return recipiId;
+    }
+
+    public void setRecipiId(String recipiId) {
+        this.recipiId = recipiId;
+    }
 }

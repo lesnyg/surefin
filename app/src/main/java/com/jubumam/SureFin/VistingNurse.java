@@ -251,6 +251,8 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
     private AsyncTask<String, String, String> cTask;
     private String commute;
     private String route;
+    private String personId;
+    private String recipiId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -260,12 +262,15 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
         activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
         route = commuteRecipient.getRoute();
 
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
 
         aTask = new mSyncTask().execute();
 
@@ -330,7 +335,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
 
         if (commute == null) {
             lin_recipi.setVisibility(View.GONE);
-        } else if (commute != null && commute.equals("true") && route.equals("VistingNurse")) {
+        } else if (commute != null && commute.equals("true") && route.equals("방문간호")) {
             strStartTime = commuteRecipient.getStartTime();
             btn_start.setText(strStartTime);
             tv_startTime.setText(strStartTime);
@@ -404,7 +409,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             public void onClick(View v) {
                 if (btn_start.getText().equals("출근하기")) {
                     Intent intent = new Intent(VistingNurse.this, MainActivity.class);
-                    intent.putExtra("route", "VistingNurse");
+                    intent.putExtra("route", "방문간호");
                     startActivity(intent);
 
                 }
@@ -633,7 +638,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement sts = con.createStatement();
-            ResultSet rs = sts.executeQuery("SELECT A.수급자명,A.성별,A.등급,A.지점,A.담당,A.인정번호1,A.구분,A.기본시간,A.생년월일,A.기본시간,A.과거병력,A.구분,A.성별,A.hp,B.기관명,B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점=B.지점 and 수급자명='" + name + "';");
+            ResultSet rs = sts.executeQuery("SELECT A.수급자명,A.성별,A.등급,A.지점,A.담당,A.인정번호1,A.구분,A.기본시간,A.생년월일,A.기본시간,A.과거병력,A.구분,A.성별,A.hp,B.기관명,B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점=B.지점 and 수급자코드 ='" + recipiId + "'");
 
 
             while (rs.next()) {
@@ -655,7 +660,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
 
             }
 
-            ResultSet rst = sts.executeQuery("select * from Su_방문간호지시서 where 수급자명 = '" + name + "'");
+            ResultSet rst = sts.executeQuery("select * from Su_방문간호지시서 where 수급자코드 ='" + recipiId + "'");
             while (rst.next()) {
                 agency = rst.getString("의료기관명칭");
                 issuedate = rst.getString("발급일자");
@@ -691,12 +696,12 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             ResultSet resultSet = statement.executeQuery("insert into Su_방문간호정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호,의료기관명칭,발급일자,유효기간," +
                     "의사면허번호,방문횟수,시작시간,종료시간,총시간,혈압,혈압2,맥박,체온," +
                     "간호시간계,건강시간계,특이사항,금액,지점,담당,기본시간,급여" +
-                    ",성별,구분,주요질환,욕창관리,영양관리,통증관리,배설관리,당뇨발관리,호흡기간호,투석간호,구강간호,관절오그라듦예방,투약관리,기초건강관리,인지훈련,총시간이름,디비체크,번호) " +
+                    ",성별,구분,주요질환,욕창관리,영양관리,통증관리,배설관리,당뇨발관리,호흡기간호,투석간호,구강간호,관절오그라듦예방,투약관리,기초건강관리,인지훈련,총시간이름,디비체크,번호,수급자코드) " +
                     "values('" + date1 + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "'," +
                     "'" + birth + "','" + acceptnumber + "','" + agency + "','" + issuedate + "','" + edate + "','" + mlicense + "'," +
                     "'" + vnumber + "','" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + bpressure + "','" + bpressure1 + "','" + pressure + "'," + "'" + btemperature + "'," +
                     "'" + usingTime1 + "','" + usingTime4 + "','" + uniqueness + "','" + smoney + "','" + place + "','" + responsibility + "','" + baseTime + "','" + tmoney + "','" + gender + "','" + division + "','" + mhistory + "'," +
-                    "'" + ck_string1 + "','" + ck_string2 + "','" + ck_string3 + "','" + ck_string4 + "','" + ck_string5 + "','" + ck_string6 + "','" + ck_string7 + "','" + ck_string8 + "','" + ck_string9 + "','" + ck_string10 + "','" + ck_string11 + "','" + ck_string12 + "','" + ptime + "','" + dbCheck + "','" + number + "')");
+                    "'" + ck_string1 + "','" + ck_string2 + "','" + ck_string3 + "','" + ck_string4 + "','" + ck_string5 + "','" + ck_string6 + "','" + ck_string7 + "','" + ck_string8 + "','" + ck_string9 + "','" + ck_string10 + "','" + ck_string11 + "','" + ck_string12 + "','" + ptime + "','" + dbCheck + "','" + number + "','"+recipiId+"')");
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -734,7 +739,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문간호정보 WHERE 수급자명 = '" + name + "' AND 일자='" + date1 + "'");
+            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문간호정보 WHERE 수급자코드 ='" + recipiId + "' AND 일자='" + date1 + "'");
             while (dateRS.next()) {
                 dateCheck = dateRS.getString("일자");
                 number++;
@@ -797,7 +802,7 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문간호정보 WHERE 수급자명 = '" + name + "' AND 일자='" + date1 + "'");
+            ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문간호정보 WHERE 수급자코드 ='" + recipiId + "' AND 일자='" + date1 + "'");
             while (dbCheckRS.next()) {
                 final String dbCheck2 = dbCheckRS.getString("디비체크");
                 if (dbCheck2 != null && dbCheck2.equals(dbCheck)) {
@@ -976,11 +981,10 @@ public class VistingNurse extends BaseActivity implements View.OnClickListener {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
 
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ?,담당업부 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원코드 = '" + personId + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
             byte[] s5 = imageBytes;
             ps.setBytes(1, s5);
             ps.setString(2, ttime);
-            ps.setString(3, "방문간호");
             ps.executeUpdate();
             ps.close();
             connection.close();

@@ -94,6 +94,8 @@ public class Non_Payment_Item extends BaseActivity {
     private TextView tv_name;
     private TextView tv_name1;
     private TextView tv_thisMonth;
+    private String recipiId;
+    private String personId;
 
 
     @Override
@@ -104,14 +106,14 @@ public class Non_Payment_Item extends BaseActivity {
         activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
-        responsibility = commuteRecipient.getResponsibility();
         String commute = commuteRecipient.getCommute();
 
         Login login = Login.getInstance();
         responsibility = login.getResponsibility();
-        String responsibilityID = login.getPersonId();
+        personId = login.getPersonId();
         String department = login.getDepartment();
 
         if(commute==null && department ==null) {
@@ -196,7 +198,7 @@ public class Non_Payment_Item extends BaseActivity {
             con = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement sts = con.createStatement();
 
-            ResultSet resultSet = sts.executeQuery("select * from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "') order by id");
+            ResultSet resultSet = sts.executeQuery("select * from Su_비급여신청자 where 수급자코드 ='" + recipiId + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "') order by id");
 
             nonList = new ArrayList<>();
             nonUseList = new ArrayList<>();

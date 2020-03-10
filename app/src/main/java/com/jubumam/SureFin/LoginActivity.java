@@ -33,6 +33,7 @@ public class LoginActivity extends Activity {
     private EditText txt_pass;
     private String personId;
     private String responsibility;
+    private String responsibilityID;
     private String department;
 
 
@@ -136,10 +137,8 @@ public class LoginActivity extends Activity {
                         intent.putExtra("route", "LoginActivity");
                         startActivity(intent);
                         finish();
-
                     } else if (hp == null) {
                         Toast.makeText(getApplicationContext(), "휴대폰번호를 입력하세요.", Toast.LENGTH_SHORT).show();
-
                     } else if (pass == null) {
                         Toast.makeText(getApplicationContext(), "비밀번호를 입력하세요.", Toast.LENGTH_SHORT).show();
                     } else if (pass != pass1) {
@@ -175,7 +174,9 @@ public class LoginActivity extends Activity {
                 pass1 = resultSet.getString("비밀번호");
                 personId = resultSet.getString("직원코드");
                 responsibility = resultSet.getString("직원명");
+                responsibilityID = resultSet.getString("직원명");
                 department = resultSet.getString("담당직종");
+
 
 
                 // id = resultSet.getString(2);

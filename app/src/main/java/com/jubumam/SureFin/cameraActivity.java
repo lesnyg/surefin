@@ -53,6 +53,8 @@ public class cameraActivity extends AppCompatActivity {
 
 
     private AsyncTask<String, String, String> caTask;
+    private String recipiId;
+    private String personId;
 
 
     @Override
@@ -71,13 +73,25 @@ public class cameraActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
 
-        Intent intent = getIntent();
-        name = intent.getExtras().getString("name");
-        gender = intent.getExtras().getString("gender");
-        rating = intent.getExtras().getString("rating");
-        birth = intent.getExtras().getString("birth");
-        pastdisease = intent.getExtras().getString("pastdisease");
-        responsibility = intent.getExtras().getString("responsibility");
+//        Intent intent = getIntent();
+//        name = intent.getExtras().getString("name");
+//        gender = intent.getExtras().getString("gender");
+//        rating = intent.getExtras().getString("rating");
+//        birth = intent.getExtras().getString("birth");
+//        pastdisease = intent.getExtras().getString("pastdisease");
+//        responsibility = intent.getExtras().getString("responsibility");
+
+
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
+        name = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
+        responsibility = login.getResponsibility();
+
 
 
         // 레이아웃과 변수 연결
@@ -255,7 +269,7 @@ public class cameraActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_직원출퇴근정보(일자,직원명,출근시간,BLOBData)VALUES ('" + ymd1 + "','" + responsibility + "','" + hms1 + "',convert(VARBINARY(max),'" + s4 + "'))");
+            ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_직원출퇴근정보(일자,직원명,출근시간,BLOBData,직원코드)VALUES ('" + ymd1 + "','" + responsibility + "','" + hms1 + "',convert(VARBINARY(max),'" + s4 + "'),'"+ recipiId +"')");
 
             //ResultSet resultSet = statement.executeQuery("INSERT INTO  Su_사진1(BLOBData)VALUES ('"+s5+"')");
             // PreparedStatement pst = connection.prepareStatement("INSERT INTO  Su_사진1(BLOBData)VALUES ('"+imageString+"',convert(VARBINARY(max))");

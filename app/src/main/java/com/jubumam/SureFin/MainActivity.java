@@ -1,28 +1,20 @@
 package com.jubumam.SureFin;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.view.ContextThemeWrapper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.lang.ref.WeakReference;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -43,9 +35,6 @@ public class MainActivity extends BaseActivity {
 //    private String title;
 //    private Button btn_search;
 //    private TextView cal_txt;
-
-    private String storeVersion;
-    private String deviceVersion;
 
 
     private Button cal_btn;
@@ -88,6 +77,7 @@ public class MainActivity extends BaseActivity {
     private TextView smsCountTxt;
     private int pendingSMSCount = 10;
     private String route1;
+    private String recipiId;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -97,8 +87,8 @@ public class MainActivity extends BaseActivity {
         activateToolbar();
 
         Login login = Login.getInstance();
+        personId = login.getPersonId();
         responsibility = login.getResponsibility();
-        responsibilityID = login.getPersonId();
         department = login.getPersonId();
 
 
@@ -156,14 +146,14 @@ public class MainActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 left join Su_사진 on Su_수급자기본정보.id=Su_사진.Idno where 담당='" + responsibility + "' order by Su_수급자기본정보.수급자명");
+            resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 left join Su_사진 on Su_수급자기본정보.수급자코드=Su_사진.수급자코드 where 직원코드='" + personId + "' order by Su_수급자기본정보.수급자명");
             //resultSetlist = statement.executeQuery("select * from Su_수급자기본정보 full outer join Su_사진 on Su_수급자기본정보.");
 
 
             byte bt[];
             list = new ArrayList<>();
             while (resultSetlist.next()) {
-                personId = resultSetlist.getString("Idno");
+                recipiId = resultSetlist.getString("수급자코드");
                 name = resultSetlist.getString("수급자명");
                 adress = resultSetlist.getString("주소2");
                 number = resultSetlist.getString("hp");
@@ -182,7 +172,7 @@ public class MainActivity extends BaseActivity {
                         }
                         // list.add(new Recipient(bitmap, name, indiviPay, rating));
 
-                        list.add(new Recipient(bitmap, name, number, adress, gender));
+                        list.add(new Recipient(bitmap, recipiId, name, number, adress, gender));
 
 
                     }
@@ -214,6 +204,7 @@ public class MainActivity extends BaseActivity {
                     public void onRecipientClick(Recipient recipient) {
                         Intent intent = new Intent(MainActivity.this, RecipientDetailActivity.class);
                         intent.putExtra("responsibility", responsibility);
+                        intent.putExtra("recipiId",recipient.getRecipiId());
                         intent.putExtra("name", recipient.getName());
                         intent.putExtra("title", "main");
                         intent.putExtra("route",route1);
@@ -297,95 +288,4 @@ public class MainActivity extends BaseActivity {
         // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
         mAdapter.notifyDataSetChanged();
     }
-
-    private class VersionCheck extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            HttpHandler sh = new HttpHandler();
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
-
-    public class BackgroundThread extends Thread {
-        @Override
-        public void run() {
-
-            // 패키지 네임 전달
-            storeVersion = MarketVersionChecker.getMarketVersion(getPackageName());
-
-            // 디바이스 버전 가져옴
-            try {
-                deviceVersion = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-            } catch (PackageManager.NameNotFoundException e) {
-                e.printStackTrace();
-            }
-            deviceVersionCheckHandler.sendMessage(deviceVersionCheckHandler.obtainMessage());
-            // 핸들러로 메세지 전달
-        }
-    }
-
-    private final DeviceVersionCheckHandler deviceVersionCheckHandler = new DeviceVersionCheckHandler(this);
-
-    // 핸들러 객체 만들기
-    private static class DeviceVersionCheckHandler extends Handler {
-        private final WeakReference<MainActivity> mainActivityWeakReference;
-
-        public DeviceVersionCheckHandler(MainActivity mainActivity) {
-            mainActivityWeakReference = new WeakReference<MainActivity>(mainActivity);
-        }
-
-        @Override
-        public void handleMessage(Message msg) {
-            MainActivity activity = mainActivityWeakReference.get();
-            if (activity != null) {
-                activity.handleMessage(msg);
-                // 핸들메세지로 결과값 전달
-            }
-        }
-    }
-
-    private void handleMessage(Message msg) {
-        //핸들러에서 넘어온 값 체크
-        Log.e(" storeVersion : ", storeVersion);
-        Log.e(" deviceVersion : ", deviceVersion);
-        if (storeVersion.compareTo(deviceVersion) > 0) {
-            // 업데이트 필요
-
-            AlertDialog.Builder alertDialogBuilder =
-                    new AlertDialog.Builder(new ContextThemeWrapper(this, android.R.style.Theme_DeviceDefault_Light));
-            alertDialogBuilder.setTitle("업데이트");
-            alertDialogBuilder
-                    .setMessage("새로운 버전이 있습니다.\n보다 나은 사용을 위해 업데이트 해 주세요.")
-                    .setPositiveButton("업데이트 바로가기", new DialogInterface.OnClickListener() {
-
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Intent intent = new Intent(Intent.ACTION_VIEW);
-
-                            intent.setData(Uri.parse("market://details?id=" + getPackageName()));
-                            startActivity(intent);
-                        }
-                    });
-            AlertDialog alertDialog = alertDialogBuilder.create();
-            alertDialog.setCanceledOnTouchOutside(true);
-            alertDialog.show();
-
-        } else {
-            // 업데이트 불필요
-
-        }
-
-    }
-
-
 }

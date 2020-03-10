@@ -102,8 +102,6 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
             }
         });
 
-        orderTask = new OrderSyncTask().execute();
-
         timer = new Timer();
 
         TimerTask TT = new TimerTask() {
@@ -175,7 +173,7 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
 
             for (int i = 0; i < areaList.size(); i++) {
                 String area = areaList.get(i).toString();
-                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '진행중' order by 주문시간 DESC");
+                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '미배달' order by 주문시간 DESC");
                 while (resultSetlist.next()) {
                     name = resultSetlist.getString("주문자");
                     phoneNumber = resultSetlist.getString("전화번호");
@@ -221,8 +219,6 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
 
         }
         protected void onPostExecute(String result) {
-            Toast.makeText(SongyeongActivity.this, result, Toast.LENGTH_SHORT).show();
-
 
         }
 

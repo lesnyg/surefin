@@ -122,6 +122,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
     private int price;                  //금액
     private int nonPayment;                  //비급여액
 
+    private String recipiId;        //수급자코드
     private String name;
     private String phone;
     private String rating;
@@ -185,6 +186,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
     private String commute;
     private ImageView img_back;
     private String route;
+    private String personId;
 
 
     @Override
@@ -195,11 +197,15 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
         activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
         route = commuteRecipient.getRoute();
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
 
         Date currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -326,7 +332,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
 
         if (commute == null) {
             lin_recipi.setVisibility(View.GONE);
-        } else if (commute != null && commute.equals("true") && route.equals("VisitingBathActivity")) {
+        } else if (commute != null && commute.equals("true") && route.equals("방문목욕")) {
             strStartTime = commuteRecipient.getStartTime();
             btn_start.setText(strStartTime);
             tv_startTime.setText(strStartTime);
@@ -337,7 +343,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             public void onClick(View v) {
                 if (btn_start.getText().equals("출근하기")) {
                     Intent intent = new Intent(VisitingBathActivity.this, MainActivity.class);
-                    intent.putExtra("route", "VisitingBathActivity");
+                    intent.putExtra("route", "방문목욕");
                     startActivity(intent);
 //                    Date startTime = new Date();
 //                    strStartTime = timeformatter.format(startTime);
@@ -646,7 +652,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문목욕정보 WHERE 수급자명 = '" + name + "' AND 일자='" + strDate + "'");
+            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문목욕정보 WHERE 수급자코드 = '" + recipiId + "' AND 일자='" + strDate + "'");
             while (dateRS.next()) {
                 dateCheck = dateRS.getString("일자");
                 number++;
@@ -665,7 +671,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문목욕정보 WHERE 수급자명 = '" + name + "' AND 일자='" + strDate + "'");
+            ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문목욕정보 WHERE 수급자코드 = '" + recipiId + "' AND 일자='" + strDate + "'");
             while (dbCheckRS.next()) {
                 final String dbCheck2 = dbCheckRS.getString("디비체크");
                 if (dbCheck2 != null && dbCheck2.equals(dbCheck)) {
@@ -794,7 +800,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery("select A.수급자명, A.성별, A.등급, A.인정번호1, A.생년월일, A.지점, A.담당, A.기본시간,A.목욕횟수, A.hp, A.구분, A.과거병력, B.기관명, B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점 = B.지점 and A.수급자명 = '" + name + "'");
+            ResultSet rs = statement.executeQuery("select A.수급자명, A.성별, A.등급, A.인정번호1, A.생년월일, A.지점, A.담당, A.기본시간,A.목욕횟수, A.hp, A.구분, A.과거병력, B.기관명, B.기관번호 FROM SU_수급자기본정보 A, SU_요양기관등록정보 B WHERE A.지점 = B.지점 and A.수급자코드 = '" + recipiId + "'");
             while (rs.next()) {
                 rating = rs.getString("등급");
                 gender = rs.getString("성별");
@@ -811,7 +817,7 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
                 bathTotalCount = rs.getString("목욕횟수");
             }
 
-            ResultSet bathRS = statement.executeQuery("select 목욕여부 from Su_방문목욕정보 where 수급자명='" + name + "' and (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet bathRS = statement.executeQuery("select 목욕여부 from Su_방문목욕정보 where 수급자코드 = '" + recipiId + "' and (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (bathRS.next()) {
                 String bathcount = bathRS.getString("목욕여부");
 
@@ -852,11 +858,11 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             ResultSet bathResultSet = statement.executeQuery("insert into Su_방문목욕정보(일자,수급자명,기관기호,기관명,등급,생년월일,인정번호," +
                     "시작시간,종료시간,총시간,차량이용,차량번호,차량미이용,제공방법,목욕전배뇨배변,목욕전욕창,목욕전얼굴색피부색," +
                     "목욕후얼굴색피부색,목욕후몸단장,목욕후주변정리,특이사항,금액," +
-                    "지점,담당,기본시간,급여,주요질환,구분,성별,목욕여부,디비체크,번호,이용금액)" +
+                    "지점,담당,기본시간,급여,주요질환,구분,성별,목욕여부,디비체크,번호,이용금액,수급자코드)" +
                     "VALUES('" + strDate + "','" + name + "','" + organizationId + "','" + organization + "','" + rating + "','" + birth + "','" + acceptnumber + "'," +
                     "'" + strStartTime + "','" + strEndTime + "','" + usingTime + "','" + strCar + "','" + carNumber + "','" + strNoCar + "','" + providing + "','" + beforeCK01 + "','" + beforeCK02 + "','" + beforeCK03 + "'," +
                     "'" + afterCK01 + "','" + afterCK02 + "','" + afterCK03 + "','" + etc + "','" + nonPayment + "'," +
-                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "','" + price + "')");
+                    "'" + place + "','" + responsibility + "','" + baseTime + "','" + provide + "','" + pastdisease + "','" + division + "','" + gender + "','" + tr + "','" + dbCheck + "','" + number + "','" + price + "','"+recipiId+"')");
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -987,11 +993,10 @@ public class VisitingBathActivity extends BaseActivity implements View.OnClickLi
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
 
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ?,담당업부 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원코드 = '" + personId + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
             byte[] s5 = imageBytes;
             ps.setBytes(1, s5);
             ps.setString(2, ttime);
-            ps.setString(3,"방문목욕");
             ps.executeUpdate();
             ps.close();
             connection.close();

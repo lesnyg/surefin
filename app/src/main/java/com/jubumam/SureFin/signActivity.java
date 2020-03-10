@@ -45,6 +45,8 @@ public class signActivity extends AppCompatActivity {
     private ByteArrayOutputStream baos;
     private String startWork;
     private String stime;
+    private String personId;
+    private String recipiId;
 
 
     @Override
@@ -53,6 +55,7 @@ public class signActivity extends AppCompatActivity {
         setContentView(R.layout.signature);
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
@@ -60,6 +63,9 @@ public class signActivity extends AppCompatActivity {
         startWork = commuteRecipient.getStartWork();
         Intent intent = getIntent();
         route = intent.getExtras().getString("route");
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
 
 
         signaturePad = (SignaturePad) findViewById(R.id.signaturePad);
@@ -173,15 +179,16 @@ public class signActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             if (route.equals("MenuMain")) {
-                PreparedStatement ps = connection.prepareStatement("update Su_직원출퇴근정보 set 요양사서명 = ? where 직원명 ='" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+                PreparedStatement ps = connection.prepareStatement("update Su_직원출퇴근정보 set 요양사서명 = ? where 직원코드 ='" + personId + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
                 ps.setBytes(1, imageBytes);
                 ps.executeUpdate();
                 ps.close();
             } else {
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_수급자서명정보(수급자명,일자,BLOBData)VALUES (?,?,?)");
+                PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_수급자서명정보(수급자명,일자,BLOBData,수급자코드)VALUES (?,?,?,?)");
                 ps.setString(1, name);
                 ps.setString(2, startWork);
                 ps.setBytes(3, imageBytes);
+                ps.setString(4, recipiId);
                 ps.executeUpdate();
                 ps.close();
             }

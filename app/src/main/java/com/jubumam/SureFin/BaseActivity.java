@@ -72,6 +72,7 @@ public class BaseActivity extends AppCompatActivity {
     private static final String TAG_TIME = "time";
     private static final String TAG_NAME = "name";
     private Map<String, String> itemMap;
+    private String personId;
 
 
     protected Toolbar activateToolbar() {
@@ -80,13 +81,13 @@ public class BaseActivity extends AppCompatActivity {
 
         notiTask = new NotiSyncTask().execute();
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
-        responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
 
-        if (commute == null) {
-            Login login = Login.getInstance();
-            responsibility = login.getResponsibility();
-        }
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
+
+
 
         return mToolbar;
     }
@@ -113,8 +114,8 @@ public class BaseActivity extends AppCompatActivity {
                     ActionBar actionBar = getSupportActionBar();
                     actionBar.setDisplayShowCustomEnabled(true); //커스터마이징 하기 위해 필요
                     actionBar.setDisplayShowTitleEnabled(false);
-                        actionBar.setDisplayHomeAsUpEnabled(true);
-                        actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
+                    actionBar.setDisplayHomeAsUpEnabled(true);
+                    actionBar.setHomeAsUpIndicator(R.drawable.ic_home_white_24dp);
 
                 }
             }
@@ -187,7 +188,7 @@ public class BaseActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             conn = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = conn.createStatement();
-            ResultSet calres = statement.executeQuery("select * from Su_서비스제공일정표 where (담당1 ='" + responsibility + "' or 담당2 ='" + responsibility + "') and 일자 ='" + divisiondate + "' order by 시간1");
+            ResultSet calres = statement.executeQuery("select * from Su_서비스제공일정표 where (담당1코드 ='" + personId + "' or 담당2코드 ='" + personId + "') and 일자 ='" + divisiondate + "' order by 시간1");
             list = new ArrayList<>();
             dialogItemList = new ArrayList<>();
             while (calres.next()) {

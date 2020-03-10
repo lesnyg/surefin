@@ -124,7 +124,7 @@ public class ServiceListActivity extends BaseActivity {
     private int intNursingTotal = 0;
     private long sumUsingTimeDay = 0;
     private long sumUsingTimeMonth = 0;
-
+    private String recipiId;
 
 
     @Override
@@ -134,14 +134,13 @@ public class ServiceListActivity extends BaseActivity {
 
         activateToolbar();
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
-        responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
 
         Login login = Login.getInstance();
         responsibility = login.getResponsibility();
-        String responsibilityID = login.getPersonId();
         String department = login.getDepartment();
 
         if(commute==null && department ==null) {
@@ -285,7 +284,7 @@ public class ServiceListActivity extends BaseActivity {
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
-            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자명='" + name + "'");
+            ResultSet recipientRS = statement.executeQuery("select 기본시간 from Su_수급자기본정보 where 수급자코드='" + recipiId + "'");
             while (recipientRS.next()) {
                 recipientBasicTime = recipientRS.getString("기본시간");
             }
@@ -296,7 +295,7 @@ public class ServiceListActivity extends BaseActivity {
                 intyearsupport = Integer.parseInt(yearsupport);
             }
 
-            ResultSet bathPriceRS = statement.executeQuery("select A.목욕여부,B.금액 from Su_방문목욕정보 as A LEFT JOIN Su_년도별금액 as B ON A.차량이용=B.상세구분 where A.수급자명='" + name + "' AND (A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') AND B.년도='" + thisYear + "' ");
+            ResultSet bathPriceRS = statement.executeQuery("select A.목욕여부,B.금액 from Su_방문목욕정보 as A LEFT JOIN Su_년도별금액 as B ON A.차량이용=B.상세구분 where A.수급자코드='" + recipiId + "' AND (A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') AND B.년도='" + thisYear + "' ");
             while (bathPriceRS.next()) {
                 count = bathPriceRS.getString("목욕여부");
                 String yearBathSupport = bathPriceRS.getString("금액");
@@ -308,7 +307,7 @@ public class ServiceListActivity extends BaseActivity {
 
             }
 
-            ResultSet nursingPriceRS = statement.executeQuery("select A.방문횟수,B.금액 from Su_방문간호정보 as A left join Su_년도별금액 as B on B.상세구분=A.총시간이름 where B.년도='" + thisYear + "' AND (A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') AND A.수급자명='" + name + "'");
+            ResultSet nursingPriceRS = statement.executeQuery("select A.방문횟수,B.금액 from Su_방문간호정보 as A left join Su_년도별금액 as B on B.상세구분=A.총시간이름 where B.년도='" + thisYear + "' AND (A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') AND A.수급자코드='" + recipiId + "'");
             while (nursingPriceRS.next()) {
 
                 String yearNursingSupport = nursingPriceRS.getString("금액");
@@ -325,7 +324,7 @@ public class ServiceListActivity extends BaseActivity {
                     "B.차량이용 ,C.방문횟수,C.총시간,D.서비스제공,D.서비스제공일자 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
                     "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
                     "FULL OUTER JOIN Su_비급여신청자 D ON (D.서비스제공일자=A.일자 AND D.수급자명=A.수급자명 AND D.번호=A.번호) or (D.서비스제공일자=B.일자 AND D.수급자명=B.수급자명 AND D.번호=B.번호) or (D.서비스제공일자=C.일자 AND D.수급자명=C.수급자명 AND D.번호=C.번호)" +
-                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "'or D.수급자명='" + name + "')" +
+                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (D.서비스제공일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자코드='" + recipiId + "' or B.수급자코드='" + recipiId + "' or C.수급자코드='" + recipiId + "'or D.수급자코드='" + recipiId + "')" +
                     "order by 요양일자,A.번호");
 
             serviceList = new ArrayList<>();

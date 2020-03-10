@@ -94,6 +94,7 @@ public class EditRecipientActivity extends BaseActivity {
     private EditText r_gadress_insert;
     private ImageView img_person;
     private ImageView img_camerainsert;
+    private String recipiId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,6 +104,7 @@ public class EditRecipientActivity extends BaseActivity {
         activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();
         commute = commuteRecipient.getCommute();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
@@ -419,7 +421,7 @@ public class EditRecipientActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + name + "'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자코드='" + recipiId + "'");
 
 
             while (resultSet.next()) {
@@ -455,7 +457,7 @@ public class EditRecipientActivity extends BaseActivity {
                 }
             });
 
-            ResultSet resultSetPhoto = statement.executeQuery("select * from Su_사진 where 이름='" + name + "'");
+            ResultSet resultSetPhoto = statement.executeQuery("select * from Su_사진 where 수급자코드='" + recipiId + "'");
             byte b[];
             while (resultSetPhoto.next()) {
                 Blob blob = resultSetPhoto.getBlob(4);
@@ -489,7 +491,7 @@ public class EditRecipientActivity extends BaseActivity {
 
             // PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_배너이미지(BLOBData) VALUES (?)");
             //PreparedStatement ps = connection.prepareStatement("INSERT INTO Su_사진(Idno,이름,BLOBData) VALUES(?,?,?)");
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET BLOBData = ? where 이름 = '" + name + "'and Idno ='" + Idno + "'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_사진 SET BLOBData = ? where 수급자코드='" + recipiId + "' ");
             //  ResultSet resultSet = statement.executeQuery("UPDATE Su_사진 SET BLOBData ='"+blob+"'WHERE 이름 = '"+name+"'");
 
             byte[] buf = imageBytes;

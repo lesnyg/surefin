@@ -154,6 +154,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private String strEndTime;      //종료시간
     private String thisYear;
 
+    private String recipiid;
     private String gender;
     private String rating;
     private String acceptnumber; //인정번호
@@ -232,7 +233,8 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
     private String commute;
     private ImageView img_back;
     private String route;
-
+    private String personId;
+    private String department;
 
 
     @Override
@@ -243,11 +245,16 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
         activateToolbar();
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiid = commuteRecipient.getRecipiId();
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
-        responsibility = commuteRecipient.getResponsibility();
         commute = commuteRecipient.getCommute();
         route = commuteRecipient.getRoute();
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
+        responsibility = login.getResponsibility();
+        department = login.getPersonId();
 
 //        Toast.makeText(VisitingActivity.this, Integer.toString((int) vistime), Toast.LENGTH_SHORT).show();
 
@@ -400,7 +407,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
 
         if (commute == null) {
             lin_recipi.setVisibility(View.GONE);
-        } else if (commute != null && commute.equals("true") && route.equals("VisitingActivity")) {
+        } else if (commute != null && commute.equals("true") && route.equals("방문요양")) {
             strStartTime = commuteRecipient.getStartTime();
             btn_start.setText(strStartTime);
             tv_startTime.setText(strStartTime);
@@ -424,7 +431,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
                     }
                     tv_price.setText(new DecimalFormat("###,###").format(todayMoney) + "원");
                     Intent intent = new Intent(VisitingActivity.this, MainActivity.class);
-                    intent.putExtra("route", "VisitingActivity");
+                    intent.putExtra("route", "방문요양");
                     startActivity(intent);
                 }
             }
@@ -755,7 +762,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문요양급여정보 WHERE 수급자명 = '" + name + "' AND 일자='" + currentDate + "'");
+            ResultSet dateRS = statement.executeQuery("select 일자 from Su_방문요양급여정보 WHERE 수급자코드 = '" + recipiid + "' AND 일자='" + currentDate + "'");
             while (dateRS.next()) {
                 dateCheck = dateRS.getString("일자");
                 number++;
@@ -798,7 +805,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문요양급여정보 WHERE 수급자명 = '" + name + "' AND 일자='" + currentDate + "'");
+            ResultSet dbCheckRS = statement.executeQuery("select 디비체크 from Su_방문요양급여정보 WHERE 수급자코드 = '" + recipiid + "' AND 일자='" + currentDate + "'");
             while (dbCheckRS.next()) {
                 final String dbCheck2 = dbCheckRS.getString("디비체크");
                 if (dbCheck2 != null && dbCheck2.equals(dbCheck)) {
@@ -906,7 +913,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
-            ResultSet visitingRS = statement.executeQuery("select 신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계 from Su_방문요양급여정보 where 수급자명='" + name + "' and (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet visitingRS = statement.executeQuery("select 신체사용시간계,인지사용시간계,일상생활시간계,정서사용시간계,생활지원사용시간계 from Su_방문요양급여정보 where 수급자코드 = '" + recipiid + "' and (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (visitingRS.next()) {
                 String time1 = visitingRS.getString("신체사용시간계");
                 String time2 = visitingRS.getString("인지사용시간계");
@@ -943,7 +950,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             }
 
 
-            ResultSet rs = statement.executeQuery("select A.수급자명,A.성별,A.등급,A.지점,A.담당,A.인정번호1,B.기관명,B.기관번호,A.생년월일,A.구분,A.기본시간,A.지점,A.담당,A.hp FROM SU_수급자기본정보 A,SU_요양기관등록정보 B WHERE  A.지점=B.지점 and A.수급자명='" + name + "';");
+            ResultSet rs = statement.executeQuery("select A.수급자명,A.성별,A.등급,A.지점,A.담당,A.인정번호1,B.기관명,B.기관번호,A.생년월일,A.구분,A.기본시간,A.지점,A.담당,A.hp FROM SU_수급자기본정보 A,SU_요양기관등록정보 B WHERE  A.지점=B.지점 and A.수급자코드 = '" + recipiid + "'");
             while (rs.next()) {
 
                 rating = rs.getString(3);
@@ -1165,11 +1172,10 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
 
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ?,담당업부 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원코드 = '" + personId + "' and 일자 = '" + ymd1 + "' and 출근시간 = '" + strStartTime + "'");
             byte[] s5 = imageBytes;
             ps.setBytes(1, s5);
             ps.setString(2, ttime);
-            ps.setString(3,"방문요양");
             ps.executeUpdate();
             ps.close();
             connection.close();

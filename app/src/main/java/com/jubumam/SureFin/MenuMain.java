@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -58,6 +57,7 @@ public class MenuMain extends BaseActivity {
 
     final String TAG = getClass().getSimpleName();
     private String name;        //이름
+    private String recipiId;        //수급자코드
     private String rating;      //등급
     private String responsibility;      //직원명
     private String basetime;
@@ -152,10 +152,11 @@ public class MenuMain extends BaseActivity {
     private Button btn_offwork;
     private String bathTotalCount;
     private String commute;
-    private String responsibilityID;
-    private String department;
+    private String personId;        //직원코드
+    private String department;      //직원부서
     private int orderCount;
     private TextView notification_badge;
+    private Timer timer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -165,11 +166,12 @@ public class MenuMain extends BaseActivity {
         activateToolbar();
 
         Login login = Login.getInstance();
-        responsibility = login.getResponsibility();
-        responsibilityID = login.getPersonId();
-        department = login.getDepartment();
+        responsibility = login.getResponsibility(); //직원이름
+        personId = login.getPersonId();             //직원코드
+        department = login.getDepartment();         //직원부서
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        recipiId = commuteRecipient.getRecipiId();      //수급자코드
         name = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
@@ -236,7 +238,17 @@ public class MenuMain extends BaseActivity {
 
         if(department.equals("송영")) {
             notification_badge.setVisibility(View.VISIBLE);
-            orderTask = new OrderSyncTask().execute();
+//            orderTask = new OrderSyncTask().execute();
+            timer = new Timer();
+
+            TimerTask TT = new TimerTask() {
+                @Override
+                public void run() {
+                    orderCount = 0;
+                    orderTask = new OrderSyncTask().execute();
+                }
+            };
+            timer.schedule(TT, 0, 60000); //Timer 실행
         }
         findViewById(R.id.lin_care).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -344,98 +356,98 @@ public class MenuMain extends BaseActivity {
             }
         });
 
-        btn_offwork = (Button) findViewById(R.id.btn_offwork);
-        btn_offwork.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, TAKE_PICTURE);
+//        btn_offwork = (Button) findViewById(R.id.btn_offwork);
+//        btn_offwork.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(cameraIntent, TAKE_PICTURE);
+//
+//            }
+//        });
 
-            }
-        });
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "권한 설정 완료");
-            } else {
-                Log.d(TAG, "권한 설정 요청");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-
-            }
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+//                Log.d(TAG, "권한 설정 완료");
+//            } else {
+//                Log.d(TAG, "권한 설정 요청");
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+//
+//            }
+//        }
     }
 
 
     // 권한 요청
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(TAG, "onRequestPermissionsResult");
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
-        }
-    }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
-        switch (requestCode) {
-            case TAKE_PICTURE:
-                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
-
-
-                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
-
-                    dialog_imageview.setImageBitmap(bitmap);
-                    dialog_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
-
-
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    imageBytes = baos.toByteArray();
-//                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-
-                    //s1 = 8;
-
-                    s2 = 32;
-                    s4 = imageString;
-
-
-                    try {
-
-                        long now = System.currentTimeMillis();
-                        Date date = new Date(now);
-
-                        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
-                        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
-                        SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
-                        String nowDate = time.format(date);
-                        SimpleDateFormat hm = new SimpleDateFormat("HH:mm");
-
-                        s3 = nowDate;
-                        ymd1 = ymd.format(date);
-                        hms1 = hms.format(date);
-                        ttime = hm.format(date);
-
-
-                    } catch (Exception e) {
-
-                    }
-
-                    //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
-                    //  startActivity(i8);
-                    tTask = new TSyncTask().execute();
-
-
-                    Intent i8 = new Intent(MenuMain.this, signActivity.class);
-                    i8.putExtra("route", "MenuMain");
-                    startActivity(i8);
-
-                }
-
-                break;
-        }
-
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        Log.d(TAG, "onRequestPermissionsResult");
+//        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+//            Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+//        }
+//    }
+//
+//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+//        super.onActivityResult(requestCode, resultCode, intent);
+//        switch (requestCode) {
+//            case TAKE_PICTURE:
+//                if (resultCode == RESULT_OK && intent.hasExtra("data")) {
+//
+//
+//                    Bitmap bitmap = (Bitmap) intent.getExtras().get("data");
+//
+//                    dialog_imageview.setImageBitmap(bitmap);
+//                    dialog_imageview.setScaleType(ImageView.ScaleType.FIT_XY);
+//
+//
+//                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                    imageBytes = baos.toByteArray();
+////                    imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+//
+//                    //s1 = 8;
+//
+//                    s2 = 32;
+//                    s4 = imageString;
+//
+//
+//                    try {
+//
+//                        long now = System.currentTimeMillis();
+//                        Date date = new Date(now);
+//
+//                        SimpleDateFormat time = new SimpleDateFormat("yyyy-MM-dd- HH:mm:ss");
+//                        SimpleDateFormat ymd = new SimpleDateFormat("yyyy-MM-dd");
+//                        SimpleDateFormat hms = new SimpleDateFormat("HH:mm:ss");
+//                        String nowDate = time.format(date);
+//                        SimpleDateFormat hm = new SimpleDateFormat("HH:mm");
+//
+//                        s3 = nowDate;
+//                        ymd1 = ymd.format(date);
+//                        hms1 = hms.format(date);
+//                        ttime = hm.format(date);
+//
+//
+//                    } catch (Exception e) {
+//
+//                    }
+//
+//                    //  Intent i8 = new Intent(MenuMain.this, SplashActivity.class);
+//                    //  startActivity(i8);
+//                    tTask = new TSyncTask().execute();
+//
+//
+//                    Intent i8 = new Intent(MenuMain.this, signActivity.class);
+//                    i8.putExtra("route", "MenuMain");
+//                    startActivity(i8);
+//
+//                }
+//
+//                break;
+//        }
+//
+//    }
 
     private void init() {
         mPager = findViewById(R.id.pager);
@@ -567,51 +579,51 @@ public class MenuMain extends BaseActivity {
     }
 
 
-    public class TSyncTask extends AsyncTask<String, String, String> {
-
-        protected void onPreExecute() {
-        }
-
-        @Override
-        protected String doInBackground(String... strings) {
-            if (isCancelled())
-                return null;
-            query1();
-
-            return null;
-
-        }
-
-        protected void onPostExecute(String result) {
-        }
-
-        protected void onCancelled() {
-            super.onCancelled();
-        }
-    }
-
-    public void query1() {
-        Connection connection = null;
-
-        try {
-            Class.forName("net.sourceforge.jtds.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
-
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원명 = '" + responsibility + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
-            byte[] s5 = imageBytes;
-            ps.setBytes(1, s5);
-            ps.setString(2, ttime);
-            ps.executeUpdate();
-            ps.close();
-            connection.close();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
+//    public class TSyncTask extends AsyncTask<String, String, String> {
+//
+//        protected void onPreExecute() {
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//            if (isCancelled())
+//                return null;
+//            query1();
+//
+//            return null;
+//
+//        }
+//
+//        protected void onPostExecute(String result) {
+//        }
+//
+//        protected void onCancelled() {
+//            super.onCancelled();
+//        }
+//    }
+//
+//    public void query1() {
+//        Connection connection = null;
+//
+//        try {
+//            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+//            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
+//
+//            PreparedStatement ps = connection.prepareStatement("UPDATE Su_직원출퇴근정보 SET 퇴근BLOB = ?,퇴근시간 = ? where 직원코드 = '" + personId + "' and 일자 = '" + startWork + "' and 출근시간 = '" + stime + "'");
+//            byte[] s5 = imageBytes;
+//            ps.setBytes(1, s5);
+//            ps.setString(2, ttime);
+//            ps.executeUpdate();
+//            ps.close();
+//            connection.close();
+//
+//        } catch (ClassNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//
+//    }
 
 
     private void recipiquery() {
@@ -621,7 +633,7 @@ public class MenuMain extends BaseActivity {
             Statement statement = connection.createStatement();
 
 
-            ResultSet surs = statement.executeQuery("select 기본시간,목욕횟수 from Su_수급자기본정보 where 수급자명 = '" + name + "'");
+            ResultSet surs = statement.executeQuery("select 기본시간,목욕횟수 from Su_수급자기본정보 where 수급자코드 = '" + recipiId + "'");
             while (surs.next()) {
                 basetime = surs.getString("기본시간");
                 bathTotalCount = surs.getString("목욕횟수");
@@ -642,7 +654,7 @@ public class MenuMain extends BaseActivity {
             ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자) AS 요양일자,(CONVERT(int,A.신체사용시간계))+(CONVERT(int,A.인지사용시간계))+(CONVERT(int,A.일상생활시간계))+(CONVERT(int,A.정서사용시간계))+(CONVERT(int,A.생활지원사용시간계)) AS 방문요양합계," +
                     "B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
                     "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
-                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "')" +
+                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자코드 = '" + recipiId + "' or B.수급자코드 = '" + recipiId + "' or C.수급자코드 = '" + recipiId + "')" +
                     "order by 요양일자,A.번호");
             timeformatter = new SimpleDateFormat("mm");
             while (serviceResultSetlist.next()) {
@@ -670,7 +682,7 @@ public class MenuMain extends BaseActivity {
 
             }
 
-            ResultSet nonpayRS = statement.executeQuery("select 일자 from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet nonpayRS = statement.executeQuery("select 일자 from Su_비급여신청자 where 수급자코드 = '" + recipiId + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (nonpayRS.next()) {
                 nosupport++;
 
@@ -759,8 +771,6 @@ public class MenuMain extends BaseActivity {
         }
         protected void onPostExecute(String result) {
 
-
-
         }
 
         protected void onCancelled() {
@@ -780,7 +790,7 @@ public class MenuMain extends BaseActivity {
             Statement statement = connection.createStatement();
             List<String> areaList = new ArrayList<>();
 
-            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + responsibilityID + "'");
+            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + personId + "'");
             while (areaRS.next()){
                 String area = areaRS.getString("지역명");
                 areaList.add(area);
@@ -788,16 +798,12 @@ public class MenuMain extends BaseActivity {
 
             for (int i = 0; i < areaList.size(); i++) {
                 String area = areaList.get(i).toString();
-                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '진행중' order by 주문시간 DESC");
+                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '미배달' order by 주문시간 DESC");
                 while (resultSetlist.next()) {
-
                     String complete = resultSetlist.getString("배달확인");
-
-                    if(complete.equals("진행중")){
+                    if(complete.equals("미배달")) {
                         orderCount++;
                     }
-
-
                 }}
 
             runOnUiThread(new Runnable() {

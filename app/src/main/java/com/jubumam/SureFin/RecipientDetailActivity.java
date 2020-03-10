@@ -103,7 +103,8 @@ public class RecipientDetailActivity extends BaseActivity {
     private String divisiondate;
     private String divisiontime;
 
-    private int personId;
+    private String personId;
+    private String recipiId;
     private int s1, s2;
 
     private Bitmap bitmap;
@@ -151,8 +152,13 @@ public class RecipientDetailActivity extends BaseActivity {
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         commute = commuteRecipient.getCommute();
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
+
         Intent intent = getIntent();
         name = intent.getExtras().getString("name");
+        recipiId = intent.getExtras().getString("recipiId");
         route = intent.getExtras().getString("route");
         responsibility = intent.getExtras().getString("responsibility");
         if (commute == null) {
@@ -268,15 +274,14 @@ public class RecipientDetailActivity extends BaseActivity {
                     }
 
                     caTask = new caAsyncTask().execute();
-                    new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, "true", hms1, ymd1,route);
-                    if(route.equals("VisitingActivity")){
+                    new CommuteRecipient(personId,recipiId, name, rating, phoneNumber, responsibility, "true", hms1, ymd1,route);
+                    if(route.equals("방문요양")){
                     ica = new Intent(RecipientDetailActivity.this, VisitingActivity.class);
-                    }else if(route.equals("VisitingBathActivity")){
+                    }else if(route.equals("방문목욕")){
                     ica = new Intent(RecipientDetailActivity.this, VisitingBathActivity.class);
-                    }else if(route.equals("VistingNurse")){
+                    }else if(route.equals("방문간호")){
                      ica = new Intent(RecipientDetailActivity.this, VistingNurse.class);
                     }
-
                     startActivity(ica);
                 }
 
@@ -316,13 +321,15 @@ public class RecipientDetailActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
 
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_직원출퇴근정보(수급자명,일자,직원명,출근시간,BLOBData)VALUES (?,?,?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_직원출퇴근정보(수급자명,일자,직원명,출근시간,BLOBData,직원코드,담당업부)VALUES (?,?,?,?,?,?,?)");
 
             ps.setString(1, name);
             ps.setString(2, ymd1);
             ps.setString(3, responsibility);
             ps.setString(4, hms1);
             ps.setBytes(5, s5);
+            ps.setString(6,personId);
+            ps.setString(7,route);
             ps.executeUpdate();
             ps.close();
             connection.close();
@@ -365,21 +372,20 @@ public class RecipientDetailActivity extends BaseActivity {
             Statement statement = connection.createStatement();
 
 
-            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + name + "'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자코드 ='" + recipiId + "'");
             while (resultSet.next()) {
 
-                personId = Integer.parseInt(resultSet.getString(1));
-                date = resultSet.getString(3);
-                rating = resultSet.getString(4);
-                kounggam = resultSet.getString(5);
-                number = resultSet.getString(6);
-                gongdanper = resultSet.getString(36);
-                gongdanprice = resultSet.getString(37);
-                individualper = resultSet.getString(38);
-                individualprice = resultSet.getString(39);
+                date = resultSet.getString("최초입사일");
+                rating = resultSet.getString("등급");
+                kounggam = resultSet.getString("경감");
+                number = resultSet.getString("인정번호1");
+                gongdanper = resultSet.getString("공단부담비율");
+                gongdanprice = resultSet.getString("공단부담금액");
+                individualper = resultSet.getString("개인부담비율");
+                individualprice = resultSet.getString("개인부담금");
                 phoneNumber = resultSet.getString("hp");
-                gender = resultSet.getString(11);
-                birth = resultSet.getString(22);
+                gender = resultSet.getString("성별");
+                birth = resultSet.getString("생년월일1");
                 pastdisease = resultSet.getString("과거병력");
                 responsibility = resultSet.getString("담당");
 
@@ -413,7 +419,7 @@ public class RecipientDetailActivity extends BaseActivity {
             }
 
 
-            ResultSet resultSetPhoto = statement.executeQuery("select * from Su_사진 where 이름='" + name + "'");
+            ResultSet resultSetPhoto = statement.executeQuery("select * from Su_사진 where 수급자코드='" + recipiId + "'");
             byte b[];
             while (resultSetPhoto.next()) {
                 Blob blob = resultSetPhoto.getBlob(4);

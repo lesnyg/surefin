@@ -7,6 +7,8 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.airbnb.lottie.L;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -35,6 +37,7 @@ public class AnswerActivity extends BaseActivity {
     private String divisiondate;
     private String divisiontime;
     private String division;//구분
+    private String personId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,9 @@ public class AnswerActivity extends BaseActivity {
         if (commute == null) {
             responsibility = intent.getExtras().getString("responsibility");
         }
+
+        Login login = Login.getInstance();
+        personId = login.getPersonId();
 
         mTask = new MySyncTask().execute();
 
@@ -93,7 +99,7 @@ public class AnswerActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetlist = statement.executeQuery("select * from Su_요양사문의 where 작성자='" + responsibility + "' order by id desc");
+            ResultSet resultSetlist = statement.executeQuery("select * from Su_요양사문의 where 직원코드='" + personId + "' order by id desc");
             final List<Answer> list = new ArrayList<>();
             while (resultSetlist.next()) {
                 String date = resultSetlist.getString("일자");

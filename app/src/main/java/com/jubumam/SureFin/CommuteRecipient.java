@@ -3,7 +3,8 @@ package com.jubumam.SureFin;
 import java.util.Date;
 
 public class CommuteRecipient {
-    private static int personId;
+    private static String personId;            //요양사 아이디
+    private static String recipiId;            //수급자 아이디
     private static String name;
     private static String rating;
     private static String phoneNumber;
@@ -14,9 +15,12 @@ public class CommuteRecipient {
     private static String route;
     private static CommuteRecipient commuteRecipient;
 
+    public CommuteRecipient() {
+    }
 
-    public CommuteRecipient(int personId, String name, String rating, String phoneNumber, String responsibility, String commute, String startTime, String startWork, String route) {
+    public CommuteRecipient(String personId, String recipiId, String name, String rating, String phoneNumber, String responsibility, String commute, String startTime, String startWork, String route) {
         this.personId = personId;
+        this.recipiId = recipiId;
         this.name = name;
         this.rating = rating;
         this.phoneNumber = phoneNumber;
@@ -29,7 +33,7 @@ public class CommuteRecipient {
 
     public static CommuteRecipient getInstance() {
         if (commuteRecipient == null) {
-            commuteRecipient = new CommuteRecipient(personId, name, rating, phoneNumber, responsibility, commute, startTime, startWork, route);
+            commuteRecipient = new CommuteRecipient(personId, recipiId, name, rating, phoneNumber, responsibility, commute, startTime, startWork, route);
         }
         return commuteRecipient;
     }
@@ -58,11 +62,11 @@ public class CommuteRecipient {
         CommuteRecipient.commute = commute;
     }
 
-    public int getPersonId() {
+    public String getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(String personId) {
         this.personId = personId;
     }
 
@@ -105,5 +109,13 @@ public class CommuteRecipient {
 
     public void setRoute(String route) {
         this.route = route;
+    }
+
+    public String getRecipiId() {
+        return recipiId;
+    }
+
+    public void setRecipiId(String recipiId) {
+        CommuteRecipient.recipiId = recipiId;
     }
 }
