@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jubumam.SureFin.NokPackage.Nok;
+import com.jubumam.SureFin.ProtectorPackage.Protector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -117,9 +117,9 @@ public class Non_Payment_Item extends BaseActivity {
         String department = login.getDepartment();
 
         if(commute==null && department ==null) {
-            Nok nok = Nok.getInstance();
-            name = nok.getRecipientName();
-            rating = nok.getRating();
+            Protector protector = Protector.getInstance();
+            name = protector.getRecipientName();
+            rating = protector.getRating();
         }else if(commute==null && department !=null){
             findViewById(R.id.lin_recipi).setVisibility(View.GONE);
         }

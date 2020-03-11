@@ -1,9 +1,8 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import java.text.DecimalFormat;
-import java.text.ParseException;
 
-public class Deposit {
+public class Deposit {          //정산모델
     private String date;
     private int settlement;
     private int charge;

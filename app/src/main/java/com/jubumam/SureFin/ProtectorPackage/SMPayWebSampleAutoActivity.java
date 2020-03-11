@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 
 import android.annotation.SuppressLint;
@@ -17,26 +17,19 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
-import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.LinearLayout;
 
-import com.jubumam.SureFin.MainActivity;
 import com.jubumam.SureFin.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.text.DecimalFormat;
-
-import cz.msebera.android.httpclient.entity.mime.Header;
-import cz.msebera.android.httpclient.util.EncodingUtils;
 
 /******************************************************************************
  *

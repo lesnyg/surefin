@@ -1,16 +1,13 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.jubumam.SureFin.BaseActivity;
 import com.jubumam.SureFin.R;
-import com.jubumam.SureFin.Recipient;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class NokDepositActivity extends BaseActivity {
+public class ProtectorDepositActivity extends ProtectorBaseActivity {
     private AsyncTask<String, String, String> mTask;
     private String name;        //이름
     private String rating;      //등급
@@ -47,6 +44,7 @@ public class NokDepositActivity extends BaseActivity {
     private DecimalFormat moneyfm;
     private SimpleDateFormat sdf;
     private SimpleDateFormat sdf2;
+    private String recipiId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +53,10 @@ public class NokDepositActivity extends BaseActivity {
 
         activateToolbar();
 
-        Nok nok = Nok.getInstance();
-        name = nok.getRecipientName();
-        rating = nok.getRating();
+        Protector protector = Protector.getInstance();
+        recipiId = protector.getRecipiId();
+        name = protector.getRecipientName();
+        rating = protector.getRating();
 
         recyclerView = findViewById(R.id.recyclerview_nok);
         tv_totalbal = findViewById(R.id.tv_totalbalance);
@@ -97,7 +96,7 @@ public class NokDepositActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_본인부담금정산 where 수급자명='" + name + "' order by 일자 desc");
+            ResultSet resultSet = statement.executeQuery("select * from Su_본인부담금정산 where 수급자코드 = '" + recipiId + "' order by 일자 desc");
             list = new ArrayList<>();
             while (resultSet.next()) {
                 date = resultSet.getString("일자");

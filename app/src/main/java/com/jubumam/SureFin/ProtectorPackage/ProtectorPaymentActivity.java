@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,7 +17,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DecimalFormat;
 
-public class NokPaymentActivity extends AppCompatActivity {
+public class ProtectorPaymentActivity extends ProtectorBaseActivity {
+    private String recipiId;
     private String recipiName;
     private String recipiPhone;
     private AsyncTask<String, String, String> mTask;
@@ -89,9 +90,12 @@ public class NokPaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nok_payment);
 
-        Nok nok = Nok.getInstance();
-        recipiName = nok.getRecipientName();
-        recipiPhone = nok.getRecipientPhone();
+        activateToolbar();
+
+        Protector protector = Protector.getInstance();
+        recipiId = protector.getRecipiId();
+        recipiName = protector.getRecipientName();
+        recipiPhone = protector.getRecipientPhone();
 
         tv_recipiname = findViewById(R.id.tv_recipiname);
         tv_nokname = findViewById(R.id.tv_nokname);
@@ -123,7 +127,7 @@ public class NokPaymentActivity extends AppCompatActivity {
         findViewById(R.id.btn_payment).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NokPaymentActivity.this,SMPayWebSampleAutoActivity.class);
+                Intent intent = new Intent(ProtectorPaymentActivity.this,SMPayWebSampleAutoActivity.class);
                 intent.putExtra("totalPrice",sum);
                 intent.putExtra("recipiName",recipiName);
                 intent.putExtra("recipiPhone",recipiPhone);
@@ -162,7 +166,7 @@ public class NokPaymentActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + recipiName + "' and  hp = '" + recipiPhone + "'");
+            ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자코드 = '" + recipiId + "'");
 
             while (resultSet.next()) {
                 nokname = resultSet.getString("보호자성명");

@@ -1,4 +1,4 @@
-package com.jubumam.SureFin;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,7 +9,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jubumam.SureFin.ProtectorPackage.Protector;
+import com.jubumam.SureFin.AnswerActivity;
+import com.jubumam.SureFin.BaseActivity;
+import com.jubumam.SureFin.CommuteRecipient;
+import com.jubumam.SureFin.Login;
+import com.jubumam.SureFin.R;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,7 +23,7 @@ import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class QuestionActivity extends BaseActivity {
+public class ProtectorQuestionActivity extends ProtectorBaseActivity {
     private EditText et_title;
     private EditText et_contents;
     private TextView tv_textnumber;
@@ -43,7 +47,8 @@ public class QuestionActivity extends BaseActivity {
     private String divisiontime;
     private String division;//구분
     private String commute;//출근확인
-    private String personId;
+    private String recipiId;
+    private String recipiName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +58,9 @@ public class QuestionActivity extends BaseActivity {
         activateToolbar();
 
 
-        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
-        commute = commuteRecipient.getCommute();
-        rating = commuteRecipient.getRating();
-
-        Login login = Login.getInstance();
-        personId = login.getPersonId();
-        responsibility = login.getResponsibility();
-
-        if(personId == null) {
-            Protector protector = Protector.getInstance();
-            personId = protector.getRecipiId();
-        }
+        Protector protector = Protector.getInstance();
+        recipiId = protector.getRecipiId();
+        recipiName = protector.getRecipientName();
 
 
         et_title = findViewById(R.id.et_title);
@@ -105,7 +101,7 @@ public class QuestionActivity extends BaseActivity {
                 title = et_title.getText().toString();
                 contents = et_contents.getText().toString();
                 if (title.equals("")) {
-                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(QuestionActivity.this);
+                    android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ProtectorQuestionActivity.this);
                     builder.setTitle("").setMessage("제목을 입력하세요.");
                     android.app.AlertDialog alertDialog = builder.create();
                     alertDialog.show();
@@ -134,8 +130,7 @@ public class QuestionActivity extends BaseActivity {
         }
 
         protected void onPostExecute(String result) {
-            Intent intent = new Intent(QuestionActivity.this, AnswerActivity.class);
-            intent.putExtra("responsibility", responsibility);
+            Intent intent = new Intent(ProtectorQuestionActivity.this, ProtectorAnswerActivity.class);
             startActivity(intent);
         }
 
@@ -150,7 +145,7 @@ public class QuestionActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetlist = statement.executeQuery("insert into Su_요양사문의(일자,작성자,제목,내용,직원코드) values('" + date + "','" + responsibility + "','" + title + "','" + contents + "','"+personId+"') ");
+            ResultSet resultSetlist = statement.executeQuery("insert into Su_수급자문의(일자,작성자,제목,내용,수급자코드) values('" + date + "','" + recipiName + "','" + title + "','" + contents + "','" + recipiId + "') ");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {

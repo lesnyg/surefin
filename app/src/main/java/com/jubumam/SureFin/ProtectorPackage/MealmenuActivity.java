@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,7 +25,7 @@ import java.sql.Statement;
 
 import pl.polidea.view.ZoomView;
 
-public class MealmenuActivity extends AppCompatActivity {
+public class MealmenuActivity extends ProtectorBaseActivity {
     private AsyncTask<String, String, String> mTask;
     private String center;
     private String date;
@@ -36,6 +36,8 @@ public class MealmenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mealmenu);
+
+        activateToolbar();
 
         View v = ((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.zoom_item, null, false);
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -48,8 +50,8 @@ public class MealmenuActivity extends AppCompatActivity {
         RelativeLayout container = (RelativeLayout) findViewById(R.id.container);
         container.addView(zoomView);
 
-        Nok nok = Nok.getInstance();
-        center = nok.getCenterName();
+        Protector protector = Protector.getInstance();
+        center = protector.getCenterName();
 
         img_meal = findViewById(R.id.img_meal);
 

@@ -1,14 +1,15 @@
-package com.jubumam.SureFin;
+package com.jubumam.SureFin.ProtectorPackage;
 
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.airbnb.lottie.L;
-import com.jubumam.SureFin.ProtectorPackage.Protector;
+import com.jubumam.SureFin.Answer;
+import com.jubumam.SureFin.AnswerAdapter;
+import com.jubumam.SureFin.BaseActivity;
+import com.jubumam.SureFin.R;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -18,7 +19,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnswerActivity extends BaseActivity {
+public class ProtectorAnswerActivity extends ProtectorBaseActivity {
 
     private AsyncTask<String, String, String> mTask;
     private String responsibility;      //작성자(요양사)
@@ -38,7 +39,7 @@ public class AnswerActivity extends BaseActivity {
     private String divisiondate;
     private String divisiontime;
     private String division;//구분
-    private String personId;
+    private String recipiId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,16 +56,8 @@ public class AnswerActivity extends BaseActivity {
             }
         });
 
-        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
-        commute = commuteRecipient.getCommute();
-        responsibility = commuteRecipient.getResponsibility();
-        Intent intent = getIntent();
-        if (commute == null) {
-            responsibility = intent.getExtras().getString("responsibility");
-        }
-
-        Login login = Login.getInstance();
-        personId = login.getPersonId();
+        Protector protector = Protector.getInstance();
+        recipiId = protector.getRecipiId();
 
         mTask = new MySyncTask().execute();
 
@@ -100,7 +93,7 @@ public class AnswerActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetlist = statement.executeQuery("select * from Su_요양사문의 where 직원코드='" + personId + "' order by id desc");
+            ResultSet resultSetlist = statement.executeQuery("select * from Su_수급자문의 where 수급자코드='" + recipiId + "' order by id desc");
             final List<Answer> list = new ArrayList<>();
             while (resultSetlist.next()) {
                 String date = resultSetlist.getString("일자");
@@ -120,16 +113,10 @@ public class AnswerActivity extends BaseActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    answerAdapter = new AnswerAdapter(new AnswerAdapter.setAnswerClicked() {
-                        @Override
-                        public void AnswerClick(Answer model) {
-
-                        }
-                    });
-
+                    answerAdapter = new AnswerAdapter();
                     answerAdapter.setItems(list);
                     recyclerview_answer.setAdapter(answerAdapter);
+
                 }
             });
 

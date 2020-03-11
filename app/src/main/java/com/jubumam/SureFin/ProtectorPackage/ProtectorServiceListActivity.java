@@ -1,4 +1,4 @@
-package com.jubumam.SureFin;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,7 +8,12 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jubumam.SureFin.ProtectorPackage.Protector;
+import com.jubumam.SureFin.BaseActivity;
+import com.jubumam.SureFin.CommuteRecipient;
+import com.jubumam.SureFin.Login;
+import com.jubumam.SureFin.R;
+import com.jubumam.SureFin.Service;
+import com.jubumam.SureFin.ServiceAdapter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -25,7 +30,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
-public class ServiceListActivity extends BaseActivity {
+public class ProtectorServiceListActivity extends ProtectorBaseActivity {
 //    private NumberPicker picker1;
 //    private NumberPicker picker2;
 //    private String newString;
@@ -201,7 +206,6 @@ public class ServiceListActivity extends BaseActivity {
         startMon = strDate + "-" + "01";
         endMon = strDate + "-" + "32";
 
-
         tv_thisMonth1.setText(thisMonth);
         tv_thisMonth2.setText(thisMonth);
         cal = Calendar.getInstance();
@@ -251,11 +255,11 @@ public class ServiceListActivity extends BaseActivity {
                 intTotalDayCarePublic = 0;
                 intnonPay = 0;
                 cal.add(Calendar.MONTH, +1);
-                String preMonthYear = tv_month.getText().toString();
+                String nextMonthYear = tv_month.getText().toString();
                 sdf = calformater.format(cal.getTime());
                 strDate = strDateFormater.format(cal.getTime());
                 thisMonth = thisMonthFormater.format(cal.getTime());
-                thisYear = preMonthYear.substring(0, 4);
+                thisYear = nextMonthYear.substring(0, 4);
                 tv_month.setText(sdf);
                 tv_thisMonth1.setText(thisMonth);
                 tv_thisMonth2.setText(thisMonth);
@@ -346,7 +350,7 @@ public class ServiceListActivity extends BaseActivity {
                 nonPay = serviceResultSetlist.getString("서비스제공");
 
 
-                if (usingTime1 == null) {
+                if (usingTime1 == null || usingTime1.equals("") || usingTime1.equals("null")) {
                     usingTime1 = "0";
                     sumUsingTimeDay = 0 + sumUsingTimeDay;
                 } else {

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,6 +64,14 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Timer timer;
     private Toolbar mToolbar;
+    private int count = 0;
+    private String ordermethod;
+    private String firstOrder;
+    private int generalCount = 0;
+    private int caremealcount = 0;
+
+    private TextView tv_caremealCount;
+    private TextView tv_generalCount;
 
 
     @Override
@@ -78,6 +87,8 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
         Date today = new Date();
         strToday = new SimpleDateFormat("yyyy-MM-dd").format(today);
 
+        tv_caremealCount=findViewById(R.id.tv_caremealCount);
+        tv_generalCount=findViewById(R.id.tv_generalCount);
         syRecyclerView = findViewById(R.id.rv_syorder);
         adapter = new SYOrderAdapter(new SYOrderAdapter.syOrderClickListener() {
             @Override
@@ -107,6 +118,7 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
         TimerTask TT = new TimerTask() {
             @Override
             public void run() {
+
                 orderTask = new OrderSyncTask().execute();
             }
         };
@@ -114,6 +126,9 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         mSwipeRefreshLayout.setOnRefreshListener(this);
+
+
+
     }
 
     @Override
@@ -143,9 +158,10 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
 
         }
         protected void onPostExecute(String result) {
-
-
-
+            tv_caremealCount.setText("요양식 수량 : "+caremealcount+"개");
+            tv_generalCount.setText("일반식 수량 : "+generalCount+"개");
+            generalCount = 0;
+            caremealcount = 0;
         }
 
         protected void onCancelled() {
@@ -183,9 +199,19 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
                     paymentmethod = resultSetlist.getString("계산방법");
                     complete = resultSetlist.getString("배달확인");
                     orderTime = resultSetlist.getString("주문시간");
+                    ordermethod = resultSetlist.getString("주문형태");
+                    firstOrder = resultSetlist.getString("첫주문");
+
+                    if(ordermethod!=null && ordermethod.equals("일반")) {
+                        generalCount++;
+                    }else if(ordermethod!=null &&ordermethod.equals("요양")){
+                        caremealcount++;
+                    }
+                    count++;
 
 
-                    list.add(new SongyeongOrder(name, phoneNumber, address, quantity, orderPrice, paymentmethod, complete, orderTime));
+
+                    list.add(new SongyeongOrder(name, phoneNumber, address, quantity, orderPrice, paymentmethod, complete, orderTime, ordermethod, firstOrder));
                 }}
 
             runOnUiThread(new Runnable() {
@@ -234,9 +260,10 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
         try {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
-            PreparedStatement ps = connection.prepareStatement("UPDATE Su_주문리스트 SET 배달확인 = ?,배달완료시간 = ? where 일자 = '" + strToday + "' and 주문시간 = '" + strCPTime + "'");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Su_주문리스트 SET 배달확인 = ?,배달완료시간 = ?,첫주문 = ? where 일자 = '" + strToday + "' and 주문시간 = '" + strCPTime + "'");
             ps.setString(1, "완료");
             ps.setString(2, completeTime);
+            ps.setString(3, "False");
             ps.executeUpdate();
             ps.close();
             connection.close();
@@ -250,6 +277,9 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
 
 
     private static class SYOrderAdapter extends RecyclerView.Adapter<SYOrderAdapter.SYOrderViewHolder> {
+
+
+
         interface syOrderClickListener {
             void syClicked(SongyeongOrder model);
             void syCompleteClicked(String completeTime);
@@ -297,11 +327,25 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
             holder.tv_address.setText( item.getAddress());
             holder.tv_quantity.setText("도시락 "+item.getQuantity() + " 개");
 //            holder.tv_complete.setText(item.getComplete());
+            if(item.getOrdermethod() == null){
+                holder.tv_etc.setVisibility(View.GONE);
+            }else if(item.getOrdermethod().equals("요양")){
+                holder.tv_etc.setTextColor(Color.RED);
+                holder.tv_etc.setText("( " + item.getOrdermethod() + " )");
+            }else{
+                holder.tv_etc.setText("( " +item.getOrdermethod()+ " )");
+            }
+
+            if(item.getFirstOrder().equals("True")){
+                holder.tv_firstorder.setText("첫 구매 고객 입니다.");
+
+            }else{
+                holder.tv_firstorder.setVisibility(View.GONE);
+            }
             holder.tv_complete.setText(item.getOrderTime());
             if (item.getComplete() != null && item.getComplete().equals("완료")) {
                 holder.tv_complete.setText("배달완료");
                 holder.btn_complete.setBackgroundColor(Color.GRAY);
-
             }
             holder.btn_complete.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -342,6 +386,8 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
             private TextView tv_phoneNumber;
             private TextView tv_quantity;
             private TextView tv_complete;
+            private TextView tv_firstorder;
+            private TextView tv_etc;
             private Button btn_complete;
             private ImageView img_phone;
 
@@ -351,6 +397,8 @@ public class SongyeongActivity extends BaseActivity implements SwipeRefreshLayou
                 tv_address = itemView.findViewById(R.id.tv_address);
                 tv_quantity = itemView.findViewById(R.id.tv_quantity);
                 tv_complete = itemView.findViewById(R.id.tv_complete);
+                tv_firstorder = itemView.findViewById(R.id.tv_firstorder);
+                tv_etc = itemView.findViewById(R.id.tv_etc);
                 btn_complete = itemView.findViewById(R.id.btn_complete);
                 img_phone = itemView.findViewById(R.id.img_phone);
             }

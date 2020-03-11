@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.jubumam.SureFin.AnswerActivity;
 import com.jubumam.SureFin.BaseActivity;
-import com.jubumam.SureFin.CommuteRecipient;
 import com.jubumam.SureFin.Notice;
 import com.jubumam.SureFin.NoticeActivity;
 import com.jubumam.SureFin.NoticeAdapter;
@@ -25,7 +24,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NokCustomerServiceActivity extends BaseActivity {
+public class ProtectorCustomerServiceActivity extends ProtectorBaseActivity {
 
     //수급자 요양사 정보
     private String name;        //이름
@@ -57,8 +56,8 @@ public class NokCustomerServiceActivity extends BaseActivity {
 
         activateToolbar();
 
-        Nok nok = Nok.getInstance();
-        name = nok.getRecipientName();
+        Protector protector = Protector.getInstance();
+        name = protector.getRecipientName();
 
         mTask = new MySyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {
@@ -80,16 +79,14 @@ public class NokCustomerServiceActivity extends BaseActivity {
         findViewById(R.id.btn_question).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NokCustomerServiceActivity.this, QuestionActivity.class);
-                intent.putExtra("responsibility", responsibility);
+                Intent intent = new Intent(ProtectorCustomerServiceActivity.this, ProtectorQuestionActivity.class);
                 startActivity(intent);
             }
         });
         findViewById(R.id.btn_answer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NokCustomerServiceActivity.this, AnswerActivity.class);
-                intent.putExtra("responsibility", responsibility);
+                Intent intent = new Intent(ProtectorCustomerServiceActivity.this, ProtectorAnswerActivity.class);
                 startActivity(intent);
             }
         });
@@ -129,7 +126,7 @@ public class NokCustomerServiceActivity extends BaseActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             Connection connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
-            ResultSet resultSetlist = statement.executeQuery("select * from Su_공지사항 order by id desc");
+            ResultSet resultSetlist = statement.executeQuery("select * from Su_수급자공지사항 order by id desc");
             final List<Notice> list = new ArrayList<>();
             while (resultSetlist.next()) {
                 id = resultSetlist.getInt("id");
@@ -146,7 +143,7 @@ public class NokCustomerServiceActivity extends BaseActivity {
                     adapter = new NoticeAdapter(new NoticeAdapter.NoticeListener() {
                         @Override
                         public void setNoticeListener(Notice model) {
-                            Intent intent = new Intent(NokCustomerServiceActivity.this, NoticeActivity.class);
+                            Intent intent = new Intent(ProtectorCustomerServiceActivity.this, NoticeActivity.class);
                             intent.putExtra("id", model.getId());
                             startActivity(intent);
                         }

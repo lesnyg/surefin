@@ -236,7 +236,7 @@ public class MenuMain extends BaseActivity {
 
         mRecipientTask = new RecipientTask().execute();
 
-        if(department.equals("송영")) {
+        if(department != null&& department.equals("송영")) {
             notification_badge.setVisibility(View.VISIBLE);
 //            orderTask = new OrderSyncTask().execute();
             timer = new Timer();
@@ -244,7 +244,6 @@ public class MenuMain extends BaseActivity {
             TimerTask TT = new TimerTask() {
                 @Override
                 public void run() {
-                    orderCount = 0;
                     orderTask = new OrderSyncTask().execute();
                 }
             };
@@ -770,7 +769,8 @@ public class MenuMain extends BaseActivity {
 
         }
         protected void onPostExecute(String result) {
-
+            notification_badge.setText(orderCount+"");
+            orderCount = 0;
         }
 
         protected void onCancelled() {
@@ -806,12 +806,6 @@ public class MenuMain extends BaseActivity {
                     }
                 }}
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    notification_badge.setText(orderCount+"");
-                }
-            });
             connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

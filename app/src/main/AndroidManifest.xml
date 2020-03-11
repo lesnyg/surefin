@@ -25,20 +25,22 @@
         android:theme="@style/AppTheme">
         <activity android:name=".SongyeongActivity"></activity>
         <activity android:name=".BlochoActivity" />
-        <activity android:name=".NokPackage.GalleryDetailActivity" />
-        <activity android:name=".NokPackage.GalleryActivity" />
-        <activity android:name=".NokPackage.NokDepositActivity" />
-        <activity android:name=".NokPackage.SMPayWebSampleAutoActivity" />
+        <activity android:name=".ProtectorPackage.GalleryDetailActivity" />
+        <activity android:name=".ProtectorPackage.GalleryActivity" />
+        <activity android:name=".ProtectorPackage.ProtectorDepositActivity" />
+        <activity android:name=".ProtectorPackage.ProtectorAnswerActivity" />
+        <activity android:name=".ProtectorPackage.SMPayWebSampleAutoActivity" />
         <activity
-            android:name=".NokPackage.MealmenuActivity"
+            android:name=".ProtectorPackage.MealmenuActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NokPackage.NokMainActivity" />
-        <activity android:name=".NokPackage.NokCustomerServiceActivity" />
-        <activity android:name=".NokPackage.SelectActivity" />
+        <activity android:name=".ProtectorPackage.ProtectorMainActivity" />
+        <activity android:name=".ProtectorPackage.ProtectorCustomerServiceActivity" />
+        <activity android:name=".ProtectorPackage.ProtectorServiceListActivity"/>
+        <activity android:name=".ProtectorPackage.SelectActivity" />
         <activity
-            android:name=".NokPackage.NokLoginActivity"
+            android:name=".ProtectorPackage.ProtectorLoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NokPackage.NokPaymentActivity" />
+        <activity android:name=".ProtectorPackage.ProtectorPaymentActivity" />
         <activity android:name=".NoticeActivity" />
         <activity android:name=".AnswerActivity" />
         <activity

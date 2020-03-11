@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.ContextThemeWrapper;
 
-import com.jubumam.SureFin.NokPackage.SelectActivity;
+import com.jubumam.SureFin.ProtectorPackage.SelectActivity;
 
 import java.lang.ref.WeakReference;
 

@@ -8,6 +8,8 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.jubumam.SureFin.ProtectorPackage.Protector;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -59,6 +61,8 @@ public class CustomerServiceActivity extends BaseActivity {
 //            rating = intent.getExtras().getString("rating");
 //            responsibility = intent.getExtras().getString("responsibility");
 //        }
+
+
 
         mTask = new MySyncTask().execute();
         findViewById(R.id.img_back).setOnClickListener(new View.OnClickListener() {

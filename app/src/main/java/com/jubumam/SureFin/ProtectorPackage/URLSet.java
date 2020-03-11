@@ -1,6 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
-
-import android.util.Log;
+package com.jubumam.SureFin.ProtectorPackage;
 
 public class URLSet {
 	

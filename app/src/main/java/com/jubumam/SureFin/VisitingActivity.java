@@ -972,7 +972,7 @@ public class VisitingActivity extends BaseActivity implements View.OnClickListen
             }
 
 
-            ResultSet rs2 = statement.executeQuery("select* from Su_년도별금액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' and 년도 = '" + thisYear + "'");
+            ResultSet rs2 = statement.executeQuery("select* from Su_년도별적용급액 where 구분 = '방문' and 상세구분 ='" + baseTime + "' and 년도 = '" + thisYear + "'");
 
             while (rs2.next()) {
                 batime = Integer.parseInt(rs2.getString("기본시간"));

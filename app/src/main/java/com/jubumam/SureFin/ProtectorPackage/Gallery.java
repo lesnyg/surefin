@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.graphics.Bitmap;
 

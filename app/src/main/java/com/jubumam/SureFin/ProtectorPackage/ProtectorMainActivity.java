@@ -1,17 +1,13 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,32 +15,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.jubumam.SureFin.BaseActivity;
-import com.jubumam.SureFin.CommuteRecipient;
 import com.jubumam.SureFin.ImageModel;
-import com.jubumam.SureFin.MainActivity;
-import com.jubumam.SureFin.MenuMain;
-import com.jubumam.SureFin.Non_Payment_Item;
 import com.jubumam.SureFin.R;
 import com.jubumam.SureFin.ServiceListActivity;
-import com.jubumam.SureFin.VisitingActivity;
-import com.jubumam.SureFin.VisitingBathActivity;
-import com.jubumam.SureFin.VistingNurse;
-import com.jubumam.SureFin.signActivity;
 import com.viewpagerindicator.CirclePageIndicator;
 
-import java.io.ByteArrayOutputStream;
 import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -58,9 +41,10 @@ import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class NokMainActivity extends BaseActivity {
+public class ProtectorMainActivity extends ProtectorBaseActivity {
 
     final String TAG = getClass().getSimpleName();
+    private String recipiId;        //수급자코드
     private String name;        //이름
     private String rating;      //등급
     private String responsibility;      //직원명
@@ -138,13 +122,14 @@ public class NokMainActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nok_main);
+        setContentView(R.layout.activity_protector_main);
 
         activateToolbar();
 
-        Nok nok = Nok.getInstance();
-        name = nok.getRecipientName();
-        rating = nok.getRating();
+        Protector protector = Protector.getInstance();
+        recipiId = protector.getRecipiId();
+        name = protector.getRecipientName();
+        rating = protector.getRating();
 
         currentTime = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -174,7 +159,7 @@ public class NokMainActivity extends BaseActivity {
 
         imageModelArrayList = new ArrayList<>();
 
-        LayoutInflater inflater = LayoutInflater.from(NokMainActivity.this);
+        LayoutInflater inflater = LayoutInflater.from(ProtectorMainActivity.this);
         final View view = inflater.inflate(R.layout.camera_image, null);
 
         dialog_imageview = view.findViewById(R.id.dialog_imageview);
@@ -188,7 +173,7 @@ public class NokMainActivity extends BaseActivity {
         findViewById(R.id.lin_detail).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(NokMainActivity.this, ServiceListActivity.class);
+                Intent intent = new Intent(ProtectorMainActivity.this, ServiceListActivity.class);
                 startActivity(intent);
             }
         });
@@ -196,38 +181,38 @@ public class NokMainActivity extends BaseActivity {
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {           //서비스 사용내역
-                startActivity(new Intent(NokMainActivity.this,ServiceListActivity.class));
+                startActivity(new Intent(ProtectorMainActivity.this,ProtectorServiceListActivity.class));
             }
         });
 
         findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {      //앨범
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(NokMainActivity.this,GalleryActivity.class));
+            public void onClick(View v) {       //앨범
+                startActivity(new Intent(ProtectorMainActivity.this,GalleryActivity.class));
             }
         });
         findViewById(R.id.button3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {       //식단
-                startActivity(new Intent(NokMainActivity.this,MealmenuActivity.class));
+                startActivity(new Intent(ProtectorMainActivity.this,MealmenuActivity.class));
             }
         });
         findViewById(R.id.button4).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {       //결제
-                startActivity(new Intent(NokMainActivity.this,NokPaymentActivity.class));
+                startActivity(new Intent(ProtectorMainActivity.this, ProtectorPaymentActivity.class));
             }
         });
         findViewById(R.id.button5).setOnClickListener(new View.OnClickListener() {      //입금내역
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(NokMainActivity.this,NokDepositActivity.class));
+            public void onClick(View v) {       //입금내역
+                startActivity(new Intent(ProtectorMainActivity.this, ProtectorDepositActivity.class));
             }
         });
         findViewById(R.id.button6).setOnClickListener(new View.OnClickListener() {      //공지사항
             @Override
-            public void onClick(View v) {
-                startActivity(new Intent(NokMainActivity.this,NokCustomerServiceActivity.class));
+            public void onClick(View v) {       //공지사항
+                startActivity(new Intent(ProtectorMainActivity.this, ProtectorCustomerServiceActivity.class));
             }
         });
     }
@@ -366,7 +351,7 @@ public class NokMainActivity extends BaseActivity {
             Statement statement = connection.createStatement();
 
 
-            ResultSet surs = statement.executeQuery("select 기본시간,목욕횟수 from Su_수급자기본정보 where 수급자명 = '" + name + "'");
+            ResultSet surs = statement.executeQuery("select 기본시간,목욕횟수 from Su_수급자기본정보 where 수급자코드 = '" + recipiId + "'");
             while (surs.next()) {
                 basetime = surs.getString("기본시간");
                 bathTotalCount = surs.getString("목욕횟수");
@@ -387,7 +372,7 @@ public class NokMainActivity extends BaseActivity {
             ResultSet serviceResultSetlist = statement.executeQuery("select COALESCE(A.수급자명,B.수급자명,C.수급자명) AS 요양수급자,COALESCE(A.일자,B.일자,C.일자) AS 요양일자,(CONVERT(int,A.신체사용시간계))+(CONVERT(int,A.인지사용시간계))+(CONVERT(int,A.일상생활시간계))+(CONVERT(int,A.정서사용시간계))+(CONVERT(int,A.생활지원사용시간계)) AS 방문요양합계," +
                     "B.목욕여부,B.차량이용 ,C.방문횟수,C.총시간 from Su_방문요양급여정보 A FULL OUTER JOIN Su_방문목욕정보 B ON (A.일자=B.일자 AND A.수급자명=B.수급자명 AND A.번호=B.번호) " +
                     "FULL OUTER JOIN Su_방문간호정보 C ON (B.일자=C.일자 AND B.수급자명=C.수급자명 AND  B.번호=C.번호) or (A.일자=C.일자 AND A.수급자명=C.수급자명 AND  A.번호=C.번호)" +
-                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자명='" + name + "' or B.수급자명='" + name + "' or C.수급자명='" + name + "')" +
+                    "where ((A.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (B.일자 BETWEEN '" + startMon + "' AND '" + endMon + "') or (C.일자 BETWEEN '" + startMon + "' AND '" + endMon + "')) AND (A.수급자코드 = '" + recipiId + "' or B.수급자코드 = '" + recipiId + "' or C.수급자코드 = '" + recipiId + "')" +
                     "order by 요양일자,A.번호");
             timeformatter = new SimpleDateFormat("mm");
             while (serviceResultSetlist.next()) {
@@ -415,10 +400,9 @@ public class NokMainActivity extends BaseActivity {
 
             }
 
-            ResultSet nonpayRS = statement.executeQuery("select 일자 from Su_비급여신청자 where 수급자명 = '" + name + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
+            ResultSet nonpayRS = statement.executeQuery("select 일자 from Su_비급여신청자 where 수급자코드 = '" + recipiId + "' AND (일자 BETWEEN '" + startMon + "' AND '" + endMon + "')");
             while (nonpayRS.next()) {
                 nosupport++;
-
             }
 
             //배너이미지
@@ -472,7 +456,7 @@ public class NokMainActivity extends BaseActivity {
                     tv_nurseSumTotal.setText(strNhour + ":" + strNmin);
                     tv_nosupport.setText(nosupport + "");
 
-                    mPager.setAdapter(new MyPagerAdapter(NokMainActivity.this, imageModelArrayList));
+                    mPager.setAdapter(new MyPagerAdapter(ProtectorMainActivity.this, imageModelArrayList));
                     indicator.setViewPager(mPager);
 
                 }

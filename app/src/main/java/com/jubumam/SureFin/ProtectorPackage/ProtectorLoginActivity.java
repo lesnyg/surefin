@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -19,12 +19,13 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-public class NokLoginActivity extends AppCompatActivity {
+public class ProtectorLoginActivity extends AppCompatActivity {
     private EditText txt_centerName;
     private EditText txt_recipiName;
     private EditText txt_recipiPhone;
     private String centerName;
     private String dbCenterName;
+    private String recipiId;
     private String recipiName;
     private String recipiPhone;
     private String rating;
@@ -90,11 +91,11 @@ public class NokLoginActivity extends AppCompatActivity {
 
         protected void onPostExecute(String result) {
             if (centerName.equals(dbCenterName)) {
-                new Nok(recipiName, recipiPhone, centerName, rating);
-                Intent intent = new Intent(NokLoginActivity.this, NokMainActivity.class);
+                new Protector(recipiId, recipiName, recipiPhone, centerName, rating);
+                Intent intent = new Intent(ProtectorLoginActivity.this, ProtectorMainActivity.class);
                 startActivity(intent);
             }else{
-                Toast.makeText(NokLoginActivity.this, "센터에 문의하세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProtectorLoginActivity.this, "센터에 문의하세요", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -113,6 +114,7 @@ public class NokLoginActivity extends AppCompatActivity {
             ResultSet resultSet = statement.executeQuery("select * from Su_수급자기본정보 where 수급자명='" + recipiName + "' and  hp = '" + recipiPhone + "'");
 
             while (resultSet.next()) {
+                recipiId = resultSet.getString("수급자코드");
                 dbCenterName = resultSet.getString("지점");
                 rating = resultSet.getString("등급");
 

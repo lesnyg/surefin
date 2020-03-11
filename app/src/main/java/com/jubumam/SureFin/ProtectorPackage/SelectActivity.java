@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.jubumam.SureFin.LoginActivity;
 import com.jubumam.SureFin.R;
 
-public class SelectActivity extends AppCompatActivity {
+public class SelectActivity extends ProtectorBaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class SelectActivity extends AppCompatActivity {
         findViewById(R.id.btn_nok).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SelectActivity.this, NokLoginActivity.class));
+                startActivity(new Intent(SelectActivity.this, ProtectorLoginActivity.class));
             }
         });
     }

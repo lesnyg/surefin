@@ -9,8 +9,10 @@ public class SongyeongOrder {
     private String paymentmethod ="";   //계산방법
     private String complete = "";   //배달확인
     private String orderTime;   //주문시간
+    private String ordermethod;   //주문형태
+    private String firstOrder;   //첫주문
 
-    public SongyeongOrder(String name, String phoneNumber, String address, String quantity, String orderPrice, String paymentmethod, String complete, String orderTime) {
+    public SongyeongOrder(String name, String phoneNumber, String address, String quantity, String orderPrice, String paymentmethod, String complete, String orderTime, String ordermethod, String firstOrder) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
@@ -19,6 +21,8 @@ public class SongyeongOrder {
         this.paymentmethod = paymentmethod;
         this.complete = complete;
         this.orderTime = orderTime;
+        this.ordermethod = ordermethod;
+        this.firstOrder = firstOrder;
     }
 
     public String getName() {
@@ -83,5 +87,21 @@ public class SongyeongOrder {
 
     public void setOrderTime(String orderTime) {
         this.orderTime = orderTime;
+    }
+
+    public String getOrdermethod() {
+        return ordermethod;
+    }
+
+    public void setOrdermethod(String ordermethod) {
+        this.ordermethod = ordermethod;
+    }
+
+    public String getFirstOrder() {
+        return firstOrder;
+    }
+
+    public void setFirstOrder(String firstOrder) {
+        this.firstOrder = firstOrder;
     }
 }

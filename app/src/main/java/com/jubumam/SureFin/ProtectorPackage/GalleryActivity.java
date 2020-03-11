@@ -1,4 +1,4 @@
-package com.jubumam.SureFin.NokPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -9,8 +9,8 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
+import com.jubumam.SureFin.BaseActivity;
 import com.jubumam.SureFin.R;
-import com.jubumam.SureFin.Recipient;
 
 import java.sql.Blob;
 import java.sql.Connection;
@@ -21,7 +21,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GalleryActivity extends AppCompatActivity {
+public class GalleryActivity extends ProtectorBaseActivity {
     private AsyncTask<String, String, String> mTask;
     private List<Gallery> list;
     private Bitmap bitmap;
@@ -31,15 +31,19 @@ public class GalleryActivity extends AppCompatActivity {
 
     private String name;        //이름
     private String rating;      //등급
+    private String recipiId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gallery);
 
-        Nok nok = Nok.getInstance();
-        name = nok.getRecipientName();
-        rating = nok.getRating();
+        activateToolbar();
+
+        Protector protector = Protector.getInstance();
+        recipiId = protector.getRecipiId();
+        name = protector.getRecipientName();
+        rating = protector.getRating();
         recyclerView = findViewById(R.id.recyclerview_gallery);
         mTask = new MyAsyncTask().execute();
     }
@@ -74,7 +78,7 @@ public class GalleryActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             final Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("select * from Su_직원출퇴근정보 where 수급자명='" + name + "' order by 일자 DESC");
+            ResultSet resultSet = statement.executeQuery("select * from Su_직원출퇴근정보 where 수급자코드 = '" + recipiId + "' order by 일자 DESC");
             byte bt[];
             byte bt2[];
             list = new ArrayList<>();

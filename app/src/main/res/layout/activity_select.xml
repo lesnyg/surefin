@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/image_nokbg"
     android:orientation="vertical"
-    tools:context=".NokPackage.SelectActivity">
+    tools:context=".ProtectorPackage.SelectActivity">
 
 
     <TextView
