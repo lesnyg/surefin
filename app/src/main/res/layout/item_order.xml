@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="order"
+            type="com.jubumam.surefin.Order" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:background="#eeeeee"
+                android:gravity="center"
+                android:text="@{order.time}"
+                android:textColor="#000000"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_margin="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_bab"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:layout_marginBottom="8dp"
+                    android:text='@{order.bab+", "+order.jug+", "+order.gug+", "+order.main+", "+order.banchan1+", "+order.banchan2+", "+order.banchan3+", "+order.banchan4+", "+order.snack+", "+order.fruit}' />
+
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+
+
+                    <Button
+                        android:src="@drawable/btn_simpleorder"
+                        android:id="@+id/btn_simpleOrder"
+                        android:layout_width="124dp"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="4dp"
+                        android:background="@drawable/btn_red"
+                        android:textColor="#ffffff"
+                        android:text="간편주문" />
+                    <Button
+                        android:id="@+id/btn_phoneOrder"
+                        android:layout_width="124dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="4dp"
+                        android:background="@drawable/btn_blue"
+                        android:textColor="#ffffff"
+                        android:text="전화주문" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_centerInParent="true"
+            android:background="#e0e0e0" />
+    </LinearLayout>
+</layout>

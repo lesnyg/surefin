@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
     <ImageView
         android:id="@+id/dialog_imageview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/nowtime"
@@ -21,6 +22,7 @@
         android:layout_marginEnd="37dp"
         android:layout_marginRight="37dp"
         android:layout_marginBottom="21dp"
+        android:text="수급자이름"
         android:textSize="20dp" />
 
     </RelativeLayout>

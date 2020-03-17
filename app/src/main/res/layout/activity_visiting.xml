@@ -1043,7 +1043,15 @@
                         android:minLines="2"
                         android:padding="4dp" />
                 </LinearLayout>
-
+                <Button
+                    android:id="@+id/btn_pic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#00207c"
+                    android:text="식사확인"
+                    android:layout_marginBottom="2dp"
+                    android:textColor="#ffffff"
+                    android:textSize="16dp" />
                 <Button
                     android:id="@+id/btn_send"
                     android:layout_width="match_parent"

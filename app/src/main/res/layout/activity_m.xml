@@ -404,7 +404,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="110dp">
+                android:layout_height="120dp">
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/pager"
@@ -512,6 +512,7 @@
                     android:orientation="horizontal">
 
                     <FrameLayout
+                        android:id="@+id/frame_order"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -527,7 +528,6 @@
                         android:src="@drawable/icon_delivery" />
                     <TextView
                         android:id="@+id/notification_badge"
-                        android:visibility="gone"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="right|end|bottom"
@@ -548,7 +548,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:background="#efefef"
+                        android:background="#ffffff"
                         />
 
                     <ImageView
