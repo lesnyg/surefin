@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.jubumam.surefin.LoginActivity;
-import com.jubumam.surefin.OrderActivity;
 import com.jubumam.surefin.R;
 
 public class SelectActivity extends ProtectorBaseActivity {
