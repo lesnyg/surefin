@@ -1,12 +1,11 @@
-package com.jubumam.surefin.ProtectorPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.jubumam.surefin.LoginActivity;
-import com.jubumam.surefin.OrderActivity;
-import com.jubumam.surefin.R;
+import com.jubumam.SureFin.LoginActivity;
+import com.jubumam.SureFin.R;
 
 public class SelectActivity extends ProtectorBaseActivity {
 

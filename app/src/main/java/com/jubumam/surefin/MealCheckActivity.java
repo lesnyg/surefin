@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

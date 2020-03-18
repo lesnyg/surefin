@@ -1,4 +1,4 @@
-package com.jubumam.surefin.ProtectorPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -6,9 +6,9 @@ import android.view.View;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jubumam.surefin.Answer;
-import com.jubumam.surefin.AnswerAdapter;
-import com.jubumam.surefin.R;
+import com.jubumam.SureFin.Answer;
+import com.jubumam.SureFin.AnswerAdapter;
+import com.jubumam.SureFin.R;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

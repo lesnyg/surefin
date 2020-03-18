@@ -1,4 +1,4 @@
-package com.jubumam.surefin.ProtectorPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,11 +8,11 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jubumam.surefin.CommuteRecipient;
-import com.jubumam.surefin.Login;
-import com.jubumam.surefin.R;
-import com.jubumam.surefin.Service;
-import com.jubumam.surefin.ServiceAdapter;
+import com.jubumam.SureFin.CommuteRecipient;
+import com.jubumam.SureFin.Login;
+import com.jubumam.SureFin.R;
+import com.jubumam.SureFin.Service;
+import com.jubumam.SureFin.ServiceAdapter;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

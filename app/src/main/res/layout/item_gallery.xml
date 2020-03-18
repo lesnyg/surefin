@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     >
 
-    <com.jubumam.surefin.ProtectorPackage.SquareImageView
+    <com.jubumam.SureFin.ProtectorPackage.SquareImageView
         android:id="@+id/img_gallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

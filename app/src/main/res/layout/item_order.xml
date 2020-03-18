@@ -5,7 +5,7 @@
 
         <variable
             name="order"
-            type="com.jubumam.surefin.Order" />
+            type="com.jubumam.SureFin.Order" />
     </data>
 
     <LinearLayout
