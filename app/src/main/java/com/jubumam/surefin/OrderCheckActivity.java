@@ -1,15 +1,23 @@
 package com.jubumam.surefin;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import com.jubumam.surefin.ProtectorPackage.SMPayWebSampleAutoActivity;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -17,13 +25,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class OrderCheckActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private String phone;
     private String address;
+    private int intcount = 1;
     private String count;
     private String calMethod;
     private String local;
@@ -43,11 +52,51 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
     private String[] item_ordermethod;
     private String[] item_local;
     private TextView tv_date;
+    private Button btn_count;
+    String lastChar = "";
+    private String responsibility;
+    private String personId;
+    private String department;
+    private String recipiId;
+    private String recipiName ="없음";
+    private String rating;
+    private String commute;
+    private String recipiPhone ="없음";
+    private String recipiAdd;
+    private String firstOrder;
+
+    private AsyncTask<String, String, String> recipiTask;
+    private final static int RESULT_NUM = 100;
+    private Spinner spinner_ordermethod;
+    private Spinner spinner_calMethod;
+    private String date;
+    private String mealTime;
+    private AsyncTask<String, String, String> orderSyncTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_order_check);
+
+        Login login = Login.getInstance();
+        //직원이름
+        responsibility = login.getResponsibility();
+        //직원코드
+        personId = login.getPersonId();
+        //직원부서
+        department = login.getDepartment();
+
+        CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
+        //수급자코드
+        recipiId = commuteRecipient.getRecipiId();
+        recipiPhone = commuteRecipient.getPhoneNumber();
+        recipiName = commuteRecipient.getName();
+        rating = commuteRecipient.getRating();
+        commute = commuteRecipient.getCommute();
+
+        Intent intent = getIntent();
+        date = intent.getExtras().getString("date");
+        mealTime = intent.getExtras().getString("mealTime");
 
         today = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
@@ -56,46 +105,39 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
         et_address = findViewById(R.id.et_address);
         et_count = findViewById(R.id.et_count);
         et_calMethod = findViewById(R.id.et_calMethod);
-        et_local = findViewById(R.id.et_local);
         et_orderMethod = findViewById(R.id.et_orderMethod);
         et_totalPrice = findViewById(R.id.et_totalPrice);
-        Spinner spinner_count =findViewById(R.id.spinner_count);
-        Spinner spinner_calMethod =findViewById(R.id.spinner_calMethod);
-        Spinner spinner_ordermethod =findViewById(R.id.spinner_ordermethod);
-        Spinner spinner_local =findViewById(R.id.spinner_local);
+        et_count.setText(intcount+"");
 
-        tv_date.setText(today);
 
-        item_count = new String[]{"1","2","3","4","5","6","7","8","9","10"};
+        spinner_calMethod = findViewById(R.id.spinner_calMethod);
+        spinner_ordermethod = findViewById(R.id.spinner_ordermethod);
+
+
+        tv_date.setText(today+"");
+
+        if(commute!=null && commute.equals("true")){
+            recipiTask = new RecipiTask().execute();
+
+        }
+
+
         item_calMethod = new String[]{"카드","현금"};
         item_ordermethod = new String[]{"일반","요양"};
-        item_local = new String[]{"서초","도곡"};
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,item_count);
+
+
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,item_calMethod);
         ArrayAdapter<String> adapter3 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,item_ordermethod);
-        ArrayAdapter<String> adapter4 = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,item_local);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+
         adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapter4.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner_count.setAdapter(adapter);
+
         spinner_calMethod.setAdapter(adapter2);
         spinner_ordermethod.setAdapter(adapter3);
-        spinner_local.setAdapter(adapter4);
 
-        spinner_count.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                et_count.setText(item_count[position]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         spinner_calMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -121,17 +163,15 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
             }
         });
 
-        spinner_local.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        findViewById(R.id.btn_count).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                et_local.setText(item_local[position]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                intcount = Integer.parseInt(et_count.getText().toString());
+                intcount++;
+                et_count.setText(intcount+"");
             }
         });
+
 
         findViewById(R.id.btn_order).setOnClickListener(new View.OnClickListener() {
 
@@ -141,12 +181,45 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
                 address = et_address.getText().toString();
                 count = et_count.getText().toString();
                 calMethod = et_calMethod.getText().toString();
-                local = et_local.getText().toString();
                 orderMethod = et_orderMethod.getText().toString();
                 totalPrice = Integer.parseInt(count)*7500;
                 et_totalPrice.setText(totalPrice+"");
                 time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-                new OrderSyncTask().execute();
+                Intent intent1 = new Intent(OrderCheckActivity.this,OrderSignActivity.class);
+                intent1.putExtra("date",date);
+                intent1.putExtra("mealTime",mealTime);
+                intent1.putExtra("count",count);
+                intent1.putExtra("calmethod",calMethod);
+                intent1.putExtra("totalPrice",totalPrice+"");
+                startActivity(intent1);
+
+            }
+        });
+
+
+
+        et_phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int digits = et_phone.getText().toString().length();
+                if (digits > 1)
+                    lastChar = et_phone.getText().toString().substring(digits - 1);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int digits = et_phone.getText().toString().length();
+                Log.d("LENGTH", "" + digits);
+                if (!lastChar.equals("-")) {
+                    if (digits == 3 || digits == 8) {
+                        et_phone.append("-");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }
@@ -156,8 +229,15 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case RESULT_NUM:
 
-
+                break;
+        }
+    }
 
     public class OrderSyncTask extends AsyncTask<String, String, String> {
 
@@ -188,8 +268,8 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
             Statement statement = connection.createStatement();
 
-            ResultSet areaRS = statement.executeQuery("insert into Su_주문리스트(일자,전화번호,주소,수량,계산방법,지역,주문형태,금액,주문시간,배달확인) " +
-                    "values('"+today+"','"+phone+"','"+address+"','"+count+"','"+calMethod+"','"+local+"','"+orderMethod+"','"+totalPrice+"','"+time+"','진행중') ");
+            ResultSet areaRS = statement.executeQuery("insert into Su_주문리스트(일자,주문자,전화번호,주소,수량,계산방법,주문형태,금액,주문시간,배달확인,식사시간,수급자코드,첫주문) " +
+                    "values('"+date+"','"+recipiName+"','"+phone+"','"+address+"','"+count+"','"+calMethod+"','"+orderMethod+"','"+totalPrice+"','"+time+"','진행중','"+mealTime+"','"+recipiId+"','"+firstOrder+"') ");
            connection.close();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -197,4 +277,49 @@ public class OrderCheckActivity extends AppCompatActivity implements AdapterView
             e.printStackTrace();
         }
     }
+    public class RecipiTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            if (isCancelled())
+                return (null);
+            recipiQuery();
+            return null;
+        }
+
+        protected void onPostExecute(String result) {
+            et_phone.setText(recipiPhone);
+            et_address.setText(recipiAdd);
+            spinner_ordermethod.setSelection(1);
+        }
+    }
+
+    private void recipiQuery() {
+        Connection connection = null;
+        try {
+            Class.forName("net.sourceforge.jtds.jdbc.Driver");
+            connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
+            Statement statement = connection.createStatement();
+            ResultSet recipiRS = statement.executeQuery("select hp,주소2 from Su_수급자기본정보 WHERE 수급자코드 = '" + recipiId + "'");
+            while (recipiRS.next()) {
+                recipiPhone = recipiRS.getString("hp");
+                recipiAdd = recipiRS.getString("주소2");
+            }
+            ResultSet firstRS = statement.executeQuery("select 첫주문 from Su_주문리스트 where 수급자코드 = '" +recipiId+"'");
+            while (firstRS.next()){
+                firstOrder = firstRS.getString("첫주문");
+            }
+            if(firstOrder==null){
+                firstOrder = "True";
+            }else if(firstOrder != null && firstOrder.equals("True")){
+                firstOrder = "False";
+            }
+            connection.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

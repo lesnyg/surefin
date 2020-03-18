@@ -68,7 +68,7 @@ public class OrderActivity extends AppCompatActivity {
 
             @Override
             public void SimpleClicked(Order model) {
-                Intent intent = new Intent(OrderActivity.this,OrderSignActivity.class);
+                Intent intent = new Intent(OrderActivity.this,OrderCheckActivity.class);
                 intent.putExtra("mealTime",model.getTime());
                 intent.putExtra("date",model.getDate());
                 startActivity(intent);

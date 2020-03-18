@@ -365,7 +365,7 @@ public class BeforeMealFragment extends Fragment implements SwipeRefreshLayout.O
                 holder.tv_etc.setText("( " +item.getOrdermethod()+ " )");
             }
 
-            if(item.getFirstOrder().equals("True")){
+            if(item.getFirstOrder()!=null && item.getFirstOrder().equals("True")){
                 holder.tv_firstorder.setText("첫 구매 고객 입니다.");
 
             }else{

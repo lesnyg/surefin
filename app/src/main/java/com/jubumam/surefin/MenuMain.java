@@ -1,13 +1,18 @@
 package com.jubumam.surefin;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +21,9 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
@@ -49,7 +56,7 @@ public class MenuMain extends BaseActivity {
 //    private MyPagerAdapter adapter;
 
     final String TAG = getClass().getSimpleName();
-    private String name;        //이름
+    private String recipiName;        //이름
     private String recipiId;        //수급자코드
     private String rating;      //등급
     private String responsibility;      //직원명
@@ -152,6 +159,10 @@ public class MenuMain extends BaseActivity {
     private TextView notification_badge;
     private FrameLayout frame_order;
     private Timer timer;
+    DBHelper mDatabase;
+
+    private String packageName = "com.surefin.surefindelivery";
+    private String className = "com.surefin.surefindelivery.OrderActivity";
 
 
 
@@ -169,7 +180,7 @@ public class MenuMain extends BaseActivity {
 
         CommuteRecipient commuteRecipient = CommuteRecipient.getInstance();
         recipiId = commuteRecipient.getRecipiId();      //수급자코드
-        name = commuteRecipient.getName();
+        recipiName = commuteRecipient.getName();
         rating = commuteRecipient.getRating();
         responsibility = commuteRecipient.getResponsibility();
         stime = commuteRecipient.getStartTime();
@@ -190,6 +201,16 @@ public class MenuMain extends BaseActivity {
         endMon = month + "-" + "32";
 
         //   Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
+        mDatabase = new DBHelper(getBaseContext());
+
+        // 데이터 입력
+        mDatabase.setDelete();
+        List<ItemRow> mList = new ArrayList<>();
+        mList.add(new ItemRow(recipiId, recipiName,2000));
+
+        for(ItemRow item : mList) {
+            mDatabase.setItem(item.contents, item.name, item.num);
+        }
 
 
         n1 = findViewById(R.id.n1);
@@ -202,7 +223,7 @@ public class MenuMain extends BaseActivity {
         n12 = findViewById(R.id.n12);
 
         tv_name = findViewById(R.id.tv_name);
-        tv_name.setText(name + "님");
+        tv_name.setText(recipiName + "님");
         tv_careTotalTime = findViewById(R.id.tv_careTotalTime);
         tv_careSumTime = findViewById(R.id.tv_careSumTime);
         tv_bathTotalTime = findViewById(R.id.tv_bathTotalTime);
@@ -357,8 +378,15 @@ public class MenuMain extends BaseActivity {
         n12.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MenuMain.this, OrderActivity.class);
-                startActivity(i);
+
+                Intent intent = new Intent();
+                intent.setClassName(packageName, className);
+                intent.putExtra("putData", recipiId);
+                startActivityForResult(intent, 0);
+
+
+
+//                loadData();
             }
         });
 
@@ -371,7 +399,7 @@ public class MenuMain extends BaseActivity {
 //
 //            }
 //        });
-
+//
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
 //                Log.d(TAG, "권한 설정 완료");
@@ -382,17 +410,50 @@ public class MenuMain extends BaseActivity {
 //            }
 //        }
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 0) {
+            if (resultCode == RESULT_OK) {
+                Log.i("test", "result : " + data.getStringExtra("result"));
+            }
+        }
+    }
 
 
-    // 권한 요청
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        Log.d(TAG, "onRequestPermissionsResult");
-//        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-//            Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
-//        }
-//    }
+
+    public boolean getPackageList() {
+        boolean isExist = false;
+
+        PackageManager pkgMgr = getPackageManager();
+        List<ResolveInfo> mApps;
+        Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+        mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        mApps = pkgMgr.queryIntentActivities(mainIntent, 0);
+
+        try {
+            for (int i = 0; i < mApps.size(); i++) {
+                if(mApps.get(i).activityInfo.packageName.startsWith(packageName)){
+                    isExist = true;
+                    break;
+                }
+            }
+        }
+        catch (Exception e) {
+            isExist = false;
+        }
+        return isExist;
+    }
+
+    //권한 요청
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult");
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+        }
+    }
 //
 //    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 //        super.onActivityResult(requestCode, resultCode, intent);
@@ -831,4 +892,34 @@ public class MenuMain extends BaseActivity {
         }
 
     }
+    private void loadData() {
+        StringBuilder sb = new StringBuilder();
+        List<ItemRow> row = mDatabase.getItem();
+        sb.append("Total count : "+row.size()+"\n\n");
+        for(ItemRow item : row) {
+            sb.append(item.contents+" , "+item.name+" , "+item.num+"\n");
+        }
+//        TextView tv_text = (TextView) findViewById(R.id.tv_text);
+//        tv_text.setText(sb.toString());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mDatabase != null)
+            mDatabase.close();
+    }
+}
+
+class ItemRow {
+    public String contents;
+    public String name;
+    public int num;
+
+    public ItemRow(String contents, String name, int num) {
+        this.contents = contents;
+        this.name = name;
+        this.num = num;
+    }
+
 }

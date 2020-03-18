@@ -58,7 +58,10 @@ public class OrderSignActivity extends AppCompatActivity {
     private String recipiPhone;
     private String recipiAdd;
     private String currentTime;
-
+    private String firstOrder;
+    private String count;
+    private String calmethod;
+    private String totalPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +78,9 @@ public class OrderSignActivity extends AppCompatActivity {
         Intent intent = getIntent();
         date = intent.getExtras().getString("date");
         mealTime = intent.getExtras().getString("mealTime");
+        count = intent.getExtras().getString("count");
+        calmethod = intent.getExtras().getString("calmethod");
+        totalPrice = intent.getExtras().getString("totalPrice");
 
 
         Login login = Login.getInstance();
@@ -146,7 +152,7 @@ public class OrderSignActivity extends AppCompatActivity {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 imageBytes = baos.toByteArray();
 
-                currentTime = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 
 
                 caTask = new caAsyncTask().execute();
@@ -206,10 +212,15 @@ public class OrderSignActivity extends AppCompatActivity {
             while (recipiRS.next()) {
                 recipiPhone = recipiRS.getString("hp");
                 recipiAdd = recipiRS.getString("주소2");
-
-
-
-
+            }
+            ResultSet firstRS = statement.executeQuery("select 첫주문 from Su_주문리스트 where 수급자코드 = '" + recipiId + "'");
+            while (firstRS.next()) {
+                firstOrder = firstRS.getString("첫주문");
+            }
+            if (firstOrder == null) {
+                firstOrder = "True";
+            } else if (firstOrder != null && firstOrder.equals("True")) {
+                firstOrder = "False";
             }
             connection.close();
         } catch (ClassNotFoundException e) {
@@ -232,21 +243,24 @@ public class OrderSignActivity extends AppCompatActivity {
             Class.forName("net.sourceforge.jtds.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://sql16ssd-005.localnet.kr/surefin1_db2020", "surefin1_db2020", "mam3535@@");
 
-                PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_주문리스트(일자,전화번호,주소,배달확인,주문자,주문시간,지역,주문형태,첫주문,수급자코드,식사시간,주문사인)VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-                ps.setString(1, date);
-                ps.setString(2, recipiPhone);
-                ps.setString(3, recipiAdd);
-                ps.setString(4, "미배달");
-                ps.setString(5, name);
-                ps.setString(6, currentTime);
-                ps.setString(7, "서초");
-                ps.setString(8, "요양");
-                ps.setString(9, "미배달");
-                ps.setString(10, recipiId);
-                ps.setString(11, mealTime);
-                ps.setBytes(12, imageBytes);
-                ps.executeUpdate();
-                ps.close();
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO  Su_주문리스트(일자,전화번호,주소,배달확인,주문자,주문시간,지역,주문형태,첫주문,수급자코드,식사시간,주문사인,수량,계산방법,금액)VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            ps.setString(1, date);
+            ps.setString(2, recipiPhone);
+            ps.setString(3, recipiAdd);
+            ps.setString(4, "미배달");
+            ps.setString(5, name);
+            ps.setString(6, currentTime);
+            ps.setString(7, "서초");
+            ps.setString(8, "요양");
+            ps.setString(9, firstOrder);
+            ps.setString(10, recipiId);
+            ps.setString(11, mealTime);
+            ps.setBytes(12, imageBytes);
+            ps.setString(13, count);
+            ps.setString(14, calmethod);
+            ps.setString(15, totalPrice);
+            ps.executeUpdate();
+            ps.close();
 
             connection.close();
 
@@ -272,13 +286,7 @@ public class OrderSignActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            if (route.equals("MenuMain")) {
-                finishAffinity();
-                System.runFinalization();
-                System.exit(0); //앱종료
-            } else {
-                startActivity(new Intent(OrderSignActivity.this, MenuMain.class));
-            }
+
         }
 
         protected void onCancelled() {

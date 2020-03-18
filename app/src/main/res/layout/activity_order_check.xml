@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".OrderCheckActivity">
+
     <TextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
@@ -15,6 +16,25 @@
         android:textSize="20dp"
         android:gravity="center"
         android:text="날짜" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+    <Button
+        android:id="@+id/btn_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="도시락\n수량만큼 눌러주세요"/>
+        <EditText
+            android:id="@+id/et_count"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="수량"
+            android:inputType="number"
+            />
+
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,30 +74,7 @@
             />
 
     </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수량 : " />
-
-        <EditText
-            android:id="@+id/et_count"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="수량"
-            />
-        <Spinner
-            android:id="@+id/spinner_count"
-            android:layout_centerHorizontal="true"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -103,30 +100,7 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="지역 : " />
-
-        <EditText
-            android:id="@+id/et_local"
-            android:layout_width="1dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="지역"
-            />
-        <Spinner
-            android:id="@+id/spinner_local"
-            android:layout_centerHorizontal="true"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"/>
-
-    </LinearLayout>
 
 
     <LinearLayout
@@ -177,8 +151,7 @@
         android:id="@+id/btn_order"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="주문하기"
-        />
+        android:text="주문하기" />
 
 
 </LinearLayout>
