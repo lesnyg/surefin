@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jubumam.SureFin">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.jubumam.surefin">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <permission android:name="com.jubumam.surefin.READ_DATABASE" android:protectionLevel="normal" />
+    <permission android:name="com.jubumam.surefin.WRITE_DATABASE" android:protectionLevel="normal" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -16,79 +20,94 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".SongyeongActivity"></activity>
-        <activity android:name=".BlochoActivity" />
-        <activity android:name=".NokPackage.GalleryDetailActivity" />
-        <activity android:name=".NokPackage.GalleryActivity" />
-        <activity android:name=".NokPackage.NokDepositActivity" />
-        <activity android:name=".NokPackage.SMPayWebSampleAutoActivity" />
+        android:theme="@style/AppTheme"
+        tools:replace="android:allowBackup">
+        <activity android:name="com.jubumam.surefin.OrderActivity">
+        </activity>
+        <activity android:name="com.jubumam.surefin.MealCheckActivity" />
+        <activity android:name=".OrderSignActivity"/>
+        <activity android:name=".OrderCheckActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name="com.jubumam.surefin.SongyeongActivity1" />
+        <activity android:name="com.jubumam.surefin.SongyeongActivity" />
+        <activity android:name="com.jubumam.surefin.BlochoActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.GalleryDetailActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.GalleryActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorDepositActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorAnswerActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.SMPayWebSampleAutoActivity" />
         <activity
-            android:name=".NokPackage.MealmenuActivity"
+            android:name="com.jubumam.surefin.ProtectorPackage.MealmenuActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NokPackage.NokMainActivity" />
-        <activity android:name=".NokPackage.NokCustomerServiceActivity" />
-        <activity android:name=".NokPackage.SelectActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorMainActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorCustomerServiceActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorServiceListActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.SelectActivity" />
         <activity
-            android:name=".NokPackage.NokLoginActivity"
+            android:name="com.jubumam.surefin.ProtectorPackage.ProtectorLoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".NokPackage.NokPaymentActivity" />
-        <activity android:name=".NoticeActivity" />
-        <activity android:name=".AnswerActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorPaymentActivity" />
+        <activity android:name="com.jubumam.surefin.NoticeActivity" />
+        <activity android:name="com.jubumam.surefin.AnswerActivity" />
         <activity
-            android:name=".QuestionActivity"
+            android:name="com.jubumam.surefin.QuestionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.jubumam.surefin.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".VisitingBathActivity"
+            android:name="com.jubumam.surefin.VisitingBathActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VistingNurse"
+            android:name="com.jubumam.surefin.VistingNurse"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".RecipientDetailActivity"
+            android:name="com.jubumam.surefin.RecipientDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MenuMain"
+            android:name="com.jubumam.surefin.MenuMain"
             android:screenOrientation="portrait" />
-        <activity android:name=".signActivity" />
+        <activity android:name="com.jubumam.surefin.signActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name="com.jubumam.surefin.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".CustomerServiceActivity"
+            android:name="com.jubumam.surefin.CustomerServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Client_Registration"
+            android:name="com.jubumam.surefin.Client_Registration"
             android:screenOrientation="portrait" />
-        <activity android:name=".Recipient" />
+        <activity android:name="com.jubumam.surefin.Recipient" />
         <activity
-            android:name=".EditRecipientActivity"
+            android:name="com.jubumam.surefin.EditRecipientActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name=".ServiceListActivity"
+            android:name="com.jubumam.surefin.ServiceListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".VisitingActivity"
+            android:name="com.jubumam.surefin.VisitingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Non_Payment_Item"
+            android:name="com.jubumam.surefin.Non_Payment_Item"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SplashActivity"
+            android:name="com.jubumam.surefin.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -96,6 +115,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <provider android:name=".myContentProvider"
+            android:authorities="com.jubumam.surefin.myContentProvider"
+            android:exported="true"
+            android:readPermission="com.jubumam.surefin.READ_DATABASE"
+            android:writePermission="com.jubumam.surefin.WRITE_DATABASE"/>
     </application>
 
 </manifest>

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#eeeeee"
     android:orientation="vertical"
-    tools:context="com.jubumam.SureFin.VisitingBathActivity">
+    tools:context="com.jubumam.surefin.VisitingBathActivity">
 
     <include
         android:id="@+id/toolbar"

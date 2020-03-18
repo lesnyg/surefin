@@ -404,7 +404,7 @@
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="110dp">
+                android:layout_height="120dp">
 
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/pager"
@@ -512,6 +512,7 @@
                     android:orientation="horizontal">
 
                     <FrameLayout
+                        android:id="@+id/frame_order"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -527,7 +528,6 @@
                         android:src="@drawable/icon_delivery" />
                     <TextView
                         android:id="@+id/notification_badge"
-                        android:visibility="gone"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:layout_gravity="right|end|bottom"
@@ -548,7 +548,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:background="#efefef"
+                        android:background="#ffffff"
                         />
 
                     <ImageView
@@ -767,6 +767,15 @@
                     android:layout_height="wrap_content"
                     android:src="@drawable/logo_jubumam"
                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주부맘헬스바이오"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:textColor="#aaaaaa"
+                    />
+
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -796,7 +805,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="(주) 주부맘크라우드"
+                    android:text="주식회사 주부맘헬스바이오"
                     android:textColor="#aaaaaa"
                     android:textSize="13dp" />
             </LinearLayout>
@@ -820,7 +829,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="308-81-34209"
+                    android:text="120-87-29729"
                     android:textColor="#aaaaaa"
                     android:textSize="13dp" />
             </LinearLayout>
@@ -844,7 +853,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="오세갑"
+                    android:text="박은경"
                     android:textColor="#aaaaaa"
                     android:textSize="13dp" />
             </LinearLayout>
@@ -868,7 +877,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="경기도 성남시 분당구 대왕판교로606번길 47,1208호(삼평동,에스지타워)"
+                    android:text="서울특별시 강남구 개포로 623, 2층 201호(개포동, 대청타워)"
                     android:textColor="#aaaaaa"
                     android:textSize="13dp" />
             </LinearLayout>
@@ -900,7 +909,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Ⓒ 주부맘크라우드.All Rights Reserved"
+                android:text="Ⓒ 주부맘헬스바이오.All Rights Reserved"
                 android:textColor="#aaaaaa"
                 android:layout_marginBottom="16dp"
                 android:textSize="13dp" />
