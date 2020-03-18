@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.jubumam.SureFin">
+    package="com.jubumam.surefin">
 
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -9,8 +9,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
-    <permission android:name="com.jubumam.SureFin.READ_DATABASE" android:protectionLevel="normal" />
-    <permission android:name="com.jubumam.SureFin.WRITE_DATABASE" android:protectionLevel="normal" />
+    <permission android:name="com.jubumam.surefin.READ_DATABASE" android:protectionLevel="normal" />
+    <permission android:name="com.jubumam.surefin.WRITE_DATABASE" android:protectionLevel="normal" />
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -28,86 +28,86 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup">
-        <activity android:name="com.jubumam.SureFin.OrderActivity">
+        <activity android:name="com.jubumam.surefin.OrderActivity">
         </activity>
-        <activity android:name="com.jubumam.SureFin.MealCheckActivity" />
-        <activity android:name="com.jubumam.SureFin.OrderSignActivity"/>
-        <activity android:name="com.jubumam.SureFin.OrderCheckActivity">
+        <activity android:name="com.jubumam.surefin.MealCheckActivity" />
+        <activity android:name="com.jubumam.surefin.OrderSignActivity"/>
+        <activity android:name="com.jubumam.surefin.OrderCheckActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.jubumam.SureFin.SongyeongActivity1" />
-        <activity android:name="com.jubumam.SureFin.SongyeongActivity" />
-        <activity android:name="com.jubumam.SureFin.BlochoActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.GalleryDetailActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.GalleryActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorDepositActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorAnswerActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.SMPayWebSampleAutoActivity" />
+        <activity android:name="com.jubumam.surefin.SongyeongActivity1" />
+        <activity android:name="com.jubumam.surefin.SongyeongActivity" />
+        <activity android:name="com.jubumam.surefin.BlochoActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.GalleryDetailActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.GalleryActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorDepositActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorAnswerActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.SMPayWebSampleAutoActivity" />
         <activity
-            android:name="com.jubumam.SureFin.ProtectorPackage.MealmenuActivity"
+            android:name="com.jubumam.surefin.ProtectorPackage.MealmenuActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorMainActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorCustomerServiceActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorServiceListActivity" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.SelectActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorMainActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorCustomerServiceActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorServiceListActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.SelectActivity" />
         <activity
-            android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorLoginActivity"
+            android:name="com.jubumam.surefin.ProtectorPackage.ProtectorLoginActivity"
             android:screenOrientation="portrait" />
-        <activity android:name="com.jubumam.SureFin.ProtectorPackage.ProtectorPaymentActivity" />
-        <activity android:name="com.jubumam.SureFin.NoticeActivity" />
-        <activity android:name="com.jubumam.SureFin.AnswerActivity" />
+        <activity android:name="com.jubumam.surefin.ProtectorPackage.ProtectorPaymentActivity" />
+        <activity android:name="com.jubumam.surefin.NoticeActivity" />
+        <activity android:name="com.jubumam.surefin.AnswerActivity" />
         <activity
-            android:name="com.jubumam.SureFin.QuestionActivity"
+            android:name="com.jubumam.surefin.QuestionActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
-            android:name="com.jubumam.SureFin.MainActivity"
+            android:name="com.jubumam.surefin.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.jubumam.SureFin.VisitingBathActivity"
+            android:name="com.jubumam.surefin.VisitingBathActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jubumam.SureFin.VistingNurse"
+            android:name="com.jubumam.surefin.VistingNurse"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.jubumam.SureFin.RecipientDetailActivity"
+            android:name="com.jubumam.surefin.RecipientDetailActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jubumam.SureFin.MenuMain"
+            android:name="com.jubumam.surefin.MenuMain"
             android:screenOrientation="portrait" />
-        <activity android:name="com.jubumam.SureFin.signActivity" />
+        <activity android:name="com.jubumam.surefin.signActivity" />
         <activity
-            android:name="com.jubumam.SureFin.LoginActivity"
+            android:name="com.jubumam.surefin.LoginActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.jubumam.SureFin.CustomerServiceActivity"
+            android:name="com.jubumam.surefin.CustomerServiceActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jubumam.SureFin.Client_Registration"
+            android:name="com.jubumam.surefin.Client_Registration"
             android:screenOrientation="portrait" />
-        <activity android:name="com.jubumam.SureFin.Recipient" />
+        <activity android:name="com.jubumam.surefin.Recipient" />
         <activity
-            android:name="com.jubumam.SureFin.EditRecipientActivity"
+            android:name="com.jubumam.surefin.EditRecipientActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.jubumam.SureFin.ServiceListActivity"
+            android:name="com.jubumam.surefin.ServiceListActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jubumam.SureFin.VisitingActivity"
+            android:name="com.jubumam.surefin.VisitingActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jubumam.SureFin.Non_Payment_Item"
+            android:name="com.jubumam.surefin.Non_Payment_Item"
             android:screenOrientation="portrait" />
         <activity
-            android:name="com.jubumam.SureFin.SplashActivity"
+            android:name="com.jubumam.surefin.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,8 +115,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <provider android:name="com.jubumam.SureFin.myContentProvider"
-            android:authorities="com.jubumam.SureFin.myContentProvider"
+        <provider android:name="com.jubumam.surefin.myContentProvider"
+            android:authorities="com.jubumam.surefin.myContentProvider"
             android:exported="true"
             android:readPermission="com.jubumam.surefin.READ_DATABASE"
             android:writePermission="com.jubumam.surefin.WRITE_DATABASE"/>
