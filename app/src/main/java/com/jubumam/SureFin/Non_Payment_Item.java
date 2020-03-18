@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.jubumam.surefin.ProtectorPackage.Protector;
+import com.jubumam.SureFin.ProtectorPackage.Protector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

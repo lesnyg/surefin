@@ -1,4 +1,4 @@
-package com.jubumam.surefin.ProtectorPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
-import com.jubumam.surefin.R;
+import com.jubumam.SureFin.R;
 
 import java.sql.Blob;
 import java.sql.Connection;

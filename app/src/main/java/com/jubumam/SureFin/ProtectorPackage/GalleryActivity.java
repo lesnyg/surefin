@@ -1,4 +1,4 @@
-package com.jubumam.surefin.ProtectorPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -8,7 +8,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
-import com.jubumam.surefin.R;
+import com.jubumam.SureFin.R;
 
 import java.sql.Blob;
 import java.sql.Connection;

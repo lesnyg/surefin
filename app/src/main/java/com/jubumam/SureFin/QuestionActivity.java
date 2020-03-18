@@ -1,4 +1,4 @@
-package com.jubumam.surefin;
+package com.jubumam.SureFin;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.jubumam.surefin.ProtectorPackage.Protector;
+import com.jubumam.SureFin.ProtectorPackage.Protector;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

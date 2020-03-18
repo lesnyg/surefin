@@ -1,4 +1,4 @@
-package com.jubumam.surefin.ProtectorPackage;
+package com.jubumam.SureFin.ProtectorPackage;
 
 public class URLSet {
 	
