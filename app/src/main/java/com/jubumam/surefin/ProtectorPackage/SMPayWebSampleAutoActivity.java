@@ -136,9 +136,6 @@ public class SMPayWebSampleAutoActivity extends Activity {
         mWebView.getSettings().setJavaScriptEnabled(true);
         mWebView.addJavascriptInterface(new JavaScriptInterface(this),"android");
 //        mWebView.getSettings().setPluginsEnabled(true);
-
-
-
         getHttpStrData();
 
         // WebView 설정
