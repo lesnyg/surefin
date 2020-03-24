@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -156,7 +157,6 @@ public class MenuMain extends BaseActivity {
     private TextView notification_badge;
     private FrameLayout frame_order;
     private Timer timer;
-    DBHelper mDatabase;
 
     private String packageName = "com.surefin.surefindelivery";
     private String className = "com.surefin.surefindelivery.OrderActivity";
@@ -198,16 +198,6 @@ public class MenuMain extends BaseActivity {
         endMon = month + "-" + "32";
 
         //   Toast.makeText(MenuMain.this,Integer.toString((int)vistime),Toast.LENGTH_SHORT).show();
-        mDatabase = new DBHelper(getBaseContext());
-
-        // 데이터 입력
-        mDatabase.setDelete();
-        List<ItemRow> mList = new ArrayList<>();
-        mList.add(new ItemRow(recipiId, recipiName,2000));
-
-        for(ItemRow item : mList) {
-            mDatabase.setItem(item.contents, item.name, item.num);
-        }
 
 
         n1 = findViewById(R.id.n1);
@@ -376,11 +366,17 @@ public class MenuMain extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent();
-                intent.setClassName(packageName, className);
-                intent.putExtra("putData", recipiId);
-                startActivityForResult(intent, 0);
-
+                Boolean bool = getPackageList();
+                if(bool) {
+                    Intent intent = new Intent();
+                    intent.setClassName(packageName, className);
+                    intent.putExtra("putData", recipiId);
+                    startActivityForResult(intent,0);
+                }else{
+                    String url = "market://details?id=" + "com.surefin.surefindelivery";
+                    Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    startActivity(i);
+                }
 
 
 //                loadData();
@@ -866,21 +862,22 @@ public class MenuMain extends BaseActivity {
             Statement statement = connection.createStatement();
             List<String> areaList = new ArrayList<>();
 
-            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + personId + "'");
-            while (areaRS.next()){
-                String area = areaRS.getString("지역명");
-                areaList.add(area);
-            }
-
-            for (int i = 0; i < areaList.size(); i++) {
-                String area = areaList.get(i).toString();
-                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '미배달' order by 주문시간 DESC");
+//            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + personId + "'");
+//            while (areaRS.next()){
+//                String area = areaRS.getString("지역명");
+//                areaList.add(area);
+//            }
+//
+//            for (int i = 0; i < areaList.size(); i++) {
+//                String area = areaList.get(i).toString();
+                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 배달확인 = '미배달' order by 주문시간 DESC");
                 while (resultSetlist.next()) {
                     String complete = resultSetlist.getString("배달확인");
                     if(complete.equals("미배달")) {
                         orderCount++;
                     }
-                }}
+                }
+//        }
 
             connection.close();
         } catch (ClassNotFoundException e) {
@@ -890,34 +887,5 @@ public class MenuMain extends BaseActivity {
         }
 
     }
-    private void loadData() {
-        StringBuilder sb = new StringBuilder();
-        List<ItemRow> row = mDatabase.getItem();
-        sb.append("Total count : "+row.size()+"\n\n");
-        for(ItemRow item : row) {
-            sb.append(item.contents+" , "+item.name+" , "+item.num+"\n");
-        }
-//        TextView tv_text = (TextView) findViewById(R.id.tv_text);
-//        tv_text.setText(sb.toString());
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if(mDatabase != null)
-            mDatabase.close();
-    }
 }
 
-class ItemRow {
-    public String contents;
-    public String name;
-    public int num;
-
-    public ItemRow(String contents, String name, int num) {
-        this.contents = contents;
-        this.name = name;
-        this.num = num;
-    }
-
-}

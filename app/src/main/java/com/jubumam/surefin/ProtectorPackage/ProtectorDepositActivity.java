@@ -48,7 +48,7 @@ public class ProtectorDepositActivity extends ProtectorBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nok_deposit);
+        setContentView(R.layout.activity_protector_deposit);
 
         activateToolbar();
 
