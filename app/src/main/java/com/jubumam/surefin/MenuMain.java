@@ -159,7 +159,7 @@ public class MenuMain extends BaseActivity {
     private Timer timer;
 
     private String packageName = "com.surefin.surefindelivery";
-    private String className = "com.surefin.surefindelivery.OrderActivity";
+    private String className = "com.surefin.surefindelivery.SplashActivity";
 
 
 
