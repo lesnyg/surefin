@@ -33,11 +33,7 @@
         <activity android:name="com.jubumam.surefin.MealCheckActivity" />
         <activity android:name="com.jubumam.surefin.OrderSignActivity"/>
         <activity android:name="com.jubumam.surefin.OrderCheckActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.jubumam.surefin.SongyeongActivity1" />
         <activity android:name="com.jubumam.surefin.SongyeongActivity" />
