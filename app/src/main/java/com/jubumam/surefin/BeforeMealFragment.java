@@ -45,6 +45,8 @@ public class BeforeMealFragment extends Fragment implements SwipeRefreshLayout.O
     private String name = "";
     private String phoneNumber;
     private String address;
+    private String address1;
+    private String address2;
     private String quantity;
     private String orderPrice;
     private String paymentmethod = "";
@@ -210,19 +212,20 @@ public class BeforeMealFragment extends Fragment implements SwipeRefreshLayout.O
             list = new ArrayList<>();
             areaList = new ArrayList<>();
 
-            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + responsibilityID + "'");
-            while (areaRS.next()){
-                String area = areaRS.getString("지역명");
-                areaList.add(area);
-            }
+//            ResultSet areaRS = statement.executeQuery("select * from Su_담당지역 where 담당자코드='" + responsibilityID + "'");
+//            while (areaRS.next()){
+//                String area = areaRS.getString("지역명");
+//                areaList.add(area);
+//            }
 
-            for (int i = 0; i < areaList.size(); i++) {
-                String area = areaList.get(i).toString();
-                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 지역 = '"+area+"' AND 배달확인 = '미배달' order by 주문시간 DESC");
+//            for (int i = 0; i < areaList.size(); i++) {
+//                String area = areaList.get(i).toString();
+                ResultSet resultSetlist = statement.executeQuery("select * from Su_주문리스트 where 일자='" + strToday + "' AND 배달확인 = '미배달' order by 주문시간 DESC");
                 while (resultSetlist.next()) {
                     name = resultSetlist.getString("주문자");
                     phoneNumber = resultSetlist.getString("전화번호");
-                    address = resultSetlist.getString("주소");
+                    address1 = resultSetlist.getString("주소1");
+                    address2= resultSetlist.getString("주소2");
                     quantity = resultSetlist.getString("수량");
                     orderPrice = resultSetlist.getString("금액");
                     paymentmethod = resultSetlist.getString("계산방법");
@@ -245,9 +248,10 @@ public class BeforeMealFragment extends Fragment implements SwipeRefreshLayout.O
                             syRecyclerView.setAdapter(adapter);
                         }
                     });
-
+                    address = address1 +", " + address2;
                     list.add(new SongyeongOrder(name, phoneNumber, address, quantity, orderPrice, paymentmethod, complete, orderTime, ordermethod, firstOrder));
-                }}
+                }
+//        }
 
 
             connection.close();
@@ -374,7 +378,6 @@ public class BeforeMealFragment extends Fragment implements SwipeRefreshLayout.O
             holder.tv_complete.setText(item.getOrderTime().substring(0,5));
             if (item.getComplete() != null && item.getComplete().equals("완료")) {
                 holder.tv_complete.setText("배달완료");
-                holder.btn_complete.setBackgroundColor(Color.GRAY);
             }
             holder.btn_complete.setOnClickListener(new View.OnClickListener() {
                 @Override

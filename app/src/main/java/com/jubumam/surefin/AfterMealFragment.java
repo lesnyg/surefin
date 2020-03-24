@@ -51,6 +51,8 @@ public class AfterMealFragment extends Fragment implements SwipeRefreshLayout.On
     private String name = "";
     private String phoneNumber;
     private String address;
+    private String address1;
+    private String address2;
     private String quantity;
     private String orderPrice;
     private String paymentmethod = "";
@@ -226,7 +228,8 @@ public class AfterMealFragment extends Fragment implements SwipeRefreshLayout.On
                 while (resultSetlist.next()) {
                     name = resultSetlist.getString("주문자");
                     phoneNumber = resultSetlist.getString("전화번호");
-                    address = resultSetlist.getString("주소");
+                    address1 = resultSetlist.getString("주소1");
+                    address2 = resultSetlist.getString("주소2");
                     quantity = resultSetlist.getString("수량");
                     orderPrice = resultSetlist.getString("금액");
                     paymentmethod = resultSetlist.getString("계산방법");
@@ -254,6 +257,7 @@ public class AfterMealFragment extends Fragment implements SwipeRefreshLayout.On
                             syRecyclerView.setAdapter(adapter);
                         }
                     });
+                    address = address1 +", " + address2;
                         list.add(new SongyeongOrder(name, phoneNumber, address, quantity, orderPrice, paymentmethod, complete, orderTime, ordermethod, firstOrder,bitmap));
 
 

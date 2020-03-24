@@ -111,11 +111,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <provider android:name="com.jubumam.surefin.myContentProvider"
-            android:authorities="com.jubumam.surefin.myContentProvider"
-            android:exported="true"
-            android:readPermission="com.jubumam.surefin.READ_DATABASE"
-            android:writePermission="com.jubumam.surefin.WRITE_DATABASE"/>
     </application>
 
 </manifest>
