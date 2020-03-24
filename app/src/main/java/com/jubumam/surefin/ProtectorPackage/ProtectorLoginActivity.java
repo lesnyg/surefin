@@ -35,7 +35,7 @@ public class ProtectorLoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nok_login);
+        setContentView(R.layout.activity_protector_login);
         txt_centerName = findViewById(R.id.txt_centerName);
         txt_recipiName = findViewById(R.id.txt_recipiName);
         txt_recipiPhone = findViewById(R.id.txt_recipiPhone);

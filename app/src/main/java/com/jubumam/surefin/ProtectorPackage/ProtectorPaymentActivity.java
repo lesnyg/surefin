@@ -86,7 +86,7 @@ public class ProtectorPaymentActivity extends ProtectorBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nok_payment);
+        setContentView(R.layout.activity_protector_payment);
 
         activateToolbar();
 

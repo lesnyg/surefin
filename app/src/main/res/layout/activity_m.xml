@@ -548,8 +548,7 @@
                         android:layout_height="match_parent"
                         android:layout_margin="1dp"
                         android:layout_weight="1"
-                        android:background="#ffffff"
-                        />
+                        android:background="@drawable/icon_bullocho" />
 
                     <ImageView
                         android:id="@+id/n13"
